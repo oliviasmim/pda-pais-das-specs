@@ -1,0 +1,77 @@
+{
+  "licao": "coelho-branco",
+  "perguntas": [
+    {
+      "etapa": "pre",
+      "pergunta": "Qual destes é um requisito NÃO funcional da agenda de mentorias?",
+      "opcoes": [
+        "O jovem agenda uma mentoria numa vaga livre.",
+        "Cancelar um agendamento devolve a vaga para a lista.",
+        "Com 150 tentativas no primeiro minuto, o agendamento responde com p95 abaixo de 300 ms.",
+        "A listagem mostra só as vagas livres do mentor."
+      ],
+      "correta": 2,
+      "explicacao": "Os outros dizem O QUE o sistema faz. Este diz QUÃO BEM ele faz, com carga e número."
+    },
+    {
+      "etapa": "pre",
+      "pergunta": "Você pede \"crie um endpoint que lista as vagas livres\" e não fala nada de volume nem de concorrência. O que a IA costuma fazer?",
+      "opcoes": [
+        "Escolhe em silêncio o padrão mais simples: tudo em memória, sem concorrência, sem meta de tempo.",
+        "Pergunta qual é a carga esperada antes de começar.",
+        "Implementa cache distribuído por garantia.",
+        "Recusa a tarefa por falta de informação."
+      ],
+      "correta": 0,
+      "explicacao": "Sem requisito não funcional escrito, o agente preenche a lacuna com o padrão mais comum. Não é erro de código, é requisito que ninguém escreveu."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Um endpoint tem média de 45 ms e p99 de 900 ms. O que isso diz?",
+      "opcoes": [
+        "Está tudo bem: a média é baixa.",
+        "O servidor caiu 1% do tempo.",
+        "O p99 está errado, porque deveria ser perto da média.",
+        "1 em cada 100 requisições demora 900 ms ou mais. A média esconde essa cauda."
+      ],
+      "correta": 3,
+      "explicacao": "Percentil mostra a distribuição. A média é puxada pela maioria rápida e esconde quem espera muito."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Uma requisição chama 10 serviços em paralelo e só responde quando todos terminam. Cada serviço fica acima do seu p99 em 1% das chamadas. Aproximadamente quantas requisições esperam por pelo menos uma chamada lenta?",
+      "opcoes": [
+        "1%",
+        "Cerca de 10%",
+        "50%",
+        "0,1%"
+      ],
+      "correta": 1,
+      "explicacao": "1 − 0,99¹⁰ ≈ 9,6%. A latência de cauda se amplifica com o fan-out: quanto mais chamadas, mais gente sente a mais lenta."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Qual destes é um requisito pronto para a spec?",
+      "opcoes": [
+        "O sistema deve ser rápido e escalável.",
+        "QUANDO duas requisições pedirem a mesma vaga ao mesmo tempo, o serviço DEVE confirmar exatamente uma (201) e recusar a outra (409). Sensor: teste de concorrência na CI.",
+        "O sistema deve tratar a concorrência corretamente.",
+        "ENQUANTO houver muitos acessos, o sistema DEVE responder bem."
+      ],
+      "correta": 1,
+      "explicacao": "Tem gatilho, número exato (uma 201, uma 409) e sensor. Os outros são desejo (sem número) ou promessa (sem sensor)."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "\"Contar as vagas livres a cada GET\" ou \"manter a lista atualizada a cada agendamento\". Quem decide?",
+      "opcoes": [
+        "A IA, porque ela conhece os padrões de mercado.",
+        "Tanto faz: o resultado é o mesmo.",
+        "A equipe, num ADR, com base na carga descrita. É uma troca entre leitura barata e escrita cara.",
+        "O banco de dados decide sozinho."
+      ],
+      "correta": 2,
+      "explicacao": "É a decisão de calcular na leitura ou na escrita, o estudo de caso do capítulo 2 do DDIA. Depende da carga e tem consequências: vai num ADR, não fica para a IA adivinhar."
+    }
+  ]
+}

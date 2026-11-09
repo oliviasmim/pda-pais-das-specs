@@ -1,0 +1,189 @@
+.lab-guias-sensores .gs-topo {
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.lab-guias-sensores .gs-placar {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.lab-guias-sensores .gs-placar__ok {
+  color: var(--folha);
+  font-weight: 600;
+}
+
+.lab-guias-sensores .gs-pilha {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+  margin-bottom: 1.25rem;
+}
+
+.lab-guias-sensores .gs-carta {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 0.75rem 0.8rem 0.7rem;
+  box-shadow: var(--shadow);
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  position: relative;
+}
+
+.lab-guias-sensores .gs-carta::before {
+  content: '♠';
+  position: absolute;
+  top: 0.45rem;
+  right: 0.6rem;
+  color: var(--ink-3);
+  font-size: 0.8rem;
+}
+
+.lab-guias-sensores .gs-carta.is-arrastando {
+  opacity: 0.45;
+}
+
+.lab-guias-sensores .gs-carta h5 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  padding-right: 1rem;
+}
+
+.lab-guias-sensores .gs-carta p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+  flex: 1;
+}
+
+.lab-guias-sensores .gs-carta__acoes {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0.3rem;
+}
+
+.lab-guias-sensores .gs-carta__acoes .btn {
+  padding: 0.3em 0.65em;
+  font-size: 0.76rem;
+}
+
+.lab-guias-sensores .gs-colunas {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 720px) {
+  .lab-guias-sensores .gs-colunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lab-guias-sensores .gs-col {
+  border: 1.5px dashed var(--line);
+  border-radius: var(--r);
+  padding: 0.75rem;
+  min-height: 8rem;
+  background: var(--paper-2);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.lab-guias-sensores .gs-col.is-alvo {
+  border-color: var(--ink);
+  background: var(--paper);
+}
+
+.lab-guias-sensores .gs-col--guia {
+  border-top: 4px solid var(--tinta);
+}
+
+.lab-guias-sensores .gs-col--sensor {
+  border-top: 4px solid var(--copas);
+}
+
+.lab-guias-sensores .gs-col--ambos {
+  border-top: 4px solid var(--uva);
+}
+
+.lab-guias-sensores .gs-col__cab {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.lab-guias-sensores .gs-col__icone {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.lab-guias-sensores .gs-col--guia .gs-col__icone {
+  color: var(--tinta);
+}
+
+.lab-guias-sensores .gs-col--sensor .gs-col__icone {
+  color: var(--copas);
+}
+
+.lab-guias-sensores .gs-col--ambos .gs-col__icone {
+  color: var(--uva);
+}
+
+.lab-guias-sensores .gs-col__cab h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.lab-guias-sensores .gs-col__cab p {
+  margin: 0;
+  font-size: 0.74rem;
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
+
+.lab-guias-sensores .gs-col__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.lab-guias-sensores .gs-resp {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 0.45rem 0.6rem;
+  font-size: 0.84rem;
+}
+
+.lab-guias-sensores .gs-resp summary {
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.lab-guias-sensores .gs-resp__nome {
+  font-weight: 500;
+}
+
+.lab-guias-sensores .gs-resp p {
+  margin: 0.45rem 0 0.3rem;
+  color: var(--ink-2);
+}
+
+.lab-guias-sensores .gs-resp--bad {
+  border-color: color-mix(in srgb, var(--copas) 40%, var(--line));
+}
+
+.lab-guias-sensores .gs-fim__box {
+  margin-top: 1.1rem;
+}
+
+.lab-guias-sensores .gs-fim__box p {
+  margin: 0 0 0.4rem;
+}

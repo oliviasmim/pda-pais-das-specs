@@ -1,0 +1,16 @@
+{
+  "name": "pda-pais-das-specs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Semana 10 da Especialização em IA da Programadores do Amanhã: laboratórios interativos de requisitos, subagents, worktrees, gates e revisão crítica.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "serve": "node scripts/servir.js",
+    "test": "node --test \"tests/**/*.test.js\"",
+    "verificar": "node scripts/verificar-site.js",
+    "check": "npm run verificar && npm test"
+  }
+}

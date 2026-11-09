@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  sensores:
+    name: Sensores do site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Estrutura (lições, quizzes, labs, links, domínio proibido)
+        run: npm run verificar
+      - name: Testes da lógica dos laboratórios
+        run: npm test
+
+  speedrun:
+    name: Projeto do speedrun (main inicial deve ficar verde)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: speedrun/agenda-mentorias
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run gates

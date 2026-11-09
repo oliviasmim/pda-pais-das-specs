@@ -1,0 +1,77 @@
+{
+  "licao": "interrogatorio",
+  "perguntas": [
+    {
+      "etapa": "pre",
+      "pergunta": "A IA gerou um endpoint de agendamento. Você chamou uma vez e ele devolveu 200. O que isso prova?",
+      "opcoes": [
+        "Que o código atende ao pedido.",
+        "Que ele roda no caminho feliz que você testou. Não diz nada sobre o que ele assumiu ou inventou.",
+        "Que não há regra inventada, porque a IA só gera o que foi pedido.",
+        "Que já dá para abrir o PR."
+      ],
+      "correta": 1,
+      "explicacao": "Uma chamada que funciona prova um caso. Regras inventadas, casos de falha esquecidos e status errados continuam lá, e quase sempre parecem razoáveis."
+    },
+    {
+      "etapa": "pre",
+      "pergunta": "Qual destas é uma forma verificável de conferir a resposta da IA?",
+      "opcoes": [
+        "Testar com vários casos.",
+        "Pedir para outra IA revisar.",
+        "POST /agendamentos com vagaId 999 deve devolver 404 {\"erro\":\"Vaga não encontrada\"}.",
+        "Ver se o código está limpo."
+      ],
+      "correta": 2,
+      "explicacao": "Só a terceira diz a entrada exata e a resposta esperada. As outras são promessas de revisão: não dizem contra o quê o código vai ser conferido."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "No diff, a linha if (agendamentosNoMes >= 3) é:",
+      "opcoes": [
+        "Pedido: todo sistema de agenda tem limite.",
+        "Assumido: o pedido não falou de limite, então a IA precisava escolher um.",
+        "Inventado: ninguém pediu limite e o problema não exige. A spec lista \"limite por jovem\" como fora do escopo.",
+        "Correto, porque evita abuso."
+      ],
+      "correta": 2,
+      "explicacao": "A IA não precisava escolher limite nenhum: dava para agendar sem limite. Quando nada obriga a decisão e ninguém pediu, é invenção. Plausível não é pedido."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Por que res.status(200) é \"assumido\" e não \"inventado\"?",
+      "opcoes": [
+        "Porque 200 é sempre o status certo.",
+        "Porque o pedido não disse o status e a IA precisava devolver algum. Ela escolheu o mais comum.",
+        "Porque a spec manda 200.",
+        "Porque status HTTP não importa."
+      ],
+      "correta": 1,
+      "explicacao": "Toda resposta tem um status, então a escolha era obrigatória. O problema é que foi a IA quem escolheu. Com a spec, a resposta vira objetiva: sucesso é 201."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Qual é o padrão de erro da IA que este laboratório mostrou?",
+      "opcoes": [
+        "Ela erra a sintaxe com frequência.",
+        "Ela preenche as lacunas do pedido com suposições plausíveis.",
+        "Ela ignora o pedido e faz outra coisa.",
+        "Ela só erra quando o modelo é pequeno."
+      ],
+      "correta": 1,
+      "explicacao": "O modelo continua o texto do jeito mais provável. Com pedido vago, o mais provável é a média dos sistemas parecidos: limite por mês, e-mail de confirmação, factory. Por isso a defesa é spec antes e rastro depois."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Qual pergunta transforma uma revisão genérica em uma revisão verificável?",
+      "opcoes": [
+        "Esse código está bom?",
+        "Onde, no pedido ou na spec, está escrito isso? E que entrada prova que está errado?",
+        "A IA tem certeza?",
+        "Isso segue boas práticas?"
+      ],
+      "correta": 1,
+      "explicacao": "Rastro e contraprova. A primeira compara com algo escrito; a segunda diz exatamente o que rodar e o que esperar. As outras pedem opinião."
+    }
+  ]
+}

@@ -1,0 +1,685 @@
+import { h, toast, copy, download, slug } from './ui.js';
+import { estadoDoLab, licaoFeita, marcarLicao, preferencia, definirPreferencia } from './store.js';
+import { renderQuiz } from './quiz.js';
+import { semanas, aulas, licoes, cartas, licaoPorId, vizinhas, aulaDaLicao } from '../content/curriculo.js';
+
+const MARKED_URL = 'https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js';
+const main = document.getElementById('conteudo');
+let limpezas = [];
+let observador = null;
+
+let markedPromise = null;
+function carregarMarked() {
+  if (!markedPromise) {
+    markedPromise = import(MARKED_URL)
+      .then((m) => (md) => m.marked.parse(md, { gfm: true }))
+      .catch(() => markdownMinimo);
+  }
+  return markedPromise;
+}
+
+function escapar(s) {
+  return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+}
+
+function markdownMinimo(md) {
+  return md
+    .split(/\n{2,}/)
+    .map((bloco) => {
+      if (/^\s*</.test(bloco)) return bloco;
+      if (bloco.startsWith('## ')) return `<h2>${escapar(bloco.slice(3))}</h2>`;
+      if (bloco.startsWith('### ')) return `<h3>${escapar(bloco.slice(4))}</h3>`;
+      if (bloco.startsWith('```')) return `<pre><code>${escapar(bloco.replace(/^```\w*\n?|```$/g, ''))}</code></pre>`;
+      return `<p>${escapar(bloco)}</p>`;
+    })
+    .join('\n');
+}
+
+function limpar() {
+  limpezas.forEach((fn) => {
+    try {
+      fn();
+    } catch {
+      /* ignora falha de limpeza */
+    }
+  });
+  limpezas = [];
+  if (observador) observador.disconnect();
+  observador = null;
+}
+
+function definirTitulo(t) {
+  document.title = t ? `${t} · País das Specs` : 'País das Specs';
+}
+
+function marcarNav(rota) {
+  document.querySelectorAll('.nav a').forEach((a) => {
+    const alvo = a.getAttribute('href').slice(1) || '/';
+    const atual = alvo === '/' ? rota === '/' : rota.startsWith(alvo);
+    if (atual) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+  const nav = document.getElementById('nav');
+  nav.dataset.aberto = '0';
+  document.getElementById('menu-btn').setAttribute('aria-expanded', 'false');
+}
+
+function carregarCss(href) {
+  if (document.querySelector(`link[data-css="${href}"]`)) return;
+  document.head.append(h('link', { rel: 'stylesheet', href, 'data-css': href }));
+}
+
+function ctxDe(licaoId, labId) {
+  return { labId, licaoId, state: estadoDoLab(licaoId, labId), toast, copy, download };
+}
+
+async function montarLab(el, licaoId) {
+  const labId = el.dataset.lab;
+  el.classList.add('lab', `lab-${labId}`);
+  el.setAttribute('id', `lab-${labId}`);
+  carregarCss(`css/labs/${labId}.css`);
+  try {
+    const mod = await import(`./labs/${labId}.js`);
+    const fim = mod.mount(el, ctxDe(licaoId, labId));
+    if (typeof fim === 'function') limpezas.push(fim);
+  } catch (erro) {
+    console.error(erro);
+    el.replaceChildren(
+      h('header', { class: 'lab__head' }, h('span', { class: 'lab__tag' }, 'Laboratório'), h('h3', {}, labId)),
+      h('p', { class: 'lab__erro' }, 'Este laboratório não carregou. Recarregue a página. Se continuar, avise a facilitadora.'),
+    );
+  }
+}
+
+function cartasInline(ids) {
+  return h(
+    'div',
+    { class: 'cartas-inline' },
+    ids
+      .map((id) => cartas.find((c) => c.id === id.trim()))
+      .filter(Boolean)
+      .map((c) =>
+        h(
+          'a',
+          { class: 'carta-mini', href: `#/baralho?carta=${c.id}`, 'data-naipe': c.naipe },
+          h('span', { class: 'carta__canto', style: { color: c.naipe === '♠' || c.naipe === '♣' ? 'var(--ink)' : '' } }, c.naipe),
+          h('span', {}, h('strong', {}, c.nome), h('span', {}, c.pergunta)),
+        ),
+      ),
+  );
+}
+
+function sorrisoSvg() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 140 46');
+  svg.setAttribute('class', 'sorriso');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.innerHTML =
+    '<path d="M6 10 Q70 58 134 10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>' +
+    '<path d="M14 14 Q70 46 126 14" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>' +
+    [26, 38, 50, 62, 74, 86, 98, 110].map((x) => `<line x1="${x}" y1="${16 + Math.sin(((x - 6) / 128) * Math.PI) * 14}" x2="${x}" y2="${22 + Math.sin(((x - 6) / 128) * Math.PI) * 18}" stroke="currentColor" stroke-width="1"/>`).join('') +
+    '<circle cx="4" cy="8" r="2" fill="currentColor"/><circle cx="136" cy="8" r="2" fill="currentColor"/>';
+  return svg;
+}
+
+/* ---------------- views ---------------- */
+
+function viewInicio() {
+  definirTitulo('');
+  const totalFeitas = licoes.filter((l) => licaoFeita(l.id)).length;
+
+  const heroi = h(
+    'section',
+    { class: 'heroi' },
+    h(
+      'div',
+      {},
+      h('div', { class: 'sobretitulo' }, 'Semana 10 · Revisão'),
+      h('h1', { html: 'Para onde você quer <em>ir</em>?' }),
+      h(
+        'p',
+        { class: 'heroi__lead' },
+        'Subagents, worktrees, CI e review aceleram o caminho. Nenhum deles escolhe o destino. Esta semana você treina dizer, antes do código, o que o sistema faz, quão bem precisa fazer e como vamos saber que fez.',
+      ),
+      h(
+        'div',
+        { class: 'row', style: { marginTop: '1.5rem' } },
+        h('a', { class: 'btn btn--primary', href: `#/licao/${licoes[0].id}` }, totalFeitas ? 'Continuar' : 'Começar pela Aula 1', ' →'),
+        h('a', { class: 'btn', href: '#/baralho' }, '♠ Baralho do Gato'),
+        totalFeitas ? h('span', { class: 'chip chip--ok' }, `${totalFeitas} de ${licoes.length} lições feitas`) : null,
+      ),
+    ),
+    h(
+      'figure',
+      { class: 'dialogo', style: { margin: 0 } },
+      sorrisoSvg(),
+      h('span', { class: 'quem' }, 'Alice'),
+      h('p', {}, '“Você poderia me dizer, por favor, que caminho devo tomar para sair daqui?”'),
+      h('span', { class: 'quem gato' }, 'O Gato'),
+      h('p', {}, '“Isso depende bastante de para onde você quer ir.”'),
+      h('span', { class: 'quem' }, 'Alice'),
+      h('p', {}, '“Não me importa muito para onde…”'),
+      h('span', { class: 'quem gato' }, 'O Gato'),
+      h('p', {}, '“Então não importa que caminho você tome.”'),
+      h('cite', {}, 'Lewis Carroll, Alice no País das Maravilhas (1865), cap. 6. Tradução livre.'),
+    ),
+  );
+
+  const frase = h(
+    'section',
+    { class: 'frase-semana', 'aria-label': 'Frase da semana' },
+    h('p', { html: 'Requisito sem número é <em>desejo</em>.<br>Requisito sem sensor é <em>promessa</em>.' }),
+  );
+
+  const blocoAulas = h(
+    'section',
+    { class: 'secao' },
+    h('div', { class: 'secao__cab' }, h('h2', {}, 'As duas aulas da semana'), h('span', { class: 'muted' }, 'Quem digita é você. A facilitadora faz perguntas do baralho.')),
+    h(
+      'div',
+      { class: 'aulas' },
+      aulas.map((a) =>
+        h(
+          'article',
+          { class: 'card aula' },
+          h('div', { class: 'aula__cab' }, h('h3', {}, a.titulo), h('span', { class: 'chip' }, '2h')),
+          h('p', { class: 'aula__pergunta' }, a.pergunta),
+          h(
+            'ol',
+            { class: 'lista-licoes' },
+            a.licoes.map((id) => {
+              const l = licaoPorId(id);
+              return h(
+                'li',
+                {},
+                h(
+                  'a',
+                  { href: `#/licao/${l.id}` },
+                  h('span', { class: 'num' }, l.numero),
+                  h('span', {}, h('span', { class: 'titulo-licao' }, l.titulo), h('span', { class: 'sub-licao' }, l.subtitulo)),
+                  licaoFeita(l.id) ? h('span', { class: 'feito' }, '✓ feita') : h('span', { class: 'faint', style: { fontSize: '0.8rem' } }, `${l.tempo} min`),
+                ),
+              );
+            }),
+            a.id === 'aula-2'
+              ? h(
+                  'li',
+                  {},
+                  h(
+                    'a',
+                    { href: '#/speedrun' },
+                    h('span', { class: 'num' }, '⏱'),
+                    h('span', {}, h('span', { class: 'titulo-licao' }, 'Speedrun cronometrado'), h('span', { class: 'sub-licao' }, '3 tasks em paralelo com worktrees, 40 minutos, placar')),
+                    h('span', { class: 'faint', style: { fontSize: '0.8rem' } }, '40 min'),
+                  ),
+                )
+              : null,
+          ),
+          h('p', { class: 'muted', style: { margin: '1rem 0 0', fontSize: '0.9rem' } }, h('strong', {}, 'Entregável: '), a.entregavel),
+        ),
+      ),
+    ),
+  );
+
+  const mapa = h(
+    'section',
+    { class: 'secao' },
+    h('div', { class: 'secao__cab' }, h('h2', {}, 'A jornada até aqui'), h('a', { href: '#/trilha' }, 'Ver a trilha completa →')),
+    h(
+      'div',
+      { class: 'mapa-mini', role: 'list' },
+      semanas.map((s) =>
+        h('a', { href: `#/trilha?semana=${s.n}`, 'data-revisao': s.revisao, role: 'listitem', title: `S${s.n} · ${s.titulo}` }, h('span', { class: 'barra' }), `S${s.n}`),
+      ),
+    ),
+    h(
+      'div',
+      { class: 'legenda' },
+      h('span', {}, h('i', { style: { background: 'color-mix(in srgb, var(--copas) 55%, var(--line))' } }), 'mais pedida para revisão'),
+      h('span', {}, h('i', { style: { background: 'color-mix(in srgb, var(--ouro) 50%, var(--line))' } }), 'revisão média'),
+      h('span', {}, h('i', { style: { background: 'var(--ink)' } }), 'você está aqui'),
+      h('span', {}, h('i', { style: { background: 'var(--line)' } }), 'ainda vem'),
+    ),
+  );
+
+  const atalhos = h(
+    'section',
+    { class: 'secao' },
+    h('div', { class: 'secao__cab' }, h('h2', {}, 'Ferramentas da semana')),
+    h(
+      'div',
+      { class: 'atalhos' },
+      [
+        { href: '#/baralho', naipe: '♠', t: 'Baralho do Gato', d: 'As 6 perguntas que você precisa responder sem travar. Dá para imprimir.' },
+        { href: '#/speedrun', naipe: '⏱', t: 'Speedrun', d: 'Cronômetro, placar e os comandos do speedrun da Aula 2.' },
+        { href: '#/trilha', naipe: '🗺', t: 'Trilha', d: 'As 14 semanas como uma viagem. Onde cada conceito nasceu.' },
+        { href: '#/glossario', naipe: '📖', t: 'Glossário', d: 'O que as pessoas dizem e o que o termo significa de verdade.' },
+      ].map((a) => h('a', { class: 'card atalho', href: a.href }, h('span', { class: 'naipe', 'aria-hidden': 'true' }, a.naipe), h('h3', {}, a.t), h('p', {}, a.d))),
+    ),
+  );
+
+  main.replaceChildren(heroi, frase, blocoAulas, mapa, atalhos);
+}
+
+function viewBaralho(params) {
+  definirTitulo('Baralho do Gato');
+  const foco = params.get('carta');
+  const grade = h(
+    'div',
+    { class: 'baralho' },
+    cartas.map((c) => {
+      const el = h('div', { class: 'carta', 'data-naipe': c.naipe, id: `carta-${c.id}`, 'data-virada': '0' });
+      const btn = h(
+        'button',
+        { type: 'button', class: 'carta__btn', 'aria-pressed': 'false', 'aria-label': `Carta ${c.nome}. ${c.pergunta} Toque para ver exemplos de resposta.` },
+        h(
+          'div',
+          { class: 'carta__in' },
+          h(
+            'div',
+            { class: 'carta__face' },
+            h('span', { class: 'carta__canto' }, c.naipe),
+            h('span', { class: 'carta__nome' }, c.nome),
+            h('p', { class: 'carta__pergunta' }, c.pergunta),
+            h('span', { class: 'carta__mede' }, `Mede: ${c.mede}`),
+            h('span', { class: 'carta__dica' }, 'Toque para virar'),
+          ),
+          h(
+            'div',
+            { class: 'carta__face carta__verso' },
+            h('span', { class: 'carta__canto' }, c.naipe),
+            h('span', { class: 'carta__nome' }, c.nome),
+            h('div', { class: 'carta__resp carta__resp--ruim' }, h('b', {}, 'Resposta que trava'), c.ruim),
+            h('div', { class: 'carta__resp carta__resp--boa' }, h('b', {}, 'Resposta que avança'), c.boa),
+          ),
+        ),
+      );
+      btn.addEventListener('click', () => {
+        const virada = el.dataset.virada === '1' ? '0' : '1';
+        el.dataset.virada = virada;
+        btn.setAttribute('aria-pressed', virada === '1' ? 'true' : 'false');
+      });
+      el.append(btn);
+      return el;
+    }),
+  );
+
+  main.replaceChildren(
+    h(
+      'section',
+      { class: 'secao', style: { marginTop: '0.5rem' } },
+      h('div', { class: 'sobretitulo' }, 'Ferramenta da semana'),
+      h('h1', {}, 'O Baralho do Gato'),
+      h(
+        'p',
+        { class: 'heroi__lead' },
+        'Seis perguntas. Se você responde todas com uma linha, um número ou uma resposta exata, você sabe o que quer da IA. Se responde com "testaria", "trataria" ou "acho que", ainda está caindo na toca.',
+      ),
+      h(
+        'div',
+        { class: 'row nao-imprimir', style: { margin: '1.2rem 0 2rem' } },
+        h('button', { class: 'btn', type: 'button', onclick: () => document.querySelectorAll('.carta').forEach((c) => (c.dataset.virada = '0')) }, 'Desvirar todas'),
+        h('button', { class: 'btn', type: 'button', onclick: () => document.querySelectorAll('.carta').forEach((c) => (c.dataset.virada = '1')) }, 'Virar todas'),
+        h('button', { class: 'btn', type: 'button', onclick: () => sortearCarta() }, '🎲 Sortear uma carta'),
+        h('button', { class: 'btn btn--ghost', type: 'button', onclick: () => window.print() }, 'Imprimir'),
+      ),
+      grade,
+    ),
+  );
+
+  function sortearCarta() {
+    const todas = [...document.querySelectorAll('.carta')];
+    todas.forEach((c) => (c.style.opacity = '0.35'));
+    const escolhida = todas[Math.floor(Math.random() * todas.length)];
+    escolhida.style.opacity = '1';
+    escolhida.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    escolhida.querySelector('button').focus({ preventScroll: true });
+    setTimeout(() => todas.forEach((c) => (c.style.opacity = '')), 4000);
+  }
+
+  if (foco) {
+    const alvo = document.getElementById(`carta-${foco}`);
+    if (alvo) setTimeout(() => alvo.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+  }
+}
+
+function viewTrilha(params) {
+  definirTitulo('Trilha');
+  const foco = Number(params.get('semana'));
+  const rotulo = { alta: 'revisão prioritária', media: 'revisão média', agora: 'você está aqui', futura: 'ainda vem' };
+  main.replaceChildren(
+    h(
+      'section',
+      { class: 'secao', style: { marginTop: '0.5rem', maxWidth: '820px' } },
+      h('div', { class: 'sobretitulo' }, 'Mapa do País'),
+      h('h1', {}, 'A trilha das 14 semanas'),
+      h(
+        'p',
+        { class: 'heroi__lead' },
+        'Cada semana é um lugar da viagem. A cor do marcador mostra o que a turma mais pediu para revisar (dúvidas no chat e na voz, cruzadas com a matriz de prioridade de revisão).',
+      ),
+      h(
+        'ol',
+        { class: 'trilha' },
+        semanas.map((s) =>
+          h(
+            'li',
+            { 'data-revisao': s.revisao, id: `semana-${s.n}` },
+            h('span', { class: 'trilha__no', 'aria-hidden': 'true' }, s.n),
+            h(
+              'div',
+              { class: 'card trilha__card', style: s.n === foco ? { borderColor: 'var(--ink)' } : {} },
+              h('div', { class: 'row', style: { justifyContent: 'space-between' } }, h('span', { class: 'trilha__lugar' }, s.lugar), h('span', { class: 'chip' }, `${s.modulo} · ${rotulo[s.revisao]}`)),
+              h('h3', {}, `S${s.n} · ${s.titulo}`),
+              h('p', {}, s.ideia),
+              s.n === 10 ? h('p', { style: { marginTop: '0.6rem' } }, h('a', { href: '#/' }, 'Abrir a semana de revisão →')) : null,
+              licoesQueRevisam(s.n),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+  if (foco) {
+    const alvo = document.getElementById(`semana-${foco}`);
+    if (alvo) setTimeout(() => alvo.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+  }
+}
+
+function licoesQueRevisam(n) {
+  const ls = licoes.filter((l) => l.semanas.includes(n));
+  if (!ls.length || n === 10) return null;
+  return h(
+    'p',
+    { class: 'faint', style: { marginTop: '0.6rem', fontSize: '0.85rem' } },
+    'Revisado em: ',
+    ls.map((l, i) => [i ? ', ' : '', h('a', { href: `#/licao/${l.id}` }, l.titulo)]),
+  );
+}
+
+async function viewGlossario() {
+  definirTitulo('Glossário');
+  const { termos } = await import('../content/glossario.js');
+  const lista = h('div', { class: 'tabela-wrap' });
+  const campo = h('input', { class: 'busca', type: 'search', placeholder: 'Buscar termo…', 'aria-label': 'Buscar termo no glossário' });
+
+  function desenhar(filtro = '') {
+    const f = slug(filtro);
+    const visiveis = termos.filter((t) => !f || slug(`${t.termo} ${t.dizem} ${t.significa}`).includes(f));
+    lista.replaceChildren(
+      h(
+        'table',
+        { class: 'tabela' },
+        h('thead', {}, h('tr', {}, h('th', {}, 'Termo'), h('th', {}, 'O que dizem'), h('th', {}, 'O que realmente significa'), h('th', {}, 'Onde'))),
+        h(
+          'tbody',
+          {},
+          visiveis.length
+            ? visiveis.map((t) =>
+                h(
+                  'tr',
+                  {},
+                  h('td', {}, h('strong', {}, t.termo)),
+                  h('td', { class: 'muted' }, t.dizem),
+                  h('td', {}, t.significa),
+                  h('td', {}, t.licao ? h('a', { href: `#/licao/${t.licao}` }, licaoPorId(t.licao)?.titulo || t.licao) : h('span', { class: 'faint' }, `S${t.semana}`)),
+                ),
+              )
+            : h('tr', {}, h('td', { colspan: 4, class: 'muted' }, 'Nenhum termo encontrado.')),
+        ),
+      ),
+    );
+  }
+
+  campo.addEventListener('input', () => desenhar(campo.value));
+  desenhar();
+  main.replaceChildren(
+    h(
+      'section',
+      { class: 'secao', style: { marginTop: '0.5rem' } },
+      h('div', { class: 'sobretitulo' }, 'Linguagem ubíqua da turma'),
+      h('h1', {}, 'Glossário'),
+      h('p', { class: 'heroi__lead' }, 'Se você não consegue dizer o que um termo significa sem usar o próprio termo, ainda não é seu.'),
+      h('div', { style: { margin: '1.5rem 0' } }, campo),
+      lista,
+    ),
+  );
+}
+
+async function viewSpeedrun() {
+  definirTitulo('Speedrun');
+  carregarCss('css/speedrun.css');
+  try {
+    const mod = await import('./views/speedrun.js');
+    const el = h('div', { class: 'speedrun' });
+    main.replaceChildren(el);
+    const fim = mod.render(el, ctxDe('speedrun', 'placar'));
+    if (typeof fim === 'function') limpezas.push(fim);
+  } catch (erro) {
+    console.error(erro);
+    main.replaceChildren(h('p', { class: 'carregando' }, 'O speedrun não carregou. Recarregue a página.'));
+  }
+}
+
+async function viewLicao(id) {
+  const licao = licaoPorId(id);
+  if (!licao) return viewNaoAchei();
+  definirTitulo(licao.titulo);
+  main.replaceChildren(h('p', { class: 'carregando' }, 'Abrindo a lição…'));
+
+  const [md, quiz, render] = await Promise.all([
+    fetch(`content/licoes/${id}.md`).then((r) => (r.ok ? r.text() : null)).catch(() => null),
+    fetch(`content/quiz/${id}.json`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    carregarMarked(),
+  ]);
+
+  if (location.hash.split('?')[0] !== `#/licao/${id}`) return;
+
+  const aula = aulaDaLicao(id);
+  const { anterior, proxima } = vizinhas(id);
+  const perguntas = (etapa) => (quiz?.perguntas || []).filter((q) => q.etapa === etapa);
+
+  const cab = h(
+    'header',
+    { class: 'licao__cab' },
+    h('div', { class: 'sobretitulo' }, `${aula ? aula.titulo : 'Semana 10'} · Lição ${licao.numero}`),
+    h('h1', {}, licao.titulo),
+    h('p', { class: 'lema' }, licao.lema),
+    h(
+      'div',
+      { class: 'meta' },
+      h('span', { class: 'chip' }, `⏱ ${licao.tempo} min`),
+      h('span', { class: 'chip' }, licao.subtitulo),
+      h('span', { class: 'chip' }, `Revisa ${licao.semanas.map((s) => `S${s}`).join(', ')}`),
+      licaoFeita(id) ? h('span', { class: 'chip chip--ok' }, '✓ feita') : null,
+    ),
+    h('div', { class: 'objetivos' }, h('h4', {}, 'Ao final, você consegue'), h('ul', {}, licao.objetivos.map((o) => h('li', {}, o)))),
+  );
+
+  const prosa = h('article', { class: 'prosa' });
+  prosa.innerHTML = md ? render(md) : '<p class="muted">O texto desta lição ainda não foi escrito.</p>';
+
+  prosa.querySelectorAll('table').forEach((t) => {
+    const wrap = h('div', { class: 'tabela-wrap' });
+    t.replaceWith(wrap);
+    wrap.append(t);
+  });
+
+  prosa.querySelectorAll('pre').forEach((pre) => {
+    const b = h('button', { type: 'button', class: 'copiar' }, 'copiar');
+    b.addEventListener('click', () => copy(pre.querySelector('code')?.textContent ?? pre.textContent));
+    pre.append(b);
+  });
+
+  prosa.querySelectorAll('a[href^="http"]').forEach((a) => {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+  });
+
+  prosa.querySelectorAll('[data-cartas]').forEach((el) => el.replaceWith(cartasInline(el.dataset.cartas.split(','))));
+
+  const pre = perguntas('pre');
+  if (pre.length) prosa.prepend(renderQuiz(id, 'pre', pre));
+
+  const check = perguntas('check');
+  const alvoCheck = prosa.querySelector('[data-quiz="check"]');
+  if (check.length) {
+    const q = renderQuiz(id, 'check', check);
+    if (alvoCheck) alvoCheck.replaceWith(q);
+    else prosa.append(q);
+  } else if (alvoCheck) alvoCheck.remove();
+
+  const pos = perguntas('pos');
+  if (pos.length) prosa.append(renderQuiz(id, 'pos', pos));
+
+  const titulos = [...prosa.querySelectorAll(':scope > h2')];
+  titulos.forEach((t) => {
+    if (!t.id) t.id = slug(t.textContent);
+  });
+
+  const indice = h(
+    'ol',
+    {},
+    titulos.map((t) =>
+      h('li', {}, h('a', { href: `#/licao/${id}`, 'data-alvo': t.id, onclick: (e) => (e.preventDefault(), t.scrollIntoView({ behavior: 'smooth', block: 'start' })) }, t.textContent)),
+    ),
+  );
+
+  const lado = h(
+    'aside',
+    { class: 'licao__lado', 'aria-label': 'Nesta lição' },
+    h('h4', {}, 'Nesta lição'),
+    indice,
+    h('h4', {}, aula ? aula.titulo : 'Semana 10'),
+    h(
+      'ol',
+      {},
+      (aula ? aula.licoes : licoes.map((l) => l.id)).map((lid) => {
+        const l = licaoPorId(lid);
+        return h('li', { class: lid === id ? 'eh-atual' : '' }, h('a', { href: `#/licao/${lid}` }, `${l.numero}. ${l.titulo}`));
+      }),
+    ),
+  );
+
+  const btnConcluir = h('button', { type: 'button', class: licaoFeita(id) ? 'btn' : 'btn btn--primary' }, licaoFeita(id) ? 'Marcar como não feita' : 'Concluí esta lição');
+  btnConcluir.addEventListener('click', () => {
+    const feita = !licaoFeita(id);
+    marcarLicao(id, feita);
+    btnConcluir.textContent = feita ? 'Marcar como não feita' : 'Concluí esta lição';
+    btnConcluir.className = feita ? 'btn' : 'btn btn--primary';
+    toast(feita ? 'Lição marcada como feita.' : 'Lição desmarcada.');
+  });
+
+  const conteudo = h(
+    'div',
+    {},
+    cab,
+    prosa,
+    h('div', { class: 'concluir' }, btnConcluir, h('span', { class: 'muted' }, 'Seu progresso fica salvo só neste navegador.')),
+    h(
+      'nav',
+      { class: 'navegacao', 'aria-label': 'Lições vizinhas' },
+      anterior ? h('a', { href: `#/licao/${anterior.id}` }, h('small', {}, '← Anterior'), anterior.titulo) : h('span'),
+      proxima
+        ? h('a', { class: 'prox', href: `#/licao/${proxima.id}` }, h('small', {}, 'Próxima →'), proxima.titulo)
+        : h('a', { class: 'prox', href: '#/speedrun' }, h('small', {}, 'Fim da semana →'), 'Speedrun e placar'),
+    ),
+  );
+
+  main.replaceChildren(h('div', { class: 'licao' }, lado, conteudo));
+  window.scrollTo(0, 0);
+
+  await Promise.all([...prosa.querySelectorAll('[data-lab]')].map((el) => montarLab(el, id)));
+
+  if ('IntersectionObserver' in window && titulos.length) {
+    observador = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((e) => {
+          if (e.isIntersecting) {
+            indice.querySelectorAll('a').forEach((a) => (a.dataset.ativo = a.dataset.alvo === e.target.id ? '1' : '0'));
+          }
+        });
+      },
+      { rootMargin: '-80px 0px -70% 0px' },
+    );
+    titulos.forEach((t) => observador.observe(t));
+  }
+}
+
+function viewNaoAchei() {
+  definirTitulo('Caminho errado');
+  main.replaceChildren(
+    h(
+      'section',
+      { class: 'secao', style: { textAlign: 'center' } },
+      h('h1', {}, 'Qualquer caminho serve?'),
+      h('p', { class: 'heroi__lead', style: { margin: '0 auto 1.5rem' } }, 'Esta página não existe. Talvez seja hora de decidir para onde você quer ir.'),
+      h('a', { class: 'btn btn--primary', href: '#/' }, 'Voltar ao início'),
+    ),
+  );
+}
+
+/* ---------------- roteador ---------------- */
+
+async function rotear() {
+  limpar();
+  const [caminho, query = ''] = (location.hash.slice(1) || '/').split('?');
+  const params = new URLSearchParams(query);
+  marcarNav(caminho);
+  const partes = caminho.split('/').filter(Boolean);
+  try {
+    if (partes.length === 0) viewInicio();
+    else if (partes[0] === 'licao' && partes[1]) await viewLicao(partes[1]);
+    else if (partes[0] === 'baralho') viewBaralho(params);
+    else if (partes[0] === 'trilha') viewTrilha(params);
+    else if (partes[0] === 'glossario') await viewGlossario();
+    else if (partes[0] === 'speedrun') await viewSpeedrun();
+    else viewNaoAchei();
+  } catch (erro) {
+    console.error(erro);
+    main.replaceChildren(h('p', { class: 'carregando' }, 'Algo quebrou ao abrir esta página. Recarregue.'));
+  }
+  if (!params.get('carta') && !params.get('semana') && partes[0] !== 'licao') window.scrollTo(0, 0);
+}
+
+/* ---------------- preferências ---------------- */
+
+function aplicarProjetor(ativo) {
+  const r = document.documentElement;
+  if (ativo) r.setAttribute('data-projetor', '1');
+  else r.removeAttribute('data-projetor');
+  document.getElementById('btn-projetor').setAttribute('aria-pressed', ativo ? 'true' : 'false');
+  definirPreferencia('projetor', ativo);
+}
+
+function temaAtual() {
+  const r = document.documentElement.getAttribute('data-theme');
+  if (r) return r;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+document.getElementById('btn-tema').addEventListener('click', () => {
+  const novo = temaAtual() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', novo);
+  definirPreferencia('tema', novo);
+});
+
+document.getElementById('btn-projetor').addEventListener('click', () => aplicarProjetor(!document.documentElement.hasAttribute('data-projetor')));
+document.getElementById('btn-projetor').setAttribute('aria-pressed', preferencia('projetor', false) ? 'true' : 'false');
+
+document.getElementById('menu-btn').addEventListener('click', (e) => {
+  const nav = document.getElementById('nav');
+  const aberto = nav.dataset.aberto === '1';
+  nav.dataset.aberto = aberto ? '0' : '1';
+  e.currentTarget.setAttribute('aria-expanded', aberto ? 'false' : 'true');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
+  const alvo = e.target;
+  if (alvo instanceof HTMLElement && (alvo.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(alvo.tagName))) return;
+  if (e.key === 'p' || e.key === 'P') aplicarProjetor(!document.documentElement.hasAttribute('data-projetor'));
+});
+
+window.addEventListener('hashchange', rotear);
+rotear();

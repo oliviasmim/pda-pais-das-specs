@@ -1,0 +1,77 @@
+{
+  "licao": "cha-do-chapeleiro",
+  "perguntas": [
+    {
+      "etapa": "pre",
+      "pergunta": "Três agentes rodam ao mesmo tempo na mesma pasta, cada um com uma task que registra uma rota em src/app.js. O que é mais provável?",
+      "opcoes": [
+        "O git avisa que há três agentes e bloqueia dois.",
+        "Cada agente grava a versão que leu antes, e as rotas dos outros somem sem nenhum erro.",
+        "Os três agentes combinam a ordem entre si pelo chat.",
+        "Nada: arquivos diferentes nunca conflitam."
+      ],
+      "correta": 1,
+      "explicacao": "Na mesma pasta não há isolamento. A última gravação vence e apaga as outras, em silêncio. É o pior tipo de bug: ninguém avisa."
+    },
+    {
+      "etapa": "pre",
+      "pergunta": "Qual a diferença entre um worktree e um clone do repositório?",
+      "opcoes": [
+        "Nenhuma, são nomes diferentes para a mesma coisa.",
+        "O clone compartilha o histórico; o worktree baixa tudo de novo.",
+        "Worktree só funciona com o Claude Code.",
+        "O worktree é mais uma pasta de trabalho do mesmo repositório, compartilhando o histórico; o clone duplica o repositório."
+      ],
+      "correta": 3,
+      "explicacao": "Worktree é mais uma xícara na mesma mesa: pasta e branch próprias, mesmo .git. Clone é outra mesa inteira, que precisa de push e pull para conversar."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Você roda git worktree add ../wt-x main e recebe: fatal: 'main' is already used by worktree at '/agenda-mentorias'. O que fazer?",
+      "opcoes": [
+        "Usar --force para abrir a main de novo.",
+        "Apagar a pasta principal.",
+        "Criar uma branch nova para o worktree, com -b.",
+        "Fazer git checkout main dentro do worktree."
+      ],
+      "correta": 2,
+      "explicacao": "Uma branch só pode estar em uma xícara por vez. É proteção: dois agentes na mesma branch voltam ao problema da mesa sem xícaras. Crie uma branch nova com -b."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Ao integrar a segunda task, o git mostra conflito em src/app.js: as duas tasks adicionaram uma linha app.use(...) no mesmo lugar. Qual resolução está certa?",
+      "opcoes": [
+        "Manter as duas linhas e rodar os testes de aceite das tasks.",
+        "Manter HEAD, que é a main.",
+        "Manter a versão da branch que está chegando.",
+        "Abortar e refazer as duas tasks juntas num agente só."
+      ],
+      "correta": 0,
+      "explicacao": "As duas linhas são necessárias. Escolher um lado apaga a rota da outra task, e o teste de aceite dela quebra. Depois de resolver, prove com os testes."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "O que o comando claude -w agendar faz?",
+      "opcoes": [
+        "Abre o Claude Code em modo web.",
+        "Faz o agente esperar (wait) a task anterior terminar.",
+        "Cria um worktree em .claude/worktrees/agendar, numa branch worktree-agendar, e abre a sessão lá dentro.",
+        "Clona o repositório na pasta agendar."
+      ],
+      "correta": 2,
+      "explicacao": "É o atalho do Claude Code para pôr a mesa: cria o worktree, cria a branch e abre a sessão nele. Lembre de pôr .claude/worktrees/ no .gitignore."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Qual hábito de integração evita perder trabalho no speedrun?",
+      "opcoes": [
+        "Fazer merge das três branches de uma vez e resolver tudo no fim.",
+        "Fazer merge de uma branch por vez e rodar os testes de aceite das três tasks na main depois de cada merge.",
+        "Pedir para o agente resolver os conflitos sem olhar.",
+        "Integrar direto pelo botão do GitHub sem rodar nada local."
+      ],
+      "correta": 1,
+      "explicacao": "Um merge por vez deixa claro de onde veio cada problema, e os testes das três tasks provam que nenhuma rota sumiu. É a carta Contraprova aplicada à integração."
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "licao": "baralho-da-rainha",
+  "perguntas": [
+    {
+      "etapa": "pre",
+      "pergunta": "Qual é o principal problema que subagents resolvem?",
+      "opcoes": [
+        "Isolar o contexto: o trabalho de uma task fica na janela do subagent, e só um resumo volta ao agente principal.",
+        "Deixar o modelo mais inteligente.",
+        "Dispensar a revisão humana.",
+        "Reduzir sempre o custo em tokens."
+      ],
+      "correta": 0,
+      "explicacao": "Isolamento de contexto é o motivo. Velocidade é bônus, e só quando as tasks são independentes. Em tokens, vários agentes costumam custar mais, não menos."
+    },
+    {
+      "etapa": "pre",
+      "pergunta": "Alguém propõe um swarm de 5 agentes para corrigir um status 200 que devia ser 201. Qual a melhor resposta?",
+      "opcoes": [
+        "Ótimo: mais agentes, mais rápido.",
+        "Usar um supervisor para coordenar os 5.",
+        "Um agente único resolve: é uma task, um arquivo, três minutos. Subir e integrar 5 agentes custa mais que a própria correção.",
+        "Usar 5 agentes e votar na melhor resposta."
+      ],
+      "correta": 2,
+      "explicacao": "Não há o que paralelizar. Sobra só o pedágio de subir agentes, coordenar e integrar. Recusar com argumento é julgamento, não preguiça."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Três tasks: extrair a validação, usar a validação nova no cancelamento, ajustar os testes. Cada uma depende da anterior. Qual padrão faz mais sentido?",
+      "opcoes": [
+        "Paralelo, um worktree por task.",
+        "Supervisor com 3 trabalhadores em paralelo.",
+        "Swarm com votação.",
+        "Agente único ou sequencial: em cadeia não há o que rodar ao mesmo tempo."
+      ],
+      "correta": 3,
+      "explicacao": "Em cadeia, o paralelo vira sequencial com pedágio. Um agente único (se o contexto couber) ou um sequencial com handoffs claros resolve melhor."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Quatro revisores especializados (segurança, testes, spec, simplicidade) só leem um PR grande. Por que um supervisor pode ser melhor que o paralelo puro?",
+      "opcoes": [
+        "Porque o supervisor lê mais rápido.",
+        "Porque alguém precisa consolidar os quatro relatórios, remover duplicados e aplicar um critério comum; sem supervisor, isso cai numa pessoa.",
+        "Porque o paralelo não permite tarefas só de leitura.",
+        "Porque o supervisor não gasta tokens."
+      ],
+      "correta": 1,
+      "explicacao": "Tarefas só de leitura não conflitam, mas os resultados precisam ser juntados com critério. É aí que o supervisor se paga."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Qual destas NÃO é uma das quatro perguntas do teste da Rainha antes de paralelizar?",
+      "opcoes": [
+        "As tasks são independentes?",
+        "Elas mexem em arquivos diferentes?",
+        "Cada uma tem teste de aceite próprio?",
+        "Temos agentes suficientes para todas as tasks?"
+      ],
+      "correta": 3,
+      "explicacao": "Ter agentes disponíveis não diz se vale a pena. As perguntas são: independentes, arquivos diferentes, pronto próprio e integração curta."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "O que é um swarm?",
+      "opcoes": [
+        "Um quinto padrão de orquestração, mais avançado que os outros.",
+        "Um modelo de linguagem treinado para trabalhar em grupo.",
+        "Um nome para arranjos com muitos subagents. Na prática é um dos padrões (paralelo, supervisor...) com mais cartas.",
+        "Um recurso do git para rodar tarefas em paralelo."
+      ],
+      "correta": 2,
+      "explicacao": "Quando alguém disser 'vamos fazer um swarm', a pergunta certa é: qual padrão, com quantos agentes, e por que um agente único não basta?"
+    }
+  ]
+}

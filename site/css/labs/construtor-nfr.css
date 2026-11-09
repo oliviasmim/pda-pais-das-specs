@@ -1,0 +1,230 @@
+.lab-construtor-nfr .nfr-passo {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+.lab-construtor-nfr .nfr-passo:not(:first-child) {
+  margin-top: 1.2rem;
+}
+
+.lab-construtor-nfr .nfr-passo__n {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+}
+
+.lab-construtor-nfr .nfr-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lab-construtor-nfr .nfr-cat {
+  font: inherit;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  color: var(--ink);
+  cursor: pointer;
+  position: relative;
+}
+
+.lab-construtor-nfr .nfr-cat:hover {
+  border-color: var(--ink-3);
+}
+
+.lab-construtor-nfr .nfr-cat.is-on {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.lab-construtor-nfr .nfr-cat:focus-visible,
+.lab-construtor-nfr .nfr-padrao:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.lab-construtor-nfr .nfr-pergunta {
+  font-style: italic;
+  color: var(--ink-2);
+  margin: 0.6rem 0 0;
+}
+
+.lab-construtor-nfr .nfr-padroes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.lab-construtor-nfr .nfr-padrao {
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.lab-construtor-nfr .nfr-padrao.is-on {
+  background: var(--tinta-soft);
+  color: var(--tinta);
+  border-color: color-mix(in srgb, var(--tinta) 40%, transparent);
+  font-weight: 600;
+}
+
+.lab-construtor-nfr .nfr-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  margin-top: 1.1rem;
+  align-items: start;
+}
+
+.lab-construtor-nfr .nfr-campo {
+  margin-bottom: 0.75rem;
+}
+
+.lab-construtor-nfr .nfr-campo label,
+.lab-construtor-nfr .nfr-onde legend {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--ink-2);
+}
+
+.lab-construtor-nfr input[type='text'],
+.lab-construtor-nfr textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.93rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.lab-construtor-nfr input[type='text']:focus,
+.lab-construtor-nfr textarea:focus {
+  outline: none;
+  border-color: var(--tinta);
+  box-shadow: var(--focus);
+}
+
+.lab-construtor-nfr .nfr-onde {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 0.5rem 0.75rem 0.6rem;
+  margin: 0 0 0.9rem;
+}
+
+.lab-construtor-nfr .nfr-onde__op {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.86rem;
+  padding: 0.15rem 0;
+  cursor: pointer;
+}
+
+.lab-construtor-nfr .nfr-onde__op input {
+  margin-top: 0.25em;
+  accent-color: var(--copas);
+}
+
+.lab-construtor-nfr .nfr-saida {
+  position: sticky;
+  top: 1rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1rem 1.1rem;
+}
+
+.lab-construtor-nfr .nfr-saida__rot,
+.lab-construtor-nfr .nfr-sugestao__rot {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-3);
+  margin: 0 0 0.4rem;
+}
+
+.lab-construtor-nfr .nfr-ears {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.45;
+  margin: 0 0 0.9rem;
+}
+
+.lab-construtor-nfr .nfr-kw {
+  color: var(--tinta);
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+}
+
+.lab-construtor-nfr .nfr-avisos {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+}
+
+.lab-construtor-nfr .nfr-sugestao {
+  border-top: 1px dashed var(--line);
+  padding-top: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.lab-construtor-nfr .nfr-sugestao__txt {
+  font-size: 0.88rem;
+  margin: 0 0 0.35rem;
+}
+
+.lab-construtor-nfr .nfr-minhas {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.lab-construtor-nfr .nfr-minhas__cab {
+  justify-content: space-between;
+}
+
+.lab-construtor-nfr .nfr-minhas__cab h4 {
+  margin: 0;
+}
+
+.lab-construtor-nfr .nfr-lista {
+  margin: 0.75rem 0 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lab-construtor-nfr .nfr-vazia {
+  list-style: none;
+  margin-left: -1.2rem;
+}
+
+.lab-construtor-nfr .nfr-remover {
+  margin-left: 0.25rem;
+  padding: 0.1em 0.55em;
+}

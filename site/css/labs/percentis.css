@@ -1,0 +1,211 @@
+.lab-percentis .pc-controles {
+  display: grid;
+  gap: 1rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  margin-bottom: 0.9rem;
+}
+
+.lab-percentis .pc-controle label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.lab-percentis .pc-controle input[type='range'] {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--copas);
+}
+
+.lab-percentis .pc-val {
+  min-width: 3.6em;
+  text-align: right;
+  font-weight: 600;
+}
+
+.lab-percentis .pc-presets {
+  margin-bottom: 1.1rem;
+}
+
+.lab-percentis .pc-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+@media (max-width: 520px) {
+  .lab-percentis .pc-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.lab-percentis .pc-tile {
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--cor);
+  border-radius: var(--r);
+  padding: 0.55rem 0.75rem;
+  background: var(--paper-2);
+}
+
+.lab-percentis .pc-tile__rot {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cor);
+  font-weight: 600;
+}
+
+.lab-percentis .pc-tile__num {
+  font-size: 1.25rem;
+}
+
+.lab-percentis .pc-fig {
+  margin: 0;
+}
+
+.lab-percentis .pc-hist {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lab-percentis .pc-fig figcaption {
+  font-size: 0.78rem;
+  margin-top: 0.25rem;
+}
+
+.lab-percentis .pc-barra {
+  fill: color-mix(in srgb, var(--ink-3) 55%, transparent);
+}
+
+.lab-percentis .pc-barra--fora {
+  fill: var(--copas);
+  opacity: 0.75;
+}
+
+.lab-percentis .pc-eixo {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.lab-percentis .pc-tick {
+  fill: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.lab-percentis .pc-marca {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.lab-percentis .pc-resumo {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  line-height: 1.45;
+  margin: 1rem 0 1.25rem;
+  padding: 0.8rem 1rem;
+  border-left: 3px solid var(--copas);
+  background: var(--paper-2);
+  border-radius: 0 var(--r) var(--r) 0;
+}
+
+.lab-percentis .pc-baixo h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.lab-percentis .pc-baixo .muted {
+  font-size: 0.85rem;
+  margin: 0 0 0.6rem;
+}
+
+.lab-percentis .pc-chamadas {
+  display: grid;
+  gap: 0.22rem;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.lab-percentis .pc-chamada {
+  display: grid;
+  grid-template-columns: 2.4em 1fr 4.6em;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.lab-percentis .pc-chamada__rot {
+  color: var(--ink-3);
+}
+
+.lab-percentis .pc-chamada__ms {
+  text-align: right;
+  color: var(--ink-2);
+}
+
+.lab-percentis .pc-chamada__trilho {
+  height: 0.55rem;
+  background: var(--paper-2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.lab-percentis .pc-chamada__barra {
+  display: block;
+  height: 100%;
+  background: var(--tinta);
+  border-radius: 99px;
+}
+
+.lab-percentis .pc-chamada--lenta .pc-chamada__barra {
+  background: var(--copas);
+}
+
+.lab-percentis .pc-chamada--lenta .pc-chamada__ms {
+  color: var(--copas);
+  font-weight: 600;
+}
+
+.lab-percentis .pc-chamada__total {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.lab-percentis .pc-medidor__trilho {
+  height: 1.1rem;
+  border-radius: 99px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  margin: 0.4rem 0 0.6rem;
+}
+
+.lab-percentis .pc-medidor__barra {
+  height: 100%;
+  background: repeating-linear-gradient(45deg, var(--copas), var(--copas) 6px, color-mix(in srgb, var(--copas) 75%, transparent) 6px, color-mix(in srgb, var(--copas) 75%, transparent) 12px);
+  transition: width 0.25s ease;
+}
+
+.lab-percentis .pc-medidor__txt {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .lab-percentis .pc-marca {
+    display: none;
+  }
+
+  .lab-percentis .pc-tick {
+    font-size: 22px;
+  }
+}

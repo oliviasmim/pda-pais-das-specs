@@ -1,0 +1,171 @@
+.lab-precisa-mesmo .pm-topo {
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.lab-precisa-mesmo .pm-placar {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.lab-precisa-mesmo .pm-placar__recusa {
+  color: var(--copas);
+  font-weight: 600;
+}
+
+.lab-precisa-mesmo .pm-opcoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--paper-2);
+  font-size: 0.83rem;
+}
+
+.lab-precisa-mesmo .pm-opcoes dt {
+  font-weight: 600;
+}
+
+.lab-precisa-mesmo .pm-opcoes dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.lab-precisa-mesmo .pm-baralho {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+
+.lab-precisa-mesmo .pm-carta {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 1rem 1.1rem 1.1rem;
+  box-shadow: var(--shadow);
+}
+
+.lab-precisa-mesmo .pm-carta::after {
+  content: attr(data-naipe);
+  position: absolute;
+  top: 0.7rem;
+  right: 0.9rem;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--ink-3);
+}
+
+.lab-precisa-mesmo .pm-carta[data-naipe='♥']::after,
+.lab-precisa-mesmo .pm-carta[data-naipe='♦']::after {
+  color: var(--copas);
+}
+
+.lab-precisa-mesmo .pm-carta.is-revelada {
+  background: var(--paper-2);
+}
+
+.lab-precisa-mesmo .pm-carta__cab h4 {
+  margin: 0.15rem 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  padding-right: 1.6rem;
+}
+
+.lab-precisa-mesmo .pm-carta__n {
+  font-size: 0.72rem;
+  color: var(--ink-3);
+}
+
+.lab-precisa-mesmo .pm-contexto {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+.lab-precisa-mesmo .pm-escolha {
+  border: 0;
+  padding: 0;
+  margin: 0 0 0.7rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+
+.lab-precisa-mesmo .pm-op {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  background: var(--paper);
+}
+
+.lab-precisa-mesmo .pm-op:has(input:checked) {
+  border-color: var(--ink);
+  background: var(--tinta-soft);
+}
+
+.lab-precisa-mesmo .pm-op:has(input:focus-visible) {
+  box-shadow: var(--focus);
+}
+
+.lab-precisa-mesmo .pm-op input {
+  accent-color: var(--copas);
+}
+
+.lab-precisa-mesmo .pm-just__rot {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin-bottom: 0.25rem;
+}
+
+.lab-precisa-mesmo textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.lab-precisa-mesmo textarea:focus {
+  outline: none;
+  border-color: var(--tinta);
+  box-shadow: var(--focus);
+}
+
+.lab-precisa-mesmo .pm-acoes {
+  margin-top: 0.6rem;
+}
+
+.lab-precisa-mesmo .pm-veredito {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--line);
+  font-size: 0.88rem;
+}
+
+.lab-precisa-mesmo .pm-veredito p {
+  margin: 0 0 0.5rem;
+}
+
+.lab-precisa-mesmo .pm-criterio {
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.lab-precisa-mesmo .pm-just-aviso {
+  color: var(--ouro);
+}

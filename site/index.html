@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>País das Specs</title>
+    <meta name="description" content="Semana 10 da Especialização em IA da Programadores do Amanhã: requisitos, subagents, worktrees, gates e revisão crítica. Laboratórios interativos." />
+    <meta name="theme-color" content="#f4f0e6" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='2' width='22' height='28' rx='4' fill='%23fbf9f3' stroke='%231c1a15' stroke-width='1.5'/%3E%3Ctext x='16' y='22' font-size='14' text-anchor='middle' fill='%23b4232c'%3E%E2%99%A5%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script>
+      (function () {
+        var r = document.documentElement;
+        try {
+          var t = JSON.parse(localStorage.getItem('pda-specs:pref:tema') || 'null');
+          if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
+          if (JSON.parse(localStorage.getItem('pda-specs:pref:projetor') || 'false')) r.setAttribute('data-projetor', '1');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topo">
+      <div class="topo__in">
+        <a class="marca" href="#/" aria-label="País das Specs, início">
+          <span class="marca__selo" aria-hidden="true">♥</span>
+          <span>País das Specs<small>PdA · Especialização em IA · Semana 10</small></span>
+        </a>
+        <button class="icone-btn menu-btn" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav" id="menu-btn">☰</button>
+        <nav class="nav" id="nav" aria-label="Principal">
+          <a href="#/">Início</a>
+          <a href="#/baralho">Baralho</a>
+          <a href="#/trilha">Trilha</a>
+          <a href="#/speedrun">Speedrun</a>
+          <a href="#/glossario">Glossário</a>
+          <button class="icone-btn" type="button" id="btn-projetor" aria-pressed="false" title="Modo projetor (P)" aria-label="Modo projetor">⛶</button>
+          <button class="icone-btn" type="button" id="btn-tema" title="Trocar tema" aria-label="Trocar tema claro ou escuro">◐</button>
+        </nav>
+      </div>
+    </header>
+    <main id="conteudo" tabindex="-1">
+      <p class="carregando">Caindo na toca do coelho…</p>
+    </main>
+    <footer class="rodape">
+      <div class="rodape__in">
+        <span>Programadores do Amanhã · Especialização em IA · Semana 10 (revisão)</span>
+        <span>Citações de Lewis Carroll (1865) em tradução livre, domínio público. Inspirado em <a href="https://github.com/rohitg00/ai-engineering-from-scratch">AI Engineering from Scratch</a>.</span>
+      </div>
+    </footer>
+    <noscript><p style="padding: 1rem">Este site precisa de JavaScript para os laboratórios.</p></noscript>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

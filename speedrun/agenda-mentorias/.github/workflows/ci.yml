@@ -1,0 +1,28 @@
+name: CI · sensores
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Sensor 1 · lint
+        run: npm run lint
+      - name: Sensor 2 · type check
+        run: npm run typecheck
+      - name: Sensor 3 · testes + cobertura (80%)
+        run: npm test
+      - name: Sensor 4 · dependências
+        run: npm run deps
+      - name: Sensor 5 · smoke (sobe o app)
+        run: npm run smoke
+      - name: Guarda · rosas pintadas
+        run: npm run guarda

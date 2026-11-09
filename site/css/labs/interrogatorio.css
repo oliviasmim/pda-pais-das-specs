@@ -1,0 +1,426 @@
+.lab-interrogatorio {
+  --ig-pedido: var(--folha);
+  --ig-assumido: var(--ouro);
+  --ig-inventado: var(--copas);
+}
+
+.lab-interrogatorio .ig-rotulo {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.25rem;
+}
+
+.lab-interrogatorio .ig-pedido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--line);
+  margin-bottom: 1rem;
+}
+
+.lab-interrogatorio .ig-citacao {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.3;
+  font-style: italic;
+  color: var(--ink);
+  border: 0;
+  padding: 0;
+}
+
+.lab-interrogatorio .ig-grade {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.lab-interrogatorio .ig-legenda-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lab-interrogatorio .ig-legenda-bar .ig-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+}
+
+.lab-interrogatorio .ig-faltam {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--tinta);
+}
+
+.lab-interrogatorio .ig-codigo {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.lab-interrogatorio .ig-arquivo {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.lab-interrogatorio .ig-linha {
+  display: grid;
+  grid-template-columns: 2.4em 1.4em 1fr;
+  align-items: baseline;
+  width: 100%;
+  margin: 0;
+  padding: 0 0.5rem 0 0;
+  border: 0;
+  border-left: 3px solid transparent;
+  background: color-mix(in srgb, var(--folha) 5%, transparent);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  white-space: pre;
+}
+
+.lab-interrogatorio .ig-num {
+  color: var(--ink-3);
+  text-align: right;
+  padding-right: 0.6em;
+  user-select: none;
+}
+
+.lab-interrogatorio .ig-sinal {
+  color: var(--ink-3);
+  text-align: center;
+  user-select: none;
+}
+
+.lab-interrogatorio .ig-texto {
+  font: inherit;
+  font-size: inherit;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  color: inherit;
+  overflow-wrap: normal;
+}
+
+.lab-interrogatorio button.ig-linha {
+  cursor: pointer;
+  background: color-mix(in srgb, var(--tinta) 7%, transparent);
+  border-left-color: color-mix(in srgb, var(--tinta) 45%, transparent);
+}
+
+.lab-interrogatorio button.ig-linha .ig-sinal {
+  color: var(--tinta);
+  font-weight: 700;
+}
+
+.lab-interrogatorio button.ig-linha:hover {
+  background: color-mix(in srgb, var(--tinta) 14%, transparent);
+}
+
+.lab-interrogatorio button.ig-linha:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: -2px;
+}
+
+.lab-interrogatorio .ig-linha--pedido { border-left-color: var(--ig-pedido); background: color-mix(in srgb, var(--ig-pedido) 12%, transparent); }
+.lab-interrogatorio .ig-linha--assumido { border-left-color: var(--ig-assumido); background: color-mix(in srgb, var(--ig-assumido) 14%, transparent); }
+.lab-interrogatorio .ig-linha--inventado { border-left-color: var(--ig-inventado); background: color-mix(in srgb, var(--ig-inventado) 12%, transparent); }
+.lab-interrogatorio button.ig-linha--pedido .ig-sinal { color: var(--ig-pedido); }
+.lab-interrogatorio button.ig-linha--assumido .ig-sinal { color: var(--ig-assumido); }
+.lab-interrogatorio button.ig-linha--inventado .ig-sinal { color: var(--ig-inventado); }
+
+.lab-interrogatorio .ig-linha--atual,
+.lab-interrogatorio button.ig-linha--atual:hover {
+  background: color-mix(in srgb, var(--tinta) 22%, transparent);
+  border-left-color: var(--tinta);
+}
+
+.lab-interrogatorio .ig-painel {
+  position: sticky;
+  left: 0;
+  margin: 0.4rem 0.6rem 0.8rem 2.4rem;
+  max-width: 46rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--tinta);
+  border-radius: var(--r);
+  padding: 0.9rem 1.1rem 1rem;
+  box-shadow: var(--shadow);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.lab-interrogatorio .ig-painel > * + * { margin-top: 0.7rem; }
+.lab-interrogatorio .ig-painel p { margin-bottom: 0; }
+
+.lab-interrogatorio .ig-vazio-titulo {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.lab-interrogatorio .ig-legenda {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.92rem;
+}
+
+.lab-interrogatorio .ig-ponto {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  margin-right: 0.45em;
+  vertical-align: 0.05em;
+}
+
+.lab-interrogatorio .ig-ponto--pedido { background: var(--ig-pedido); }
+.lab-interrogatorio .ig-ponto--assumido { background: var(--ig-assumido); }
+.lab-interrogatorio .ig-ponto--inventado { background: var(--ig-inventado); }
+
+.lab-interrogatorio .ig-onde {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+
+.lab-interrogatorio .ig-titulo {
+  margin: 0.15rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.lab-interrogatorio .ig-trecho {
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  background: var(--paper-2);
+  border-radius: var(--r-sm);
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.lab-interrogatorio .ig-pergunta {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.lab-interrogatorio .ig-opcoes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.lab-interrogatorio .ig-opcao {
+  display: grid;
+  gap: 0.1rem;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  border-left-width: 5px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.lab-interrogatorio .ig-opcao span { font-size: 0.85rem; color: var(--ink-2); }
+.lab-interrogatorio .ig-opcao--pedido { border-left-color: var(--ig-pedido); }
+.lab-interrogatorio .ig-opcao--assumido { border-left-color: var(--ig-assumido); }
+.lab-interrogatorio .ig-opcao--inventado { border-left-color: var(--ig-inventado); }
+.lab-interrogatorio .ig-opcao:hover { background: var(--paper-2); }
+.lab-interrogatorio .ig-opcao:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+
+.lab-interrogatorio .ig-veredito {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--r-sm);
+  outline: none;
+}
+
+.lab-interrogatorio .ig-veredito--ok { background: color-mix(in srgb, var(--folha) 15%, transparent); }
+.lab-interrogatorio .ig-veredito--quase { background: color-mix(in srgb, var(--ouro) 18%, transparent); }
+.lab-interrogatorio .ig-veredito--nao { background: color-mix(in srgb, var(--copas) 13%, transparent); }
+
+.lab-interrogatorio .ig-veredito-nota {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.lab-interrogatorio .ig-cor--pedido { color: var(--ig-pedido); }
+.lab-interrogatorio .ig-cor--assumido { color: color-mix(in srgb, var(--ig-assumido) 80%, var(--ink)); }
+.lab-interrogatorio .ig-cor--inventado { color: var(--ig-inventado); }
+
+.lab-interrogatorio .ig-naspec {
+  border-left: 3px solid var(--tinta);
+  padding: 0.25rem 0 0.25rem 0.75rem;
+}
+
+.lab-interrogatorio .ig-naspec p { margin: 0; }
+.lab-interrogatorio .ig-naspec--forte { background: color-mix(in srgb, var(--tinta) 8%, transparent); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+
+.lab-interrogatorio .ig-contraprova {
+  border: 1px dashed var(--line);
+  border-radius: var(--r-sm);
+  padding: 0.6rem 0.75rem;
+}
+
+.lab-interrogatorio .ig-contraprova dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 0.75rem;
+  margin: 0;
+}
+
+.lab-interrogatorio .ig-contraprova dt { font-size: 0.8rem; color: var(--ink-3); }
+.lab-interrogatorio .ig-contraprova dd { margin: 0; font-size: 0.8rem; word-break: break-word; }
+.lab-interrogatorio .ig-obtido { color: var(--copas); }
+
+.lab-interrogatorio .ig-carta {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.lab-interrogatorio .ig-naipe {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.lab-interrogatorio .ig-acoes { margin-top: 0.9rem; }
+
+.lab-interrogatorio .ig-spec {
+  background: color-mix(in srgb, var(--tinta) 5%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--tinta) 30%, var(--line));
+  border-radius: var(--r);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lab-interrogatorio .ig-spec h4 { margin: 0; font-family: var(--font-display); font-size: 1.1rem; }
+.lab-interrogatorio .ig-spec-topo p { margin: 0.2rem 0 0.6rem; font-size: 0.8rem; }
+.lab-interrogatorio .ig-tabela-wrap { overflow-x: auto; }
+
+.lab-interrogatorio .ig-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.lab-interrogatorio .ig-tabela th,
+.lab-interrogatorio .ig-tabela td {
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.lab-interrogatorio .ig-tabela th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.lab-interrogatorio .ig-extras { margin: 0.75rem 0 0; padding-left: 1.1rem; font-size: 0.88rem; }
+.lab-interrogatorio .ig-dica { margin: 0.6rem 0 0; font-size: 0.85rem; }
+
+.lab-interrogatorio .ig-placar {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 1rem;
+}
+
+.lab-interrogatorio .ig-placar-topo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+}
+
+.lab-interrogatorio .ig-pontos {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.lab-interrogatorio .ig-pontos strong { font-size: 2.2rem; line-height: 1; }
+.lab-interrogatorio .ig-placar-topo .muted { margin: 0; font-size: 0.85rem; }
+
+.lab-interrogatorio .ig-barras {
+  flex: 1;
+  min-width: 14rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.lab-interrogatorio .ig-barra {
+  display: grid;
+  grid-template-columns: 7.5em 1fr 2.5em;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.lab-interrogatorio .ig-barra-trilho {
+  height: 0.55rem;
+  background: var(--paper-2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.lab-interrogatorio .ig-barra-cheia { display: block; height: 100%; transition: width 0.3s ease; }
+.lab-interrogatorio .ig-barra-cheia--pedido { background: var(--ig-pedido); }
+.lab-interrogatorio .ig-barra-cheia--assumido { background: var(--ig-assumido); }
+.lab-interrogatorio .ig-barra-cheia--inventado { background: var(--ig-inventado); }
+
+.lab-interrogatorio .ig-padrao {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--r);
+  padding: 1rem 1.2rem;
+}
+
+.lab-interrogatorio .ig-padrao .ig-rotulo { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+.lab-interrogatorio .ig-padrao p { margin: 0.3rem 0 0; font-family: var(--font-display); font-size: 1.08rem; line-height: 1.45; }
+.lab-interrogatorio .ig-padrao .muted { font-family: var(--font-body); font-size: 0.9rem; color: color-mix(in srgb, var(--paper) 75%, transparent); }
+
+@media (max-width: 760px) {
+  .lab-interrogatorio .ig-painel { margin-left: 0.4rem; margin-right: 0.4rem; }
+  .lab-interrogatorio .ig-opcoes { grid-template-columns: 1fr; }
+  .lab-interrogatorio .ig-barra { grid-template-columns: 6.5em 1fr 2.5em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-interrogatorio .ig-barra-cheia { transition: none; }
+}

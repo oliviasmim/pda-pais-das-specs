@@ -1,0 +1,189 @@
+.lab-carta-destino .cd-papel {
+  position: relative;
+  background:
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--ouro-soft) 70%, transparent), transparent 45%),
+    var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1.5rem clamp(1rem, 4vw, 2.2rem) 1.25rem;
+  box-shadow: var(--shadow), inset 0 0 0 6px var(--paper), inset 0 0 0 7px var(--line);
+  overflow: hidden;
+}
+
+.lab-carta-destino .cd-sobrescrito {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.lab-carta-destino .cd-epigrafe {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink-2);
+  margin: 0.2rem 0 1.2rem;
+}
+
+.lab-carta-destino .cd-bloco {
+  border-top: 1px solid var(--line);
+  padding-top: 0.85rem;
+  margin-top: 0.85rem;
+}
+
+.lab-carta-destino .cd-bloco h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.55rem;
+  font-size: 1rem;
+}
+
+.lab-carta-destino .cd-naipe {
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.lab-carta-destino .cd-naipe--copas {
+  color: var(--copas);
+}
+
+.lab-carta-destino .cd-duas {
+  display: grid;
+  gap: 0 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.lab-carta-destino .cd-tres {
+  display: grid;
+  gap: 0 1rem;
+  grid-template-columns: 2fr 6rem 2fr;
+}
+
+@media (max-width: 640px) {
+  .lab-carta-destino .cd-tres {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lab-carta-destino .cd-campo {
+  margin-bottom: 0.55rem;
+}
+
+.lab-carta-destino .cd-campo label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin-bottom: 0.2rem;
+}
+
+.lab-carta-destino input[type='text'],
+.lab-carta-destino textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.45rem 0.1rem;
+  border: 0;
+  border-bottom: 1.5px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.lab-carta-destino textarea {
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 0.45rem 0.6rem;
+}
+
+.lab-carta-destino .cd-campo--status input {
+  font-family: var(--font-mono);
+}
+
+.lab-carta-destino input[type='text']:focus,
+.lab-carta-destino textarea:focus {
+  outline: none;
+  border-color: var(--tinta);
+}
+
+.lab-carta-destino [aria-invalid='true'] {
+  border-color: var(--copas) !important;
+}
+
+.lab-carta-destino .cd-erro {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--copas);
+  min-height: 0;
+}
+
+.lab-carta-destino .cd-erro:empty {
+  display: none;
+}
+
+.lab-carta-destino .cd-selo {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  width: 6.2rem;
+  height: 6.2rem;
+  border-radius: 50%;
+  border: 3px double var(--folha);
+  color: var(--folha);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  transform: rotate(-14deg) scale(0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.3, 1.6, 0.6, 1);
+  pointer-events: none;
+}
+
+.lab-carta-destino .cd-selo span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.lab-carta-destino .cd-selo small {
+  font-size: 0.7rem;
+}
+
+.lab-carta-destino .cd-papel.is-aprovada .cd-selo {
+  opacity: 0.85;
+  transform: rotate(-14deg) scale(1);
+}
+
+@media (max-width: 520px) {
+  .lab-carta-destino .cd-selo {
+    width: 4.6rem;
+    height: 4.6rem;
+    top: 0.6rem;
+    right: 0.6rem;
+  }
+
+  .lab-carta-destino .cd-selo span {
+    font-size: 0.8rem;
+  }
+}
+
+.lab-carta-destino .cd-acoes {
+  margin: 1rem 0;
+}
+
+.lab-carta-destino .cd-resultado p {
+  margin: 0 0 0.6rem;
+}
+
+.lab-carta-destino .cd-dica {
+  font-size: 0.86rem;
+  color: var(--ouro);
+}
+
+.lab-carta-destino .cd-md {
+  max-height: 20rem;
+  white-space: pre-wrap;
+}

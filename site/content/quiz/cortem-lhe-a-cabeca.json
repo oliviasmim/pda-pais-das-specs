@@ -1,0 +1,77 @@
+{
+  "licao": "cortem-lhe-a-cabeca",
+  "perguntas": [
+    {
+      "etapa": "pre",
+      "pergunta": "O agente termina e diz: 'Implementei e todos os testes estão passando ✅'. O que essa frase prova?",
+      "opcoes": [
+        "Que a feature está pronta.",
+        "Que a cobertura está acima de 80%.",
+        "Nada sozinha: é a sentença antes do veredito. Só um sensor independente, como a CI, prova.",
+        "Que a spec foi seguida."
+      ],
+      "correta": 2,
+      "explicacao": "Quem escreveu o código está dizendo que o código está certo. O gate é o que transforma 'confia em mim' em 'prove'."
+    },
+    {
+      "etapa": "pre",
+      "pergunta": "Qual destes é um GUIA (feedforward), e não um SENSOR (feedback)?",
+      "opcoes": [
+        "O AGENTS.md com a regra 'nunca altere arquivos em tests/aceite/'.",
+        "O lint rodando na CI.",
+        "O npm audit.",
+        "Um teste de aceite falhando."
+      ],
+      "correta": 0,
+      "explicacao": "Guias agem antes do agente, para ele acertar de primeira. Sensores conferem depois e devolvem o erro. AGENTS.md, spec e skills são guias."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Um PR passa em lint, type check, build e testes, mas o agente trocou o 409 esperado por 201 dentro do teste de aceite. Qual sensor pega isso?",
+      "opcoes": [
+        "Lint.",
+        "Type check.",
+        "Testes + cobertura.",
+        "Nenhum dos cinco: precisa da guarda dos testes de aceite na CI, de um hook que bloqueie a edição, ou de review."
+      ],
+      "correta": 3,
+      "explicacao": "Os testes passam justamente porque foram pintados. Só a guarda (checksum), o hook PreToolUse ou um revisor que leia o diff do teste pega a rosa pintada."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "A CI da sua equipe ficou vermelha e mesmo assim o PR foi mergeado. Qual a causa mais provável, mesmo com o YAML correto?",
+      "opcoes": [
+        "O GitHub estava fora do ar.",
+        "O check não está marcado como obrigatório na proteção da main.",
+        "O agente apagou o workflow.",
+        "O npm audit é opcional por padrão."
+      ],
+      "correta": 1,
+      "explicacao": "Sem check obrigatório, CI vermelha é só uma opinião. Gate que não bloqueia é decoração."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Por que colocar o lint antes dos testes na esteira?",
+      "opcoes": [
+        "Fail fast: o lint é barato e rápido; um erro de sintaxe pego nele economiza o tempo dos testes para quem está esperando.",
+        "Porque o lint é mais importante.",
+        "Porque os testes dependem do lint para rodar.",
+        "A ordem não faz diferença."
+      ],
+      "correta": 0,
+      "explicacao": "Os passos param no primeiro que falha. Barato primeiro significa feedback mais rápido e menos minutos de CI gastos."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "O NFR-2 diz: 'p95 abaixo de 50 ms com 1.000 vagas'. Nenhum teste mede isso. Como chamar esse requisito?",
+      "opcoes": [
+        "Requisito cumprido, porque está escrito.",
+        "Um desejo, porque não tem número.",
+        "Uma promessa: requisito sem sensor. Precisa de um teste que meça o p95 e falhe na CI.",
+        "Um requisito funcional."
+      ],
+      "correta": 2,
+      "explicacao": "Ele tem número (não é desejo), mas não tem sensor (é promessa). Só vira requisito de verdade quando um gate mede e bloqueia."
+    }
+  ]
+}

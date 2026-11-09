@@ -1,0 +1,77 @@
+{
+  "licao": "julgamento",
+  "perguntas": [
+    {
+      "etapa": "pre",
+      "pergunta": "Um PR do agente tem 278 linhas e CI verde. Por onde começar a revisão?",
+      "opcoes": [
+        "Pelo primeiro arquivo, linha a linha.",
+        "Pela lista de arquivos e tamanhos, depois assinaturas e contratos, depois testes. O corpo por último.",
+        "Pelos testes: se passam, o resto está certo.",
+        "Pedindo ao próprio agente para confirmar que está tudo certo."
+      ],
+      "correta": 1,
+      "explicacao": "Leitura em camadas: cada camada é mais barata que a seguinte. Só a lista de arquivos já mostra teste de aceite alterado e dependência nova."
+    },
+    {
+      "etapa": "pre",
+      "pergunta": "O que é \"sentença primeiro, veredito depois\" numa revisão de código com IA?",
+      "opcoes": [
+        "Escrever o teste antes do código.",
+        "Aceitar o \"pronto, testes passando\" do agente antes de ver a evidência.",
+        "Rodar a CI antes da revisão humana.",
+        "Bloquear todo PR por padrão."
+      ],
+      "correta": 1,
+      "explicacao": "É a ordem da Rainha: decidir antes de olhar. O contrário é TDD, em que o veredito (o teste) vem antes do código."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Um teste se chama \"T1 falha: vaga ocupada responde 409\", mas a asserção diz assert.equal(r.status, 201). Qual o diagnóstico?",
+      "opcoes": [
+        "Falsa Tartaruga: o teste só testa o mock.",
+        "Rosas pintadas: o teste de aceite foi alterado para passar e está escondendo um bug.",
+        "Erro de digitação sem importância.",
+        "Abstraction bloat."
+      ],
+      "correta": 1,
+      "explicacao": "O nome ainda diz 409, a asserção foi trocada. O agente não fez o código recusar a vaga ocupada e mudou o teste. O bug de agendamento duplo continua lá."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "Um teste cria uma fonteFalsa que devolve [vaga 1] e confere que o adapter devolveu [vaga 1]. Que bug esse teste pegaria?",
+      "opcoes": [
+        "Vaga ocupada sendo agendada.",
+        "Status HTTP errado.",
+        "Praticamente nenhum: ele confere o próprio mock, não o comportamento.",
+        "Data em formato inválido."
+      ],
+      "correta": 2,
+      "explicacao": "É a Falsa Tartaruga. A cobertura sobe e nenhuma regra de negócio é testada. A pergunta \"que bug este teste pegaria?\" desmascara."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Por que o subagent de review não deve ter Edit e Write?",
+      "opcoes": [
+        "Porque fica mais barato.",
+        "Porque revisor que edita vira autor: conserta (às vezes o teste) em vez de apontar, e perde a independência.",
+        "Porque o Claude Code não permite.",
+        "Porque subagents não conseguem ler arquivos."
+      ],
+      "correta": 1,
+      "explicacao": "O revisor é um sensor. Sensor mede e devolve sinal. Quem corrige é o autor. Por isso tools de leitura e disallowedTools: Edit, Write."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "A IA alterou um teste de aceite duas vezes na semana. Qual resposta fecha o loop do harness?",
+      "opcoes": [
+        "Pedir de novo no chat para não mudar mais.",
+        "Trocar para um modelo maior.",
+        "Uma regra no AGENTS.md (guia) e um hook que bloqueia edição em tests/aceite/ com guarda na CI (sensores).",
+        "Apagar os testes de aceite para evitar o problema."
+      ],
+      "correta": 2,
+      "explicacao": "Erro repetido pede guia novo e sensor novo. Pedir no chat some na próxima sessão; trocar de modelo não muda o incentivo de \"fazer os testes passarem\"."
+    }
+  ]
+}

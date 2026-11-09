@@ -1,0 +1,258 @@
+.lab-contexto .cx-janela,
+.lab-contexto .cx-sub__card {
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 0.85rem 1rem 0.9rem;
+  background: var(--paper-2);
+}
+
+.lab-contexto .cx-janela__cab {
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.lab-contexto .cx-janela__cab h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.lab-contexto .cx-janela__num {
+  margin-left: auto;
+  font-size: 0.82rem;
+}
+
+.lab-contexto .cx-trilho {
+  position: relative;
+  height: 2.2rem;
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  overflow: visible;
+}
+
+.lab-contexto .cx-trilho--sub {
+  height: 1.4rem;
+}
+
+.lab-contexto .cx-barra {
+  display: flex;
+  height: 100%;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+
+.lab-contexto .cx-seg {
+  display: block;
+  height: 100%;
+  border-right: 1px solid var(--paper);
+  transition: width 0.35s ease;
+  animation: cx-entra 0.35s ease;
+}
+
+@keyframes cx-entra {
+  from {
+    opacity: 0;
+    transform: scaleX(0.4);
+    transform-origin: left;
+  }
+}
+
+.lab-contexto .cx-seg--base {
+  background: var(--ink-3);
+}
+
+.lab-contexto .cx-seg--impl {
+  background: var(--tinta);
+}
+
+.lab-contexto .cx-seg--inv {
+  background: var(--ouro);
+}
+
+.lab-contexto .cx-seg--res {
+  background: var(--uva);
+}
+
+.lab-contexto .cx-limite {
+  position: absolute;
+  top: -0.45rem;
+  bottom: -0.45rem;
+  width: 0;
+  border-left: 2px dashed var(--copas);
+}
+
+.lab-contexto .cx-limite span {
+  position: absolute;
+  bottom: -1.25rem;
+  left: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--copas);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lab-contexto .cx-legenda {
+  margin-top: 1.5rem;
+  gap: 0.4rem 0.9rem;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+
+.lab-contexto .cx-leg::before {
+  content: '';
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 2px;
+  margin-right: 0.35rem;
+  vertical-align: -0.08rem;
+}
+
+.lab-contexto .cx-leg--base::before {
+  background: var(--ink-3);
+}
+
+.lab-contexto .cx-leg--impl::before {
+  background: var(--tinta);
+}
+
+.lab-contexto .cx-leg--inv::before {
+  background: var(--ouro);
+}
+
+.lab-contexto .cx-leg--res::before {
+  background: var(--uva);
+}
+
+.lab-contexto .cx-sub {
+  margin: 0.75rem 0 0 1.5rem;
+  position: relative;
+}
+
+.lab-contexto .cx-sub:not(:empty)::before {
+  content: '';
+  position: absolute;
+  left: -1rem;
+  top: -0.75rem;
+  height: 2.2rem;
+  width: 0.8rem;
+  border-left: 2px solid var(--uva);
+  border-bottom: 2px solid var(--uva);
+  border-bottom-left-radius: 8px;
+}
+
+.lab-contexto .cx-sub__card {
+  border-color: color-mix(in srgb, var(--uva) 45%, var(--line));
+  background: var(--uva-soft);
+}
+
+.lab-contexto .cx-sub__card.is-novo {
+  animation: cx-pop 0.4s ease;
+}
+
+@keyframes cx-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
+.lab-contexto .cx-sub__tarefa {
+  font-family: var(--font-display);
+  font-style: italic;
+  margin: 0 0 0.5rem;
+}
+
+.lab-contexto .cx-sub__volta {
+  margin: 0.55rem 0 0;
+  font-size: 0.86rem;
+}
+
+.lab-contexto .cx-decisao {
+  margin: 1rem 0;
+}
+
+.lab-contexto .cx-decisao__prox {
+  margin: 0 0 0.6rem;
+}
+
+.lab-contexto .cx-sep {
+  flex: 1;
+}
+
+.lab-contexto .cx-dica {
+  font-size: 0.82rem;
+  margin: 0.5rem 0 0;
+}
+
+.lab-contexto .cx-log {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.84rem;
+}
+
+.lab-contexto .cx-log li {
+  display: grid;
+  grid-template-columns: 1.8rem 1fr auto auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-sm);
+}
+
+.lab-contexto .cx-log li:nth-child(odd) {
+  background: var(--paper-2);
+}
+
+.lab-contexto .cx-log li.is-delegada .cx-log__nome::after {
+  content: ' · subagent';
+  color: var(--uva);
+  font-size: 0.78rem;
+}
+
+.lab-contexto .cx-log__n,
+.lab-contexto .cx-log__tok {
+  color: var(--ink-3);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 520px) {
+  .lab-contexto .cx-log li {
+    grid-template-columns: 1.6rem 1fr auto;
+  }
+
+  .lab-contexto .cx-log__tok {
+    display: none;
+  }
+}
+
+.lab-contexto .cx-comp {
+  margin-top: 1.25rem;
+}
+
+.lab-contexto .cx-comp h4 {
+  margin: 0 0 0.5rem;
+}
+
+.lab-contexto .cx-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin-bottom: 0.9rem;
+}
+
+.lab-contexto .cx-tabela th,
+.lab-contexto .cx-tabela td {
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.lab-contexto .cx-tabela tbody th {
+  font-weight: 500;
+  color: var(--ink-2);
+}

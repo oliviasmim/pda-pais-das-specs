@@ -1,0 +1,151 @@
+.lab-carta-rainha .cr-passo {
+  margin: 1rem 0 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: block;
+  color: var(--ink);
+}
+
+.lab-carta-rainha .lab__body > .cr-passo:first-child { margin-top: 0; }
+
+.lab-carta-rainha .cr-catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0.5rem;
+}
+
+.lab-carta-rainha .cr-erro {
+  display: grid;
+  gap: 0.25rem;
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  position: relative;
+}
+
+.lab-carta-rainha .cr-erro span { font-size: 0.8rem; color: var(--ink-2); }
+.lab-carta-rainha .cr-erro:hover { background: var(--paper-2); }
+.lab-carta-rainha .cr-erro:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+
+.lab-carta-rainha .cr-erro--on {
+  border-color: var(--copas);
+  background: color-mix(in srgb, var(--copas) 8%, var(--paper));
+}
+
+.lab-carta-rainha .cr-erro--on::after {
+  content: '♥';
+  position: absolute;
+  top: 0.45rem;
+  right: 0.6rem;
+  color: var(--copas);
+}
+
+.lab-carta-rainha .cr-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.lab-carta-rainha .cr-input.mono { font-family: var(--font-mono); font-size: 0.82rem; }
+.lab-carta-rainha textarea.cr-input { resize: vertical; }
+.lab-carta-rainha .cr-input:focus-visible { outline: 2px solid var(--tinta); outline-offset: 1px; }
+
+.lab-carta-rainha .cr-duas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.lab-carta-rainha .cr-lado {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: 0.9rem;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  border-top-width: 4px;
+  background: var(--paper);
+}
+
+.lab-carta-rainha .cr-lado--guia { border-top-color: var(--tinta); }
+.lab-carta-rainha .cr-lado--sensor { border-top-color: var(--copas); }
+.lab-carta-rainha .cr-lado .btn { justify-self: start; }
+
+.lab-carta-rainha .cr-lado-topo {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.lab-carta-rainha .cr-lado-topo h4 { margin: 0; font-family: var(--font-display); font-size: 1.1rem; }
+.lab-carta-rainha .cr-lado-topo p { margin: 0.1rem 0 0; font-size: 0.84rem; }
+
+.lab-carta-rainha .cr-seta {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.lab-carta-rainha .cr-lado--guia .cr-seta { color: var(--tinta); }
+.lab-carta-rainha .cr-lado--sensor .cr-seta { color: var(--copas); }
+
+.lab-carta-rainha .cr-destino { margin: 0; font-size: 0.84rem; color: var(--ink-2); }
+.lab-carta-rainha .cr-destino code { font-size: 0.8rem; word-break: break-all; }
+.lab-carta-rainha .cr-nota { font-size: 0.86rem; margin: 0.8rem 0 0; }
+
+.lab-carta-rainha .cr-avisos {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.lab-carta-rainha .cr-aviso {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.65rem;
+  border-left: 3px solid var(--ouro);
+  border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--ouro) 12%, var(--paper));
+}
+
+.lab-carta-rainha .cr-aviso--ok {
+  border-left-color: var(--folha);
+  background: color-mix(in srgb, var(--folha) 10%, var(--paper));
+}
+
+.lab-carta-rainha .cr-previa {
+  margin: 0 0 0.75rem;
+  padding: 1rem 1.1rem;
+  max-height: 22rem;
+  overflow: auto;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--copas);
+  border-radius: var(--r);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.lab-carta-rainha .cr-previa code { font: inherit; background: none; padding: 0; color: var(--ink); }
+.lab-carta-rainha .cr-previa:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+
+@media (max-width: 720px) {
+  .lab-carta-rainha .cr-duas { grid-template-columns: 1fr; }
+}
