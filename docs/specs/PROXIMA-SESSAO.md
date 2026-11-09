@@ -56,4 +56,9 @@ Ver a seção "Pendências conhecidas" no fim para o que ficou de fora da sessã
 
 ## Pendências conhecidas
 
-(Preenchido no fim da sessão de construção.)
+- **Cloudflare Pages não publicado.** O login do wrangler expirou (erro 400 ao renovar o token). Para publicar: `npx wrangler login`, depois `npx wrangler pages project create pda-pais-das-specs --production-branch main` e `npx wrangler pages deploy site --project-name pda-pais-das-specs`. O GitHub Pages já está no ar: https://oliviasmim.github.io/pda-pais-das-specs/
+- **Revisão de voz dos textos.** As 7 lições foram escritas por agentes seguindo o plano. Vale uma passada com a skill `voz-iasmim` antes da aula.
+- **Menção à OIP na lição 2.** `coelho-branco.md` diz, sem nomes, que a orientação de escala do Encontro 1 foi a mais mal lida pela turma. A facilitadora decide se mantém.
+- **`code` dentro de laboratórios.** A regra global `:not(pre) > code` do `style.css` põe borda em código dentro de linhas de diff. Os labs do Julgamento contornam; o ideal é limitar a regra a `.prosa`.
+- **Sem teste de interface na CI** (ver item 6 do backlog). O teste de ponta a ponta foi feito à mão, em navegador headless, no site publicado: 7 lições, 16 laboratórios montados, 0 erros.
+- **Speedrun não ensaiado no Windows.** O hook do Claude Code é em Node (sem `jq`) justamente para funcionar lá, mas não foi testado.
