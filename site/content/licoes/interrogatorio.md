@@ -76,6 +76,12 @@ Em dupla, 15 minutos. Uma pessoa lê o código em voz alta, a outra decide a ori
 
 <div data-lab="interrogatorio"></div>
 
+### Por dentro: de onde vem cada linha
+
+Agora o mesmo problema visto por dentro da máquina. Rode com o pedido vago e sem AGENTS.md. Depois troque uma peça por vez e olhe o livro-razão: cada linha do diff ganha (ou perde) um endereço.
+
+<div data-lab="motion-agente"></div>
+
 <div data-quiz="check"></div>
 
 ### Para discutir

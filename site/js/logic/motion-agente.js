@@ -350,10 +350,9 @@ export function simular(montagem, avarias = new Set()) {
   if (leuSpec) linhas.push({ id: 'nfr1', tipo: 'spec', texto: NFR1.spec });
   else linhas.push({ id: 'nfr1', tipo: 'omitido', texto: NFR1.omitido, teste: NFR1.teste, certo: NFR1.spec });
   for (const inv of INVENCOES) {
-    const barrada = (inv.bloqueadaPelaSpec && leuSpec) || (regraPergunte && !inv.bloqueadaPelaSpec);
     if (inv.bloqueadaPelaSpec && leuSpec) continue;
-    if (!barrada && !(inv.pergunta && regraPergunte)) linhas.push({ id: inv.id, tipo: 'inventado', texto: inv.texto });
-    else if (inv.pergunta && regraPergunte) linhas.push({ id: inv.id, tipo: 'pergunta', texto: inv.pergunta });
+    if (regraPergunte && inv.pergunta) linhas.push({ id: inv.id, tipo: 'pergunta', texto: inv.pergunta });
+    else linhas.push({ id: inv.id, tipo: 'inventado', texto: inv.texto });
   }
 
   const contar = () => {
@@ -621,7 +620,7 @@ export function simular(montagem, avarias = new Set()) {
   passos.push({
     estacao: 'pr',
     titulo: 'PR aberto',
-    marca: problemas ? 'falha' : perguntas.length ? 'ok' : 'ok',
+    marca: problemas ? 'falha' : 'ok',
     narracao: problemas
       ? `O PR chega com ${problemas} ${problemas === 1 ? 'problema' : 'problemas'} e cara de pronto. Quem aprovar sem a carta Rastro leva junto.`
       : `O PR chega sem suposição e sem invenção${perguntas.length ? ', com uma pergunta para você responder' : ''}. ${voltas ? `Custou ${voltas} ${voltas === 1 ? 'volta' : 'voltas'} do loop.` : 'De primeira.'}`,

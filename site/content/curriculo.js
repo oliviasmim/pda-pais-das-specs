@@ -48,7 +48,7 @@ export const licoes = [
       'Dar a contraprova: a entrada exata que mostra o erro e a resposta esperada.',
       'Nomear o padrão de erro da IA: preencher lacunas com suposições plausíveis.',
     ],
-    labs: ['interrogatorio'],
+    labs: ['interrogatorio', 'motion-agente'],
   },
   {
     id: 'coelho-branco',
