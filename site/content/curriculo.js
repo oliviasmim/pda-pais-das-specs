@@ -1,7 +1,7 @@
 export const semanas = [
   { n: 1, modulo: 'M1', titulo: 'Fundamentos: o que é isso que a gente chama de IA', lugar: 'A margem do rio', ideia: 'Previsão de token, janela de contexto, temperatura, alucinação. Agente = LLM + Harness.', revisao: 'media' },
   { n: 2, modulo: 'M1', titulo: 'Prompt e Context Engineering', lugar: 'A toca do coelho', ideia: 'Especificidade, exemplos, formato de saída. Smart zone e dumb zone. CLAUDE.md como memória.', revisao: 'alta' },
-  { n: 3, modulo: 'M1', titulo: 'AGENTS.md e Skills', lugar: 'O frasco "BEBA-ME"', ideia: 'Regras curtas e verificáveis. Skills sob demanda com progressive disclosure.', revisao: 'alta' },
+  { n: 3, modulo: 'M1', titulo: 'AGENTS.md e Skills', lugar: 'O frasco "BEBA-ME"', ideia: 'Regras curtas e verificáveis. Skills carregadas só quando a tarefa pede (progressive disclosure).', revisao: 'alta' },
   { n: 4, modulo: 'M1', titulo: 'Tools, MCPs e Segurança (OWASP para LLM)', lugar: 'A chave dourada', ideia: 'Skill é conhecimento, MCP é capacidade. Prompt injection e supply chain.', revisao: 'media' },
   { n: 5, modulo: 'M2', titulo: 'Clean code e DDD na era da IA', lugar: 'A casa do Coelho', ideia: 'Sinais de código ruim gerado por IA. Abstraction bloat. Bounded contexts.', revisao: 'media' },
   { n: 6, modulo: 'M2', titulo: 'O fluxo de desenvolvimento com IA', lugar: 'O conselho da Lagarta', ideia: 'RPI em sessões separadas. ADR. Critérios EARS e cenários BDD.', revisao: 'media' },
@@ -62,7 +62,7 @@ export const licoes = [
     objetivos: [
       'Diferenciar requisito funcional de não funcional.',
       'Ler tempo de resposta como distribuição: p50, p95, p99.',
-      'Explicar por que a latência de cauda se amplifica com fan-out.',
+      'Explicar por que a latência de cauda cresce quando um pedido chama vários serviços (fan-out).',
       'Escrever um NFR em EARS com número e sensor.',
     ],
     labs: ['percentis', 'construtor-nfr'],
@@ -105,7 +105,7 @@ export const licoes = [
     numero: 5,
     titulo: 'O Baralho da Rainha',
     subtitulo: 'Sequencial, paralelo, supervisor (ou nenhum)',
-    lema: 'Mais cartas na mesa não jogam mais rápido. Às vezes, só embaralham.',
+    lema: 'Mais cartas na mesa só embaralham o jogo, a menos que as tarefas sejam independentes.',
     cena: 'cartas',
     tempo: 20,
     semanas: [10],

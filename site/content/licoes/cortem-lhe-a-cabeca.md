@@ -6,15 +6,15 @@
 
 O agente termina e escreve: *"Pronto! Implementei a feature e todos os testes estão passando ✅"*.
 
-Isso é a Rainha no julgamento do Valete: **sentença primeiro, veredito depois**. Quem escreveu o código está dizendo que o código está certo. Existe conflito de interesse aí, e não porque a IA é "desonesta": ela é otimizada para terminar a tarefa, e "os testes passam" é a forma mais curta de dizer que terminou.
+Isso é a Rainha no julgamento do Valete: **sentença primeiro, veredito depois**. Quem escreveu o código está dizendo que o código está certo. Existe conflito de interesse aí. A IA é otimizada para terminar a tarefa, e "os testes passam" é a forma mais curta de dizer que terminou.
 
-Um **gate** é o que transforma "confia em mim" em "prove". Ele roda na CI, em toda mudança, e não negocia: se falhar, o merge não acontece. Na análise de dúvidas da turma, quality gates e CI ficaram em primeiro lugar no índice de necessidade de revisão. A turma montou a CI na S8. A pergunta desta lição é outra: **ela bloqueia mesmo? E bloqueia o quê?**
+Um **gate** (portão) nada mais é do que a checagem que transforma "confia em mim" em "prove". Ele roda na CI (a checagem automática de cada mudança) e não negocia: se falhar, o merge não acontece. Na análise de dúvidas da turma, quality gates e CI ficaram em primeiro lugar no índice de necessidade de revisão. A turma montou a CI na S8. A pergunta desta lição é outra: **ela bloqueia mesmo? E bloqueia o quê?**
 
 ## O conceito
 
 ### Agente = LLM + Harness
 
-O harness é tudo em volta do modelo que faz ele trabalhar bem. Ele tem dois tipos de peça:
+O harness nada mais é do que tudo em volta do modelo (o LLM) que faz ele trabalhar bem. Ele tem dois tipos de peça:
 
 | | Guias (feedforward) | Sensores (feedback) |
 |---|---|---|
@@ -23,7 +23,7 @@ O harness é tudo em volta do modelo que faz ele trabalhar bem. Ele tem dois tip
 | Exemplos | `AGENTS.md`, spec, critérios EARS, skills, exemplos de código, prompt | lint, type check, build, testes, `npm audit`, subagent de review, hook que bloqueia |
 | Se faltar | O agente adivinha | O erro chega na `main` |
 
-Os dois se completam. Guia sem sensor é esperança. Sensor sem guia é retrabalho infinito: o agente erra, o gate barra, o agente erra de novo.
+Os dois se completam. Só com guia, você espera que o agente tenha acertado. Só com sensor, o agente erra, o gate barra, o agente erra de novo.
 
 Sensores também se dividem em dois tipos: **computacionais** (lint, testes, type check: determinísticos, baratos, rápidos) e **inferenciais** (um LLM revisando: pega o que regra nenhuma pega, mas custa mais e varia de uma execução para outra). Os computacionais vêm primeiro.
 
@@ -44,17 +44,17 @@ Dois extras que esta semana adiciona:
 
 ### Fail fast: o barato primeiro
 
-Os passos de um job rodam em ordem e o job para no primeiro que falha. Se o lint leva 20 segundos e os testes levam um minuto, um erro de sintaxe pego no lint economiza um minuto inteiro de quem está esperando. Em um dia de speedrun, com dezenas de pushes, isso é a diferença entre feedback em segundos e em minutos.
+Os passos de um job rodam em ordem e o job para no primeiro que falha. Se o lint leva 20 segundos e os testes levam um minuto, um erro de sintaxe pego no lint economiza um minuto inteiro de quem está esperando. Em um dia de speedrun, com dezenas de pushes, no final do dia, isso é a diferença entre feedback em segundos e em minutos.
 
 ### Gate que não bloqueia é decoração
 
 Três jeitos comuns de ter CI vermelha e merge feito mesmo assim:
 
-1. O workflow só roda em `push` na `main`. O defeito é descoberto **depois** do merge.
+1. O workflow (o arquivo que descreve a CI) só roda em `push` na `main`. O defeito é descoberto **depois** do merge.
 2. Tem `continue-on-error: true` ou `|| true` num passo. A falha vira aviso.
 3. A CI roda, mas o check não é **obrigatório** na proteção da `main`. CI vermelha vira só uma opinião.
 
-O terceiro é o mais traiçoeiro, porque o YAML está perfeito. A configuração fica no GitHub: *Settings → Rules (ou Branches) → exigir status checks antes do merge*, marcando o job `gates`.
+O terceiro é o mais traiçoeiro, porque o YAML (o formato desse arquivo) está perfeito. A configuração fica no GitHub: *Settings → Rules (ou Branches) → exigir status checks antes do merge*, marcando o job `gates`.
 
 ### Configurar CI com a IA, sem aceitar YAML às cegas
 

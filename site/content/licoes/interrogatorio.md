@@ -17,9 +17,9 @@ Agora a pergunta da revisão: **está certo?** A resposta mais comum é alguma d
 - "Pediria para outra IA revisar."
 - "Parece limpo, tem até uma Factory."
 
-Nenhuma delas é uma revisão. São promessas de revisão. Elas não dizem **contra o quê** o código vai ser conferido, **com que entrada** e **esperando que resposta**. Por isso não pegam nada.
+Todas são promessas de revisão. Elas não dizem **contra o quê** o código vai ser conferido, **com que entrada** e **esperando que resposta**. Por isso não pegam nada.
 
-E o código gerado por IA é difícil justamente porque ele **erra de um jeito convincente**. Os erros não parecem erros. Parecem boas ideias que alguém teve.
+O código gerado por IA é difícil de revisar porque **erra de um jeito convincente**: o erro parece uma boa ideia que alguém teve.
 
 ## O conceito
 
@@ -30,7 +30,7 @@ Antes de perguntar se uma linha está certa, pergunte **de onde ela veio**. Só 
 | Origem | O que é | O que fazer |
 |---|---|---|
 | **Pedido** | Está escrito no pedido ou na spec. | Conferir se está completo. Uma linha pedida pode estar pela metade. |
-| **Assumido** | O pedido deixou em aberto e a IA escolheu sozinha. O status, o nome do campo, a fonte de dados. | Virar decisão escrita (spec, ADR) ou pergunta para quem pediu. Pode até estar certo. Só não é seu. |
+| **Assumido** | O pedido deixou em aberto e a IA escolheu sozinha. O status, o nome do campo, a fonte de dados. | Virar decisão escrita (na spec ou num ADR, o registro curto de uma decisão) ou pergunta para quem pediu. Pode até estar certo. Só não é seu. |
 | **Inventado** | Ninguém pediu e o problema não exige. Uma regra de negócio, um e-mail, uma dependência, uma camada. | Remover. Se for mesmo necessário, levar para a spec com alguém responsável pela decisão. |
 
 O pedido do exemplo tem 9 palavras. Ele não diz o status de sucesso, o formato do corpo, o que fazer com vaga ocupada, de onde vêm os dados. Cada lacuna vira uma escolha da IA. Algumas escolhas são inofensivas. Outras viram bug em produção.
@@ -50,7 +50,7 @@ Isso tem duas consequências práticas:
 
 Sem spec, o melhor que você consegue dizer é "isso foi assumido". Com spec, a pergunta vira sim ou não: **está na linha X da spec, ou não está**.
 
-Repare no que isso significa. A spec não é só um documento para o agente ler antes de gerar. **É a ferramenta de quem revisa.** Sem ela, revisão é opinião contra opinião. Com ela, é comparação.
+Perceba: a spec serve para o agente ler antes de gerar e **também é a ferramenta de quem revisa**. Sem ela, revisão é opinião contra opinião. Com ela, é comparação.
 
 ### O Baralho do Gato
 
@@ -58,13 +58,13 @@ Seis perguntas que transformam "testaria" em revisão de verdade. Cada uma tem u
 
 <div data-cartas="rastro,contraprova,par,contrato,navalha,carta-rainha"></div>
 
-A carta que mais muda a revisão é a ♣ **Contraprova**. Ela obriga você a dizer, antes de rodar, o que espera ver:
+A ♣ **Contraprova** nada mais é do que dizer, antes de rodar, o que você espera ver. É a carta que mais muda a revisão:
 
 | Ruim | Bom |
 |---|---|
 | "Testaria com vaga ocupada." | "Agendar a vaga 1 duas vezes. Espero `201` e depois `409 {"erro":"Vaga indisponível"}`. O código devolve `200` nas duas." |
 
-Se você não consegue escrever a linha da direita, você ainda não sabe o que o código deveria fazer. E aí nenhuma revisão vai te salvar.
+Se você não consegue escrever a linha da direita, ainda não sabe o que o código deveria fazer.
 
 ## Pratique
 
@@ -86,7 +86,7 @@ Em dupla, 15 minutos. Uma pessoa lê o código em voz alta, a outra decide a ori
 
 ## Leve com você
 
-**1. Comentário de revisão com rastro e contraprova.** Use este formato em todo comentário de PR. Se você não consegue preencher, ainda não é um comentário, é uma impressão.
+**1. Comentário de revisão com rastro e contraprova.** Use este formato em todo comentário de PR (pull request). Se você não consegue preencher, ainda tem só uma impressão.
 
 ```markdown
 **Linha:** src/rotas/agendamentos.js:14
@@ -107,7 +107,7 @@ Em dupla, 15 minutos. Uma pessoa lê o código em voz alta, a outra decide a ori
 
 A última linha é a mais barata e a mais útil: ela faz o agente **declarar** o que assumiu, em vez de você caçar.
 
-**3. Pedido de revisão para o agente, depois da sua.** Usar IA para revisar não é o problema. O problema é pedir "revisa aí" sem critério. Faça a sua revisão primeiro e depois peça assim:
+**3. Pedido de revisão para o agente, depois da sua.** Usar IA para revisar funciona, se você der um critério. Faça a sua revisão primeiro e depois peça assim:
 
 ```text
 Compare o diff da branch atual com docs/spec.md.

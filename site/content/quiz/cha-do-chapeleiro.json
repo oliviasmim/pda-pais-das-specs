@@ -11,7 +11,7 @@
         "Nada: arquivos diferentes nunca conflitam."
       ],
       "correta": 1,
-      "explicacao": "Na mesma pasta não há isolamento. A última gravação vence e apaga as outras, em silêncio. É o pior tipo de bug: ninguém avisa."
+      "explicacao": "Na mesma pasta não há isolamento. A última gravação vence e apaga as outras, em silêncio. O bug é silencioso: ninguém avisa."
     },
     {
       "etapa": "pre",

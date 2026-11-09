@@ -4,22 +4,22 @@
 
 ## O problema
 
-No speedrun vocês vão rodar três agentes ao mesmo tempo, um para cada task: agendar (T1), cancelar (T2) e listar vagas (T3). A tentação é abrir três terminais na mesma pasta e mandar ver.
+No speedrun vocês vão rodar três agentes ao mesmo tempo, um para cada tarefa (task): agendar (T1), cancelar (T2) e listar vagas (T3). A tentação é abrir três terminais na mesma pasta e começar.
 
-Parece funcionar. Nenhum comando falha. Mas, por baixo:
+Parece funcionar. Nenhum comando falha. Mas perceba o que acontece por baixo:
 
 - os três leem `src/app.js`, cada um edita a versão que leu, e **a última gravação apaga as outras**;
 - um agente roda os testes no meio da edição do outro e tenta "consertar" um código que não é dele;
 - um `git add .` de um agente leva junto o trabalho pela metade de outro;
-- alguém faz `git checkout` para olhar outra branch e puxa o chão de quem estava trabalhando.
+- alguém faz `git checkout` para olhar outra branch (outra linha de trabalho do projeto) e puxa o chão de quem estava trabalhando.
 
-Nenhum desses problemas avisa. É o pior tipo de bug: o silencioso. O Chá Maluco tem cadeira para todo mundo, mas uma xícara só. Cada um bebe o resto do outro.
+Nenhum desses problemas avisa: o bug é silencioso. O Chá Maluco tem cadeira para todo mundo, mas uma xícara só. Cada um bebe o resto do outro.
 
 ## O conceito
 
 ### Worktree em uma frase
 
-**Um repositório, várias pastas de trabalho, cada uma na sua branch.** Todas compartilham o mesmo `.git` (histórico, commits, objetos). Não é um clone: é mais uma xícara na mesma mesa.
+**Worktree nada mais é do que mais uma pasta de trabalho do mesmo repositório, cada uma na sua branch.** Todas compartilham o mesmo `.git` (histórico, commits, objetos). Não é um clone: é mais uma xícara na mesma mesa.
 
 | | Trocar de branch na mesma pasta | Clonar de novo | Worktree |
 |---|---|---|---|
@@ -30,7 +30,7 @@ Nenhum desses problemas avisa. É o pior tipo de bug: o silencioso. O Chá Maluc
 
 ### As regras do chá
 
-1. **Uma branch, uma xícara.** O git não deixa a mesma branch aberta em dois worktrees. Ele recusa com `fatal: 'main' is already used by worktree at ...`. Isso é proteção, não bug.
+1. **Uma branch, uma xícara.** O git não deixa a mesma branch aberta em dois worktrees. Ele recusa com `fatal: 'main' is already used by worktree at ...`. Isso é a proteção funcionando.
 2. **A cabeceira é da integração.** A pasta principal fica na `main`. Agentes trabalham nas xícaras. Merge acontece na cabeceira.
 3. **Cada xícara se serve sozinha.** `node_modules` e arquivos ignorados (como `.env`) não vêm junto. Rode `npm install` em cada worktree. No Claude Code, o arquivo `.worktreeinclude` lista arquivos ignorados que devem ser copiados para worktrees novos.
 4. **Lave a xícara no fim.** `git worktree remove <pasta>` apaga a pasta. A branch e os commits continuam.
@@ -73,7 +73,7 @@ da lista da task. No fim, devolva: arquivos alterados, testes rodados, o que fic
 
 As três tasks registram uma rota em `src/app.js`, no mesmo lugar. O git sabe juntar mudanças em lugares diferentes, mas não sabe em que ordem pôr duas linhas novas no mesmo ponto. Então ele para e pergunta: **conflito**.
 
-Isso não é erro de ninguém. É o git se recusando a adivinhar. A resposta certa, neste caso, é **manter as duas linhas**. A resposta errada, e muito comum quando se tem pressa, é aceitar "a minha versão" e apagar a rota da outra task sem perceber.
+Conflito é o git se recusando a adivinhar. A resposta certa, neste caso, é **manter as duas linhas**. A resposta errada, e muito comum quando se tem pressa, é aceitar "a minha versão" e apagar a rota da outra task sem perceber.
 
 Três hábitos na integração:
 

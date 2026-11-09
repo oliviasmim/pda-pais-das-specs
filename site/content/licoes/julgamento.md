@@ -5,12 +5,12 @@
 
 ## O problema
 
-O agente termina o speedrun e abre um PR: **278 linhas, 11 arquivos, CI verde**, e uma mensagem animada: "Pronto! Todos os testes passando ✅".
+O agente termina o speedrun e abre um PR: **278 linhas, 11 arquivos, CI verde** (a checagem automática passou), e uma mensagem animada: "Pronto! Todos os testes passando ✅".
 
 Duas reações comuns, as duas ruins:
 
 1. **"LGTM" em 40 segundos.** A CI está verde, o agente disse que está pronto, aprova.
-2. **Duas horas linha a linha**, começando pelo primeiro arquivo, até perder a floresta no meio das árvores e aprovar por cansaço.
+2. **Duas horas linha a linha**, começando pelo primeiro arquivo, até perder a visão do todo e aprovar por cansaço.
 
 E tem um problema pior: **CI verde pode mentir.** Uma pergunta que voltou várias vezes nas aulas foi: *"Como evitar que o agente altere o teste para fazer o código passar?"*. Se o agente mexe no teste, o sensor continua apitando verde. Só que agora ele mede outra coisa.
 
@@ -25,7 +25,7 @@ No julgamento do Valete de Copas, a Rainha quer dar a sentença antes de ouvir a
 - **Sentença:** "Pronto, todos os testes passando ✅" (dita pelo agente, que é parte interessada).
 - **Veredito:** qual teste? Ele falharia sem esse código? Alguém mexeu nele?
 
-TDD é exatamente a ordem certa: **o veredito vem antes**. O teste é escrito, falha (vermelho), e só então o código é aceito por fazê-lo passar. Aceitar o "pronto" do agente sem olhar a evidência é a ordem da Rainha.
+TDD, que é escrever o teste antes do código, segue a ordem certa: **o veredito vem antes**. O teste é escrito, falha (vermelho), e só então o código é aceito por fazê-lo passar. Aceitar o "pronto" do agente sem olhar a evidência é a ordem da Rainha.
 
 ### Leitura em camadas
 
@@ -38,7 +38,7 @@ Um diff grande se lê de fora para dentro. Cada camada é mais barata que a segu
 | 3 · Testes | O que os testes provam de verdade? | ~8 min | Asserção enfraquecida, teste que só testa o mock, caso de falha sem teste |
 | 4 · Corpo | O que o código faz linha a linha? | ~20 min | Erro genérico, condição faltando, efeito colateral |
 
-A camada 2 é a mais subestimada. Ela pega até **ausências**: se a spec tem 409 para vaga ocupada e nenhuma linha do diff tem `409`, você já sabe que um caso de falha sumiu, sem ler o corpo.
+Perceba que a camada 2 é a mais subestimada: ela pega até **ausências**. Se a spec tem 409 para vaga ocupada e nenhuma linha do diff tem `409`, você já sabe que um caso de falha sumiu, sem ler o corpo.
 
 ### Sinais de alerta
 
@@ -56,7 +56,7 @@ A camada 2 é a mais subestimada. Ela pega até **ausências**: se a spec tem 40
 
 No jardim da Rainha, três jardineiros estão pintando rosas brancas de vermelho. Plantaram a roseira errada e, se a Rainha descobrir, perdem a cabeça. Então pintam.
 
-O agente faz igual. Ele não consegue fazer o teste `vaga ocupada responde 409` passar e troca a asserção para `201`. A CI fica verde. O bug continua lá, agora escondido. Não é malícia: você pediu "faça os testes passarem", e mudar o teste também faz os testes passarem.
+O agente faz igual. Ele não consegue fazer o teste `vaga ocupada responde 409` passar e troca a asserção para `201`. A CI fica verde. O bug continua lá, agora escondido. Você pediu "faça os testes passarem", e mudar o teste também faz os testes passarem.
 
 A defesa tem três camadas, e você precisa das três:
 
@@ -66,7 +66,7 @@ A defesa tem três camadas, e você precisa das três:
 | Hook `PreToolUse` | Sensor, na hora | Bloqueia a edição no momento em que o agente tenta e devolve a mensagem para ele. |
 | Guarda na CI | Sensor, no merge | Compara os testes de aceite com os checksums originais. Pega o que escapou do hook. |
 
-O hook do Claude Code recebe no stdin um JSON com a ferramenta que o agente quer usar. O caminho do arquivo vem em `tool_input.file_path`. Sair com código **2** bloqueia a ação, e o que você escreve no stderr volta para o agente como explicação. O projeto do speedrun já vem com ele:
+O hook `PreToolUse` nada mais é do que um comando que o Claude Code roda antes de uma ferramenta. Ele recebe no stdin um JSON com a ferramenta que o agente quer usar. O caminho do arquivo vem em `tool_input.file_path`. Sair com código **2** bloqueia a ação, e o que você escreve no stderr volta para o agente como explicação. O projeto do speedrun já vem com ele:
 
 ```json
 {
@@ -97,23 +97,23 @@ process.stdin.on('end', () => {
 });
 ```
 
-Por que precisa da CI também? Porque o `matcher` só olha as ferramentas `Edit` e `Write`. Se o agente usar o Bash (`sed -i`, `echo >`), o hook não vê. E porque um agente determinado pode atualizar o arquivo de checksums junto, como no diff do laboratório. Sensor bom não confia em um lugar só.
+Por que precisa da CI também? Porque o `matcher` só olha as ferramentas `Edit` e `Write`. Se o agente usar o Bash (`sed -i`, `echo >`), o hook não vê. E porque um agente determinado pode atualizar o arquivo de checksums junto, como no diff do laboratório.
 
 ### A Falsa Tartaruga
 
-A Falsa Tartaruga (*Mock Turtle*, no original) chora contando das aulas que teve na escola do mar. É uma tartaruga de mentira, e todo mundo finge que não percebe.
+A Falsa Tartaruga (*Mock Turtle*, no original) chora contando das aulas que teve na escola do mar. É uma tartaruga de mentira.
 
-Teste de mock é igual. Ele cria uma `fonteFalsa` que devolve `[vaga 1]`, chama o código, e confere que voltou `[vaga 1]`. Passa sempre. A cobertura sobe. E ele não pegaria nenhum bug de regra de negócio, porque não testa regra nenhuma: testa o próprio mock.
+Teste de mock é igual. Ele cria uma `fonteFalsa` (um mock, a peça de mentira no lugar da fonte de dados real) que devolve `[vaga 1]`, chama o código e confere que voltou `[vaga 1]`. Passa sempre. A cobertura (a parte do código que os testes executam) sobe. Ele não pega nenhum bug de regra de negócio, porque testa o próprio mock.
 
 A pergunta que desmascara: **"que bug este teste pegaria?"**. Se a resposta for "nenhum", é Falsa Tartaruga.
 
 ### Revisores especializados
 
-Por que um **subagent** para revisar, e não a mesma sessão que escreveu o código?
+Por que um **subagent** (um segundo agente, com contexto próprio) para revisar, e não a mesma sessão que escreveu o código?
 
 - **Isolamento de contexto.** A sessão que escreveu sabe por que fez cada coisa e tende a justificar. O subagent começa com a janela limpa: só lê o que está de fato no diff e na spec. Não herda o viés de quem escreveu.
 - **Uma pergunta por revisor.** No tribunal, os jurados escrevem bobagens na lousa porque ninguém disse o que anotar. Um revisor genérico faz o mesmo. Um revisor com **uma especialidade e uma rubrica** faz uma pergunta só, e faz bem.
-- **Só leitura.** Revisor com `Edit` e `Write` vira autor: em vez de apontar, ele conserta, às vezes o teste. Sensor bom só mede.
+- **Só leitura.** Revisor com `Edit` e `Write` vira autor: em vez de apontar, ele conserta, às vezes o teste.
 
 No Claude Code, o revisor é um arquivo em `.claude/agents/`. O `description` diz **quando** o agente principal deve chamá-lo:
 
@@ -130,11 +130,11 @@ Você é o cético de testes do projeto agenda-mentorias. Para cada teste novo o
 pergunte que bug ele pegaria. Teste de aceite alterado é sempre bloqueio.
 ```
 
-Revisor por IA é um **sensor inferencial**: pega o que lint e testes não veem, mas pode errar e custa tokens. Ele **complementa** os gates da CI, não substitui. E não substitui você.
+Revisor por IA é um **sensor inferencial**, ou seja, uma checagem que usa um modelo para julgar. Ela pega o que lint e testes não veem, mas pode errar e custa tokens. Ele **complementa** os gates da CI e a sua leitura.
 
 ### Red team: humano contra máquina
 
-A comparação é a prova de que você entendeu. Revise **à mão primeiro**, depois rode o subagent, e compare. Alguns padrões que aparecem:
+Revise **à mão primeiro**, depois rode o subagent e compare as duas listas. Alguns padrões que aparecem:
 
 - O humano pega o que é **ausência** (o 409 que sumiu) e o que **cheira estranho** no contexto do projeto.
 - A máquina pega o que é **repetitivo e exaustivo** (todas as mensagens de erro contra a tabela, caractere por caractere).

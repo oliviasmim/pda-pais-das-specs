@@ -8,15 +8,17 @@ Alguém pede ao agente: *"Crie um endpoint que lista as vagas livres de um mento
 
 A IA entrega em dois minutos. Carrega todas as vagas, filtra as livres, ordena e devolve. Na demo, com 10 vagas, tudo funciona. Os testes passam.
 
-Segunda-feira, 9h, a agenda abre. Cento e cinquenta jovens tentam agendar no primeiro minuto. A listagem fica lenta, duas pessoas conseguem a mesma vaga, e um mentor recebe dois jovens no mesmo horário. Ninguém escreveu um bug. **Ninguém escreveu quão bem o sistema precisava funcionar.**
+Segunda-feira, 9h, a agenda abre. Cento e cinquenta jovens tentam agendar no primeiro minuto. A listagem fica lenta, duas pessoas conseguem a mesma vaga, e um mentor recebe dois jovens no mesmo horário. Faltou escrever **quão bem o sistema precisava funcionar.**
 
-A IA quase nunca erra o requisito que você escreveu. Ela erra o que você **não** escreveu. E o que a gente menos escreve é o requisito não funcional. Sem ele, o agente escolhe o padrão mais simples: tudo em memória, nenhuma concorrência, nenhuma meta de tempo.
+A IA erra, quase sempre, no que você **não** escreveu. E o que a gente menos escreve é o requisito não funcional. Sem ele, o agente escolhe o padrão mais simples: tudo em memória, nenhuma concorrência, nenhuma meta de tempo.
 
-> No Encontro 1 da OIP, a orientação mais mal lida pela turma era justamente um requisito de escala. Metade leu como "privacidade" ou "só teste". Não é falta de atenção: ninguém tinha dado nome a isso ainda. Hoje a gente dá.
+> No Encontro 1 da OIP, a orientação mais mal lida pela turma era justamente um requisito de escala. Metade leu como "privacidade" ou "só teste". Ninguém tinha dado nome a isso ainda. Hoje a gente dá.
 
 ## O conceito
 
 ### Funcional e não funcional
+
+Requisito não funcional nada mais é do que a descrição de quão bem o sistema faz o que ele faz.
 
 | | Funcional | Não funcional |
 |---|---|---|
@@ -33,15 +35,15 @@ O capítulo 2 da 2ª edição do livro de Martin Kleppmann e Chris Riccomini (*D
 
 **2. A latência de cauda se amplifica.** Quando uma requisição chama vários serviços e só responde depois que todos terminam, ela espera o mais lento. Com uma chamada, 1% das requisições sente o p99 do backend. Com cinco chamadas, quase 5%. Com cem, a maioria. O laboratório abaixo mostra isso ao vivo.
 
-**3. "Escalável" não é um rótulo.** Dizer que um sistema "escala" não significa nada. Primeiro se descreve a carga: 300 jovens, 40 mentores, cerca de 25 vagas por mentor por mês, pico de 150 tentativas no primeiro minuto de segunda. Depois se pergunta: **se essa carga dobrar, o que a gente faz?**
+**3. "Escalável" só vale com a carga descrita.** Primeiro se descreve a carga: 300 jovens, 40 mentores, cerca de 25 vagas por mentor por mês, pico de 150 tentativas no primeiro minuto de segunda. Depois se pergunta: **se essa carga dobrar, o que a gente faz?**
 
-**4. Calcular na leitura ou na escrita é uma decisão, não um detalhe.** O livro usa a linha do tempo de uma rede social como estudo de caso: montar a timeline toda vez que alguém abre o app, ou deixá-la pronta a cada nova postagem. Na agenda é a mesma escolha: contar as vagas livres a cada `GET`, ou manter a lista atualizada a cada agendamento. Leitura barata custa escrita cara, e o contrário. Essa decisão vai num ADR. **A IA não pode tomá-la sozinha.**
+**4. Calcular na leitura ou na escrita é uma decisão, não um detalhe.** O livro usa a linha do tempo de uma rede social como estudo de caso: montar a timeline toda vez que alguém abre o app, ou deixá-la pronta a cada nova postagem. Na agenda é a mesma escolha: contar as vagas livres a cada `GET`, ou manter a lista atualizada a cada agendamento. Leitura barata custa escrita cara, e o contrário. Essa decisão vai num ADR (registro de decisão de arquitetura). **A IA não pode tomá-la sozinha.**
 
-**5. Falha não é pane.** Uma parte do sistema falhar (*fault*) é normal. O sistema inteiro parar de atender (*failure*) é o que se quer evitar. Tolerância a falhas é seguir funcionando quando uma parte cai. Muitas panes reais começam numa mudança feita por pessoas, como uma configuração errada, e o livro defende tratar isso como problema do sistema, não de culpa individual. Pergunta para a agenda: se o envio de e-mail cair, o agendamento cai junto?
+**5. Falha e pane são coisas diferentes.** Uma parte do sistema falhar (*fault*) é normal. O sistema inteiro parar de atender (*failure*) é o que se quer evitar. Tolerância a falhas é seguir funcionando quando uma parte cai. Muitas panes reais começam numa mudança feita por pessoas, como uma configuração errada, e o livro defende tratar isso como problema do sistema, não de culpa individual. Pergunta para a agenda: se o envio de e-mail cair, o agendamento cai junto?
 
 **6. Manutenibilidade também é requisito.** Operabilidade (dá para rodar e observar), simplicidade (sem complexidade acidental, aquela que não vem do problema) e evolutividade (dá para mudar sem medo). Abstração desnecessária gerada pela IA é complexidade acidental.
 
-**7. Metas explícitas.** Quando o requisito vira compromisso, ele tem nome: SLO (a meta interna, ex.: p95 < 300 ms em 99% dos dias) e SLA (o contrato com quem usa). A turma não precisa de SLA agora, mas precisa do hábito: **meta escrita, medida e com gate.**
+**7. Metas explícitas.** Quando o requisito vira compromisso, ele tem nome: SLO (a meta interna, ex.: p95 < 300 ms em 99% dos dias) e SLA (o contrato com quem usa). A turma não precisa de SLA agora, mas precisa do hábito: **meta escrita, medida e com gate** (um bloqueio automático).
 
 ### Do requisito ao sensor
 

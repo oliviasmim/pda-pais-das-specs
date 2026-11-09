@@ -24,7 +24,7 @@ A última linha da saída começa com `PLACAR {...}`. Copie a linha inteira e co
 
 O avaliador usa o próprio seed (não o do projeto) e chama `reset(seed)`, `repo.buscarVaga` e `repo.buscarAgendamento` de `src/repo.js`. Por isso o `AGENTS.md` do projeto proíbe mudar essas assinaturas.
 
-O avaliador confere a **ordem** dos commits, não se o teste estava mesmo vermelho. Isso fica com a clínica: peça ao time para mostrar a saída do `npm test` no commit `test(Tn)`.
+O avaliador confere a **ordem** dos commits. Conferir se o teste estava mesmo vermelho fica com a clínica: peça ao time para mostrar a saída do `npm test` no commit `test(Tn)`.
 
 Os pontos manuais (sensores verdes na CI, integração, carta respondida na clínica, minutos restantes) ficam no checklist do site.
 

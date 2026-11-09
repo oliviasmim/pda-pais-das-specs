@@ -23,7 +23,7 @@
         "Usar 5 agentes e votar na melhor resposta."
       ],
       "correta": 2,
-      "explicacao": "Não há o que paralelizar. Sobra só o pedágio de subir agentes, coordenar e integrar. Recusar com argumento é julgamento, não preguiça."
+      "explicacao": "Não há o que paralelizar. Sobra só o pedágio de subir agentes, coordenar e integrar. Recusar com argumento é julgamento."
     },
     {
       "etapa": "check",

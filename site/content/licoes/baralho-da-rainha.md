@@ -4,9 +4,9 @@
 
 ## O problema
 
-Depois que a turma descobre subagents, aparece a tentação: *se um agente é bom, cinco são melhores*. Na internet isso tem nome bonito: **swarm**, um enxame de agentes.
+Depois que a turma descobre subagents (agentes ajudantes que o agente principal chama), aparece a tentação: *se um agente é bom, cinco são melhores*. Na internet isso tem nome bonito: **swarm**, um enxame de agentes.
 
-O croquet da Rainha é um swarm. Todo mundo joga ao mesmo tempo, ninguém espera a vez, os tacos são flamingos que fogem e as bolas são ouriços que vão embora. Muito movimento, pouco jogo.
+O croquet da Rainha é um swarm. Todo mundo joga ao mesmo tempo, ninguém espera a vez, os tacos são flamingos que fogem e as bolas são ouriços que vão embora.
 
 Cada agente a mais tem um preço:
 
@@ -15,13 +15,13 @@ Cada agente a mais tem um preço:
 - **integrar:** alguém junta os resultados e resolve conflitos;
 - **revisar:** alguém confere se cada entrega bate com a spec.
 
-Se o ganho de rodar junto for menor que esse preço, mais agentes deixam o trabalho **mais lento e mais caro**. Recusar o swarm, com argumento, é sinal de maturidade, não de atraso.
+Se o ganho de rodar junto for menor que esse preço, mais agentes deixam o trabalho **mais lento e mais caro**. Recusar o swarm, com argumento, é sinal de maturidade.
 
 ## O conceito
 
 ### Por que subagents existem
 
-Um subagent é um agente com **janela de contexto própria**. Ele recebe uma tarefa, trabalha, e devolve **só um resumo** para quem chamou. Os logs, as tentativas e os arquivos que ele leu ficam com ele.
+Um subagent nada mais é do que um agente com **janela de contexto própria** (o espaço de texto que a IA consegue ler de uma vez). Ele recebe uma tarefa, trabalha, e devolve **só um resumo** para quem chamou. Os logs, as tentativas e os arquivos que ele leu ficam com ele.
 
 É isso que resolve o problema da lição 3: o agente principal não enche a janela com o trabalho dos outros e continua na smart zone. **Isolamento de contexto é o motivo. Velocidade é bônus**, e só quando as tasks são independentes.
 
@@ -57,7 +57,7 @@ Quatro "sim": paralelo. Algum "não": sequencial ou agente único. Muitas partes
 
 <div data-cartas="navalha,par"></div>
 
-A carta 🎩 Navalha também vale para arquitetura de agentes: *qual é o arranjo mais simples que entrega o mesmo resultado?* Se um agente único passa nos mesmos testes no mesmo tempo, os outros quatro são abstraction bloat de agente.
+A carta 🎩 Navalha também vale para arquitetura de agentes: *qual é o arranjo mais simples que entrega o mesmo resultado?* Se um agente único passa nos mesmos testes no mesmo tempo, os outros quatro são abstraction bloat de agente (camadas demais sem necessidade).
 
 Frase pronta para recusar com julgamento:
 
@@ -69,7 +69,7 @@ Frase pronta para recusar com julgamento:
 
 <div data-lab="orquestracao"></div>
 
-**Em dupla, cenário por cenário.** Antes de clicar, cada pessoa escolhe um padrão e diz em voz alta o porquê, usando as quatro perguntas do teste da Rainha. Depois rodem. Quando errarem o palpite, a pergunta não é "qual era a resposta", e sim "**qual das quatro perguntas eu respondi errado?**".
+**Em dupla, cenário por cenário.** Antes de clicar, cada pessoa escolhe um padrão e diz em voz alta o porquê, usando as quatro perguntas do teste da Rainha. Depois rodem. Quando errarem o palpite, perguntem: "**qual das quatro perguntas eu respondi errado?**"
 
 Termine no cenário **Speedrun**: ele é o plano da Aula 2. Depois, monte o seu caso com o projeto de vocês.
 

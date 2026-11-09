@@ -71,7 +71,7 @@
         "Feature: agendar mentoria. NFR: precisa ser rápido. Sensor: testar."
       ],
       "correta": 0,
-      "explicacao": "Só a segunda permite escrever um teste que falha: tem entrada, status e mensagem exatos, e um NFR com número e sensor."
+      "explicacao": "Só a primeira permite escrever um teste que falha: tem entrada, status e mensagem exatos, e um NFR com número e sensor."
     }
   ]
 }

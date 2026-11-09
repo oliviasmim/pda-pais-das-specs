@@ -23,7 +23,7 @@
         "Recusa a tarefa por falta de informação."
       ],
       "correta": 0,
-      "explicacao": "Sem requisito não funcional escrito, o agente preenche a lacuna com o padrão mais comum. Não é erro de código, é requisito que ninguém escreveu."
+      "explicacao": "Sem requisito não funcional escrito, o agente preenche a lacuna com o padrão mais comum. O problema é um requisito que ninguém escreveu."
     },
     {
       "etapa": "check",

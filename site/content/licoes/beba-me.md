@@ -16,9 +16,9 @@ As três têm a mesma causa: **olhar só para o modelo e esquecer o harness.** O
 
 ### Agente = LLM + Harness
 
-O **LLM** prevê o próximo token. Sozinho, ele não lê arquivo, não roda teste, não lembra da sessão de ontem. O **harness** é tudo o que fica em volta e transforma o modelo num agente: ferramentas, permissões, AGENTS.md, skills, MCPs, hooks, testes, CI, subagents.
+O **LLM** (modelo de linguagem) prevê o próximo token, que é um pedaço de texto. Sozinho, ele não lê arquivo, não roda teste, não lembra da sessão de ontem. O **harness** nada mais é do que tudo o que fica em volta do modelo e o transforma num agente: ferramentas, permissões, AGENTS.md, skills, MCPs, hooks, testes, CI, subagents.
 
-O modelo é o motor. O harness é o resto do carro: volante, freio, painel, cinto. Ninguém dirige um motor.
+O modelo é o motor. O harness é o resto do carro: volante, freio, painel, cinto.
 
 Quando o agente erra, a pergunta útil quase nunca é "qual modelo é melhor?". É: **que peça do harness faltou?**
 
@@ -36,7 +36,7 @@ Todo componente do harness faz uma de duas coisas:
 
 Sensores ainda se dividem em dois tipos. **Computacionais** são determinísticos e baratos: lint, tipos, testes. Rodam sempre e dão sempre a mesma resposta. **Inferenciais** usam um modelo para julgar: agente de review, LLM como juiz. Pegam o que o lint não vê, mas podem errar e custam tokens. Use os computacionais em tudo e os inferenciais onde eles não alcançam.
 
-O teste escrito **antes** da implementação é especial: é guia e sensor ao mesmo tempo. Antes, diz ao agente o que precisa passar. Depois, mede se passou. Por isso TDD combina tão bem com IA.
+O teste escrito **antes** da implementação é especial: é guia e sensor ao mesmo tempo. Antes, diz ao agente o que precisa passar. Depois, mede se passou. Por isso o TDD (escrever o teste antes do código) combina tão bem com IA.
 
 **A regra que fecha o loop:** se a IA repetiu um erro, você precisa de **um guia novo** (uma regra no AGENTS.md, para ela errar menos) **e de um sensor novo** (um teste ou uma checagem no review, para pegar quando errar mesmo assim). Pedir de novo no chat não é nenhum dos dois.
 
@@ -44,14 +44,14 @@ O teste escrito **antes** da implementação é especial: é guia e sensor ao me
 
 ### Grande demais para a porta: contexto
 
-Alice bebe e encolhe, come e cresce, e nunca está do tamanho certo para a porta. A janela de contexto é assim. Tudo o que o agente lê, roda e responde fica lá dentro. Até uns 40% da janela, o agente está na **smart zone**. Depois disso, entra na **dumb zone**: esquece instruções do começo, repete erros, mistura tarefas. É o *context rot* da S2.
+Alice bebe e encolhe, come e cresce, e nunca está do tamanho certo para a porta. A janela de contexto (o que o agente consegue ter à vista de uma vez) é assim. Tudo o que o agente lê, roda e responde fica lá dentro. Até uns 40% da janela, o agente está na **smart zone**. Depois disso, entra na **dumb zone**: esquece instruções do começo, repete erros, mistura tarefas. É o *context rot* da S2.
 
-Subagents resolvem um problema específico: **isolamento de contexto**.
+Subagents (agentes auxiliares que trabalham à parte) resolvem um problema específico: **isolamento de contexto**.
 
 - O subagent roda numa janela **própria**, com o seu próprio prompt de sistema, ferramentas e permissões.
 - Ele **não vê** a conversa do agente principal. Recebe só o pedido.
 - Quando termina, só o **resumo final** volta para o principal. Os 20 mil tokens de log que ele leu ficam lá e somem.
-- Isso **não é de graça**: os tokens do subagent também são gastos. Você troca dinheiro por uma janela principal limpa.
+- Isso **tem custo**: os tokens do subagent também são gastos. Você troca dinheiro por uma janela principal limpa.
 
 No Claude Code, um subagent é um arquivo Markdown em `.claude/agents/` com `name`, `description` e, opcionalmente, `tools` e `model`. O `description` diz ao agente principal **quando** delegar. É a pergunta da Lagarta: *"Quem é você?"*. Se o subagent não sabe responder em uma frase, ele não deveria existir.
 
@@ -74,7 +74,7 @@ Recusar um padrão avançado sem necessidade não é falta de conhecimento. É j
 
 ### 1. Monte o harness
 
-Classifique cada peça. Preste atenção nas que parecem óbvias e não são.
+Classifique cada peça. Perceba quais parecem óbvias e não são.
 
 <div data-lab="guias-sensores"></div>
 
@@ -175,7 +175,7 @@ Adicione uma regra aqui (guia) E um teste ou checagem de review (sensor).
 | Sensor inferencial | "Outra IA olhando." | Sensor que usa um modelo para julgar, como um agente de review com rubrica. |
 | Context rot | "A IA ficou burra." | Perda de qualidade quando a janela enche de histórico irrelevante. |
 | Subagent | "Mais um agente." | Agente com janela própria que recebe só o pedido e devolve só o resumo. Resolve isolamento de contexto. |
-| Swarm | "O jeito avançado." | Nome da moda para arranjos de vários agentes. Útil em poucos casos, caro em todos. |
+| Swarm | "O jeito avançado." | Nome da moda para arranjos de vários agentes. Útil em poucos casos. Em todos eles, tem custo de coordenação. |
 | Custo de coordenação | "Overhead." | Tokens, tempo e conflitos gastos para dividir, distribuir e integrar trabalho entre agentes. |
 
 ## Para ir além

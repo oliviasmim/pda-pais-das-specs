@@ -62,7 +62,7 @@ As seis perguntas que a turma precisa responder sem travar viram um baralho. Cad
 
 ## 4. A metáfora: o País das Specs
 
-A metáfora não é enfeite. Cada cena do livro carrega um conceito que a turma já viu, e ajuda a lembrar dele.
+Cada cena do livro carrega um conceito que a turma já viu e ajuda a lembrar dele.
 
 | Cena (Carroll, 1865) | Conceito | Semana de origem |
 |---|---|---|
@@ -165,13 +165,13 @@ O papel da facilitadora muda: **ela não roda comandos. Ela faz perguntas do bar
 
 ## 7. Cuidado com o Encontro 2 da OIP
 
-O Encontro 2 avalia a revisão do endpoint de saldo da carteira digital (fonte de dados assumida, e-mail sem validação, usuário não encontrado, regra "+10" inventada). **Não use esse código nem o domínio da carteira em aula.** O site usa outro domínio (agenda de mentorias) e treina o hábito, não o gabarito:
+O Encontro 2 avalia a revisão do endpoint de saldo da carteira digital (fonte de dados assumida, e-mail sem validação, usuário não encontrado, regra "+10" inventada). **Não use esse código nem o domínio da carteira em aula.** O site usa outro domínio (agenda de mentorias) e treina o hábito:
 
 - Pedido vs assumido vs inventado (vale para qualquer código).
 - "Que entrada prova que está errado?" (é o sinal de nível 3 em D2).
 - "Qual o padrão de erro da IA e como evitar?" (é o sinal de nível 3 em PC).
 
-Se a turma perguntar se "vai cair na OIP", a resposta honesta é: o código é outro, a pergunta é a mesma.
+Se a turma perguntar se "vai cair na OIP", responda: o código é outro, a pergunta é a mesma.
 
 ---
 
@@ -181,7 +181,7 @@ Se a turma perguntar se "vai cair na OIP", a resposta honesta é: o código é o
 |---|---|
 | Clear Thinking | Carta de Destino; NFR com número; carta ♥ Par. Combate a Vague Trap. |
 | Bias to Action | Speedrun de 40 min: começar antes de estar pronto, com o teste vermelho como primeiro passo. Combate a Overwhelm Trap (3 tasks pequenas em vez de uma feature gigante). |
-| Disagreeability | Cartas "Precisa mesmo?" e 🎩 Navalha: recusar o swarm, o padrão de projeto e a abstração que a IA sugeriu, com argumento e não com hierarquia. Combate a Midwit Trap. |
+| Disagreeability | Cartas "Precisa mesmo?" e 🎩 Navalha: recusar o swarm, o padrão de projeto e a abstração que a IA sugeriu, com argumento. Combate a Midwit Trap. |
 
 Pergunta "e daí?" para fechar cada aula: **quanto custa para a pessoa usuária quando o requisito não foi escrito?** (Jovem perde a mentoria porque duas pessoas pegaram a mesma vaga. Mentor recebe dois jovens no mesmo horário.)
 
