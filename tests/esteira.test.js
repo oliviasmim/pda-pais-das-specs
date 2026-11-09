@@ -76,7 +76,7 @@ test('workflow gerado tem os passos ligados, na ordem, e passa na auditoria', ()
   const yaml = gerarWorkflow(['lint', 'testes', 'deps']);
   assert.match(yaml, /actions\/checkout@v6/);
   assert.match(yaml, /npm ci/);
-  assert.ok(yaml.indexOf('npm run lint') < yaml.indexOf('npm run test:cobertura'));
+  assert.ok(yaml.indexOf('npm run lint') < yaml.indexOf('npm test'));
   assert.ok(!yaml.includes('npm run smoke'));
   assert.deepEqual(auditarYaml(yaml), []);
 });

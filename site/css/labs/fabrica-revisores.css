@@ -150,8 +150,6 @@
   max-height: 30rem;
   overflow: auto;
   padding: 0.9rem 1rem;
-  background: var(--ink);
-  color: var(--paper);
   border-radius: var(--r);
   font-family: var(--font-mono);
   font-size: 0.76rem;

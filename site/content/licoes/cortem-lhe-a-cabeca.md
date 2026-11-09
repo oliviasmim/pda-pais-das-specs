@@ -116,7 +116,7 @@ Passos, nesta ordem, cada um separado e falhando o job se falhar:
 2. npm run lint
 3. npm run typecheck
 4. npm run smoke          (sobe o servidor e chama GET /health)
-5. npm run test:cobertura (mínimo de 80% de linhas)
+5. npm test (mínimo de 80% de linhas)
 6. npm audit --audit-level=high
 Proibido: continue-on-error, "|| true", npm install, pular passo.
 No fim, para cada passo, me diga que mudança no código faz ele ficar vermelho.
