@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "O agente termina e diz: 'Implementei e todos os testes estão passando ✅'. O que essa frase prova?",
+      "pergunta": "O agente escreveu a feature, escreveu os testes DEPOIS do código, rodou e disse: \"tudo passando ✅\". O que falta para isso virar evidência?",
       "opcoes": [
-        "Que a feature está pronta.",
-        "Que a cobertura está acima de 80%.",
-        "Nada sozinha: é a sentença antes do veredito. Só um sensor independente, como a CI, prova.",
-        "Que a spec foi seguida."
+        "Cobertura acima de 80% reportada na mesma mensagem.",
+        "Uma segunda IA executando a mesma suíte, para tirar o viés de quem escreveu.",
+        "Um teste que existiria mesmo sem esse código: escrito antes e falhando sem ele (o TDD), ou escrito por quem não escreveu a feature. Veredito antes da sentença.",
+        "Rodar a suíte duas vezes seguidas, para eliminar flakiness."
       ],
       "correta": 2,
-      "explicacao": "Quem escreveu o código está dizendo que o código está certo. O gate é o que transforma 'confia em mim' em 'prove'."
+      "explicacao": "Teste escrito depois do código tende a descrever o que o código faz, não o que a spec pede. O teste anterior à implementação (ou independente dela) falharia sem a feature: é isso que transforma \"confia em mim\" em prova."
     },
     {
       "etapa": "pre",
-      "pergunta": "Qual destes é um GUIA (feedforward), e não um SENSOR (feedback)?",
+      "pergunta": "O DELETE /agendamentos/7 devolve 200 com o corpo certinho, mas esquece de liberar a vaga (livre: true). Qual sensor pega isso?",
       "opcoes": [
-        "O AGENTS.md com a regra 'nunca altere arquivos em tests/aceite/'.",
-        "O lint rodando na CI.",
-        "O npm audit.",
-        "Um teste de aceite falhando."
-      ],
-      "correta": 0,
-      "explicacao": "Guias agem antes do agente, para ele acertar de primeira. Sensores conferem depois e devolvem o erro. AGENTS.md, spec e skills são guias."
-    },
-    {
-      "etapa": "check",
-      "pergunta": "Um PR passa em lint, type check, build e testes, mas o agente trocou o 409 esperado por 201 dentro do teste de aceite. Qual sensor pega isso?",
-      "opcoes": [
-        "Lint.",
-        "Type check.",
-        "Testes + cobertura.",
-        "Nenhum dos cinco: precisa da guarda dos testes de aceite na CI, de um hook que bloqueie a edição, ou de review."
+        "Type check: a resposta saiu com campo de tipo errado para quem consome.",
+        "Build + smoke: um efeito colateral esquecido sempre aparece no boot da máquina limpa.",
+        "npm audit: a falha indica vulnerabilidade conhecida na cadeia de dependências.",
+        "Um teste de aceite de duas chamadas: DELETE e depois GET /mentores/:id/vagas conferindo que a vaga voltou. Nenhum dos outros três olha comportamento depois da resposta."
       ],
       "correta": 3,
-      "explicacao": "Os testes passam justamente porque foram pintados. Só a guarda (checksum), o hook PreToolUse ou um revisor que leia o diff do teste pega a rosa pintada."
+      "explicacao": "Lint, tipos, build e audit conferem a forma do sistema: sintaxe, tipos, boot, dependências. Efeito colateral de regra de negócio só aparece em teste que observa o mundo depois da ação. Por isso a tabela de 'pega / não pega' existe: cada sensor tem seu cego."
     },
     {
       "etapa": "check",
-      "pergunta": "A CI da sua equipe ficou vermelha e mesmo assim o PR foi mergeado. Qual a causa mais provável, mesmo com o YAML correto?",
+      "pergunta": "Na sua máquina tudo funciona e todos os testes passam. Na CI, o passo build + smoke falha numa máquina limpa. Que tipo de defeito esse sensor pega que os testes não pegam?",
       "opcoes": [
-        "O GitHub estava fora do ar.",
-        "O check não está marcado como obrigatório na proteção da main.",
-        "O agente apagou o workflow.",
-        "O npm audit é opcional por padrão."
+        "Regra de negócio trocada por suposição do agente.",
+        "Arquivo esquecido fora do git, variável de ambiente ausente, erro que só aparece ligando o sistema do zero. Só quem liga o projeto num ambiente novo vê.",
+        "p95 acima da meta com 1.000 vagas.",
+        "Teste que só confere o que o mock devolve."
       ],
       "correta": 1,
-      "explicacao": "Sem check obrigatório, CI vermelha é só uma opinião. Gate que não bloqueia é decoração."
+      "explicacao": "\"Funciona na minha máquina\" tem um motivo literal: a sua máquina tem coisas que o repositório não tem. O smoke em ambiente limpo é o sensor dessa diferença."
     },
     {
-      "etapa": "pos",
-      "pergunta": "Por que colocar o lint antes dos testes na esteira?",
+      "etapa": "check",
+      "pergunta": "O hook PreToolUse bloqueia Edit e Write em tests/aceite/. Mesmo assim, numa sessão, o agente alterou o teste de aceite e a CI ficou verde: ele usou sed -i pelo Bash. O que faltava?",
       "opcoes": [
-        "Fail fast: o lint é barato e rápido; um erro de sintaxe pego nele economiza o tempo dos testes para quem está esperando.",
-        "Porque o lint é mais importante.",
-        "Porque os testes dependem do lint para rodar.",
-        "A ordem não faz diferença."
+        "Um segundo hook com matcher \"Bash\" barrando comandos que tocam tests/aceite/, ou a guarda de checksums na CI. Idealmente os dois: o hook olha duas ferramentas, e guia com sensor nunca é só um.",
+        "Um prompt mais firme explicando que sed -i também é edição de arquivo.",
+        "Trocar o matcher por multiEdit, que é a ferramenta que o Bash usa por baixo.",
+        "Mudar o hook para PostToolUse, que só roda com o arquivo já alterado."
       ],
       "correta": 0,
-      "explicacao": "Os passos param no primeiro que falha. Barato primeiro significa feedback mais rápido e menos minutos de CI gastos."
+      "explicacao": "O matcher define o que o hook enxerga: Edit e Write. Qualquer escrita por outra porta (Bash, script, apply_patch) passa reto. Por isso a lição coloca a guarda na CI mesmo com o hook funcionando: cada camada cobre o buraco da anterior."
     },
     {
       "etapa": "pos",
-      "pergunta": "O NFR-2 diz: 'p95 abaixo de 50 ms com 1.000 vagas'. Nenhum teste mede isso. Como chamar esse requisito?",
+      "pergunta": "Por que o review feito por um agente (sensor inferencial) entra DEPOIS de lint, tipos, build e testes, e nunca no lugar deles?",
       "opcoes": [
-        "Requisito cumprido, porque está escrito.",
-        "Um desejo, porque não tem número.",
-        "Uma promessa: requisito sem sensor. Precisa de um teste que meça o p95 e falhe na CI.",
-        "Um requisito funcional."
+        "Porque a action oficial do GitHub só aceita essa ordem de passos.",
+        "Porque ele é caro, varia de uma execução para outra e pode errar. O determinístico e barato filtra tudo o que consegue primeiro; o modelo julga só o que sobra.",
+        "Porque sensor inferencial não tem permissão de bloquear merge.",
+        "Porque modelo nenhum entende sintaxe; para isso existe lint, que precisa rodar antes de qualquer outra coisa."
       ],
-      "correta": 2,
-      "explicacao": "Ele tem número (não é desejo), mas não tem sensor (é promessa). Só vira requisito de verdade quando um gate mede e bloqueia."
+      "correta": 1,
+      "explicacao": "Fail fast também é fail cheap: lint em 20 segundos antes de testes de 3 minutos, testes antes de tokens de modelo. O inferencial pode sim bloquear, e entende sintaxe; o ponto é custo e variância, não permissão nem capacidade."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Como você PROVA que o gate de lint da main bloqueia de verdade?",
+      "opcoes": [
+        "Lendo o YAML e conferindo que o passo npm run lint existe.",
+        "Olhando o badge verde de CI no README do repositório.",
+        "Rodando npm run lint local e vendo verde.",
+        "Abrindo um PR que quebra o lint de propósito e vendo o check vermelho com o botão de merge bloqueado. Depois desfaz."
+      ],
+      "correta": 3,
+      "explicacao": "É a carta Contraprova aplicada à CI: a prova de que o gate bloqueia é ele bloqueando, uma vez, na sua frente. YAML certo, badge verde e lint local dizem que o sensor existe; nenhum diz que a proteção da main exige o check. Gate que nunca ficou vermelho é decoração não testada."
     }
   ]
 }

@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "Qual é o principal problema que subagents resolvem?",
+      "pergunta": "Em qual cenário o paralelo SE PAGA?",
       "opcoes": [
-        "Isolar o contexto: o trabalho de uma task fica na janela do subagent, e só um resumo volta ao agente principal.",
-        "Deixar o modelo mais inteligente.",
-        "Dispensar a revisão humana.",
-        "Reduzir sempre o custo em tokens."
+        "Duas tasks independentes de 4 horas cada, em arquivos separados, cada uma com teste de aceite próprio e integração prevista de 10 minutos.",
+        "Três tasks em cadeia (extrair a validação, usar a validação no cancelamento, ajustar os testes), de 1 hora cada.",
+        "Uma task de 6 horas que precisa enxergar o projeto inteiro para tomar cada decisão.",
+        "Duas tasks independentes de 20 minutos, com setup de worktree e integração prevista de 2 horas."
       ],
       "correta": 0,
-      "explicacao": "Isolamento de contexto é o motivo. Velocidade é bônus, e só quando as tasks são independentes. Em tokens, vários agentes costumam custar mais, não menos."
+      "explicacao": "O paralelo se paga quando a task é grande, as partes não se falam e a integração é curta. Na cadeia não há o que rodar junto. Na task indivisível não há o que dividir. Na última, setup e integração custam seis vezes o trabalho."
     },
     {
       "etapa": "pre",
-      "pergunta": "Alguém propõe um swarm de 5 agentes para corrigir um status 200 que devia ser 201. Qual a melhor resposta?",
+      "pergunta": "Três tasks passam no teste da Rainha nas três primeiras perguntas: são independentes, mexem em arquivos diferentes e cada uma tem teste de aceite. Mas a integração prevista são dois dias de costura. Veredito?",
       "opcoes": [
-        "Ótimo: mais agentes, mais rápido.",
-        "Usar um supervisor para coordenar os 5.",
-        "Um agente único resolve: é uma task, um arquivo, três minutos. Subir e integrar 5 agentes custa mais que a própria correção.",
-        "Usar 5 agentes e votar na melhor resposta."
+        "Paralelo: aprovado por 3 a 1 nas quatro perguntas.",
+        "Supervisor: um agente dedicado à integração resolve o quarto ponto.",
+        "Não paralelo: cada pergunta reprova sozinha. Integração longa engole o ganho das três primeiras, e três agentes trabalhando geram três vezes o material para costurar.",
+        "Depende do número de agentes ociosos no time: se estão parados, o custo extra é zero."
       ],
       "correta": 2,
-      "explicacao": "Não há o que paralelizar. Sobra só o pedágio de subir agentes, coordenar e integrar. Recusar com argumento é julgamento."
+      "explicacao": "O teste é de portão, não de média: um \"não\" basta. E integração de dois dias não é detalhe de execução, é o preço principal da decisão. As mesmas três tasks em sequência, com a main sempre verde, custam menos."
     },
     {
       "etapa": "check",
-      "pergunta": "Três tasks: extrair a validação, usar a validação nova no cancelamento, ajustar os testes. Cada uma depende da anterior. Qual padrão faz mais sentido?",
+      "pergunta": "Um colega propõe rodar pesquisa, plano e implementação da mesma feature em três subagents EM PARALELO, \"para ganhar tempo\". O que responder?",
       "opcoes": [
-        "Paralelo, um worktree por task.",
-        "Supervisor com 3 trabalhadores em paralelo.",
-        "Swarm com votação.",
-        "Agente único ou sequencial: em cadeia não há o que rodar ao mesmo tempo."
+        "Boa ideia, desde que cada um tenha seu worktree: o isolamento elimina a dependência entre as etapas.",
+        "Funciona se um supervisor ficar de prontidão para reexecutar qualquer etapa que travar.",
+        "Não funciona porque subagent não tem permissão de ler arquivos do projeto.",
+        "Não ganha tempo: a saída da pesquisa é a entrada do plano, e a do plano é a entrada da implementação. Em cadeia, o paralelo vira sequencial com pedágio: três handoffs de presente."
       ],
       "correta": 3,
-      "explicacao": "Em cadeia, o paralelo vira sequencial com pedágio. Um agente único (se o contexto couber) ou um sequencial com handoffs claros resolve melhor."
+      "explicacao": "Se a etapa 2 precisa do resultado da 1, os três subagents nunca rodam ao mesmo tempo de verdade: dois ficam esperando ou chutando. Se o motivo da divisão é contexto limpo por etapa, o nome do arranjo é sequencial, com handoffs explícitos."
     },
     {
       "etapa": "check",
-      "pergunta": "Quatro revisores especializados (segurança, testes, spec, simplicidade) só leem um PR grande. Por que um supervisor pode ser melhor que o paralelo puro?",
+      "pergunta": "Quatro revisores especializados rodaram em paralelo num PR grande e voltaram com 12 achados: 5 duplicados e 2 contraditórios (um pede 400, outro pede 404, para a mesma linha). O que faltou no arranjo?",
       "opcoes": [
-        "Porque o supervisor lê mais rápido.",
-        "Porque alguém precisa consolidar os quatro relatórios, remover duplicados e aplicar um critério comum; sem supervisor, isso cai numa pessoa.",
-        "Porque o paralelo não permite tarefas só de leitura.",
-        "Porque o supervisor não gasta tokens."
-      ],
-      "correta": 1,
-      "explicacao": "Tarefas só de leitura não conflitam, mas os resultados precisam ser juntados com critério. É aí que o supervisor se paga."
-    },
-    {
-      "etapa": "pos",
-      "pergunta": "Qual destas NÃO é uma das quatro perguntas do teste da Rainha antes de paralelizar?",
-      "opcoes": [
-        "As tasks são independentes?",
-        "Elas mexem em arquivos diferentes?",
-        "Cada uma tem teste de aceite próprio?",
-        "Temos agentes suficientes para todas as tasks?"
-      ],
-      "correta": 3,
-      "explicacao": "Ter agentes disponíveis não diz se vale a pena. As perguntas são: independentes, arquivos diferentes, pronto próprio e integração curta."
-    },
-    {
-      "etapa": "pos",
-      "pergunta": "O que é um swarm?",
-      "opcoes": [
-        "Um quinto padrão de orquestração, mais avançado que os outros.",
-        "Um modelo de linguagem treinado para trabalhar em grupo.",
-        "Um nome para arranjos com muitos subagents. Na prática é um dos padrões (paralelo, supervisor...) com mais cartas.",
-        "Um recurso do git para rodar tarefas em paralelo."
+        "Mais dois revisores, para os contraditórios saírem no voto da maioria.",
+        "Nada: desempatar contradição entre revisores é trabalho de quem escreveu o código.",
+        "Um supervisor que consolide: remove duplicados e desempata com um critério só (a spec), em vez de devolver 12 sinais brutos para cima do autor.",
+        "Rubricas mais longas e detalhadas, até os quatro convergirem sozinhos para as mesmas respostas."
       ],
       "correta": 2,
-      "explicacao": "Quando alguém disser 'vamos fazer um swarm', a pergunta certa é: qual padrão, com quantos agentes, e por que um agente único não basta?"
+      "explicacao": "Paralelo entrega sinais; alguém precisa transformar sinais em veredito. Esse alguém, sem supervisor, vira o autor do PR ou você. Rubrica tira parte da variação, mas desempate com critério comum é trabalho de consolidação."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Um vídeo mostra um \"swarm de 8 agentes\" revisando um PR: quatro leem partes do diff em paralelo e um \"agente líder\" junta os relatórios num veredito. O que existe por baixo do nome da moda?",
+      "opcoes": [
+        "Um padrão de orquestração novo, que só os modelos desta geração suportam.",
+        "Oito MCPs de revisão chamando ferramentas de análise estática ao mesmo tempo.",
+        "Paralelo com supervisor, com mais cartas na mesa. \"Swarm\" não descreve o desenho; as quatro perguntas da Rainha (independência, arquivos, pronto próprio, integração) continuam sendo as que importam.",
+        "Um único modelo que internamente oito personas discutem entre si."
+      ],
+      "correta": 2,
+      "explicacao": "Quando alguém disser \"vamos fazer um swarm\", a pergunta certa é: qual dos quatro padrões, com quantos agentes e por que um agente único não basta? O rótulo é marketing; o desenho é engenharia."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "O time paralelizou 4 tasks do speedrun e entregou 30% mais devagar que o colega com um agente só. O líder pergunta se a tentativa ao menos valeu a experiência. Qual comparação fecha essa conta?",
+      "opcoes": [
+        "Tokens totais do paralelo contra tokens totais do agente único.",
+        "Número de conflitos de merge resolvidos por hora em cada arranjo.",
+        "Tempo de parede e custo para entregar as MESMAS 4 tasks com os MESMOS testes verdes. Se um agente passa nos mesmos testes no mesmo tempo, o arranjo maior era abstraction bloat de agente.",
+        "Percentual de tempo que cada agente ficou ocioso esperando o próximo."
+      ],
+      "correta": 2,
+      "explicacao": "É a carta Navalha aplicada à arquitetura de agentes: o arranjo mais simples que passa nos mesmos testes vence. Métrica parcial (tokens, conflitos, ociosidade) deixa você ganhar o argumento e perder a decisão."
     }
   ]
 }

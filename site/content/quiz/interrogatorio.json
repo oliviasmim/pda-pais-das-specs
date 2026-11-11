@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "A IA gerou um endpoint de agendamento. Você chamou uma vez e ele devolveu 200. O que isso prova?",
+      "pergunta": "A IA entregou o POST /agendamentos. Você testou: o caminho feliz devolveu 200 e vagaId 999 devolveu 404. O que está provado?",
       "opcoes": [
-        "Que o código atende ao pedido.",
-        "Que ele roda no caminho feliz que você testou. Não diz nada sobre o que ele assumiu ou inventou.",
-        "Que não há regra inventada, porque a IA só gera o que foi pedido.",
-        "Que já dá para abrir o PR."
+        "Que o endpoint atende à spec: sucesso e vaga inexistente são os dois casos centrais.",
+        "Esses dois casos funcionam na sua máquina. Vaga ocupada, campos faltando, concorrência e tudo o que a IA assumiu continuam sem veredito.",
+        "Que não há regra inventada: regra inventada sempre quebra o caminho feliz dos testes.",
+        "Que a revisão pode ir direto para o corpo do código, porque o comportamento já foi conferido."
       ],
       "correta": 1,
-      "explicacao": "Uma chamada que funciona prova um caso. Regras inventadas, casos de falha esquecidos e status errados continuam lá, e quase sempre parecem razoáveis."
+      "explicacao": "Duas chamadas provam dois casos. Todo o resto da tabela, e tudo o que a IA preencheu por conta própria, segue sem evidência. Cuidado com a primeira opção: ela parece técnica, mas transforma dois testes em atestado de spec."
     },
     {
       "etapa": "pre",
-      "pergunta": "Qual destas é uma forma verificável de conferir a resposta da IA?",
+      "pergunta": "Qual destas é uma contraprova de verdade?",
       "opcoes": [
-        "Testar com vários casos.",
-        "Pedir para outra IA revisar.",
-        "POST /agendamentos com vagaId 999 deve devolver 404 {\"erro\":\"Vaga não encontrada\"}.",
-        "Ver se o código está limpo."
+        "\"POST /agendamentos com vagaId 1 livre. Espero 201. Rodei, devolveu 201.\"",
+        "\"Vou rodar POST /agendamentos com vagaId 999 e ver o que devolve, aí comparo com a spec.\"",
+        "\"Testei 20 e-mails válidos seguidos e todos responderam rápido.\"",
+        "\"POST /agendamentos com jovemEmail 'ana', sem formato de e-mail. Espero 400 {\\\"erro\\\":\\\"jovemEmail inválido\\\"}. O código devolveu 201 e gravou 'ana'.\""
       ],
-      "correta": 2,
-      "explicacao": "Só a terceira diz a entrada exata e a resposta esperada. As outras são promessas de revisão: não dizem contra o quê o código vai ser conferido."
+      "correta": 3,
+      "explicacao": "Contraprova precisa de três coisas: entrada exata, resposta esperada pela spec e resposta que o código deu, diferentes. A primeira só confirma o que funciona. As outras duas não dizem o que esperavam ver antes de rodar."
     },
     {
       "etapa": "check",
-      "pergunta": "No diff, a linha if (agendamentosNoMes >= 3) é:",
+      "pergunta": "No diff do pedido vago (\"crie um endpoint para o jovem agendar uma mentoria\"), qual trecho é ASSUMIDO, e não inventado?",
       "opcoes": [
-        "Pedido: todo sistema de agenda tem limite.",
-        "Assumido: o pedido não falou de limite, então a IA precisava escolher um.",
-        "Inventado: ninguém pediu limite e o problema não exige. A spec lista \"limite por jovem\" como fora do escopo.",
-        "Correto, porque evita abuso."
+        "if (agendamentosNoMes >= 3) return 403;",
+        "await enviarEmailConfirmacao(jovemEmail);",
+        "res.status(200).json(agendamento);",
+        "import moment from 'moment';"
       ],
       "correta": 2,
-      "explicacao": "A IA não precisava escolher limite nenhum: dava para agendar sem limite. Quando nada obriga a decisão e ninguém pediu, é invenção. Plausível não é pedido."
+      "explicacao": "A resposta precisava de algum status e algum corpo: a escolha era obrigatória e ficou com a IA. Limite mensal, e-mail e dependência de data ninguém pediu e o problema não exige: invenção. O assumido vira decisão escrita ou pergunta; os inventados saem."
     },
     {
       "etapa": "check",
-      "pergunta": "Por que res.status(200) é \"assumido\" e não \"inventado\"?",
+      "pergunta": "Todo sistema de agenda do mundo manda e-mail de confirmação. Por que, mesmo assim, o e-mail do diff é INVENTADO e não assumido?",
       "opcoes": [
-        "Porque 200 é sempre o status certo.",
-        "Porque o pedido não disse o status e a IA precisava devolver algum. Ela escolheu o mais comum.",
-        "Porque a spec manda 200.",
-        "Porque status HTTP não importa."
+        "Porque a lacuna não era obrigatória: dava para entregar o endpoint sem e-mail nenhum. Ser comum nos outros sistemas não torna algo pedido.",
+        "Porque e-mail nunca é requisito legítimo num sistema de agenda.",
+        "Porque a spec proíbe e-mail em qualquer circunstância, agora e para sempre.",
+        "Porque e-mail de confirmação é requisito não funcional, e NFR não pode aparecer num diff de feature."
       ],
-      "correta": 1,
-      "explicacao": "Toda resposta tem um status, então a escolha era obrigatória. O problema é que foi a IA quem escolheu. Com a spec, a resposta vira objetiva: sucesso é 201."
+      "correta": 0,
+      "explicacao": "Assumido é uma lacuna que precisava ser preenchida. Inventado é uma lacuna que nem existia. A spec lista e-mail como fora do escopo e diz: se parecer necessário, pergunte. A resposta certa é conversa com quem decidiu, não código. As opções exageradas são apegadas à forma, não ao critério."
     },
     {
       "etapa": "pos",
-      "pergunta": "Qual é o padrão de erro da IA que este laboratório mostrou?",
+      "pergunta": "Duas pessoas deram o mesmo pedido de 9 palavras a agentes diferentes. Um diff veio com limite de 3 agendamentos por mês; o outro, com bloqueio de agendamento no domingo. Isso é aleatório?",
       "opcoes": [
-        "Ela erra a sintaxe com frequência.",
-        "Ela preenche as lacunas do pedido com suposições plausíveis.",
-        "Ela ignora o pedido e faz outra coisa.",
-        "Ela só erra quando o modelo é pequeno."
+        "É bug da versão atual do modelo, e some na próxima.",
+        "Sim, e por isso com pedido vago os erros se cancelam na média.",
+        "Sim, é o não-determinismo sorteando erros: não há padrão para aprender.",
+        "Não. Os detalhes mudam, o padrão não: cada lacuna vira a continuação mais provável, a média dos sistemas parecidos. A defesa é a mesma nos dois diffs: menos lacunas antes, rastro depois."
       ],
-      "correta": 1,
-      "explicacao": "O modelo continua o texto do jeito mais provável. Com pedido vago, o mais provável é a média dos sistemas parecidos: limite por mês, e-mail de confirmação, factory. Por isso a defesa é spec antes e rastro depois."
+      "correta": 3,
+      "explicacao": "O não-determinismo muda o presente que você recebe, não o mecanismo: preencher lacunas pelo que é mais provável estatisticamente. Por isso duas pessoas com o mesmo pedido ruim receberam suposições plausíveis diferentes. Não é sorte, e não some com modelo novo."
     },
     {
       "etapa": "pos",
-      "pergunta": "Qual pergunta transforma uma revisão genérica em uma revisão verificável?",
+      "pergunta": "Você pôs no AGENTS.md a regra 'ao terminar, liste o que você assumiu'. O agente devolve: 'Nenhuma suposição feita'. O que concluir?",
       "opcoes": [
-        "Esse código está bom?",
-        "Onde, no pedido ou na spec, está escrito isso? E que entrada prova que está errado?",
-        "A IA tem certeza?",
-        "Isso segue boas práticas?"
+        "Que o modelo é ruim para seguir instrução simples e deve ser trocado.",
+        "Que o pedido estava completo: lista vazia é evidência de que não havia lacuna.",
+        "Quase nada. A declaração também é texto gerado: o agente pode não enxergar as próprias suposições, porque suposição plausível raramente se apresenta como suposição. A lista ajuda a caçar; o rastro continua sendo seu.",
+        "Que a regra funcionou e, nas próximas sessões, dá para confiar e pular o rastro."
       ],
-      "correta": 1,
-      "explicacao": "Rastro e contraprova. A primeira compara com algo escrito; a segunda diz exatamente o que rodar e o que esperar. As outras pedem opinião."
+      "correta": 2,
+      "explicacao": "A lista do próprio agente é um indício barato, não uma prova. Se ele soubesse que estava assumindo, teria perguntado. O rastro (onde está escrito?) continua sendo a ferramenta que confere."
     }
   ]
 }

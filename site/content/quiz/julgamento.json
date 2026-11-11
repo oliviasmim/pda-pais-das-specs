@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "Um PR do agente tem 278 linhas e CI verde. Por onde começar a revisão?",
+      "pergunta": "Qual destas situações é \"sentença primeiro, veredito depois\"?",
       "opcoes": [
-        "Pelo primeiro arquivo, linha a linha.",
-        "Pela lista de arquivos e tamanhos, depois assinaturas e contratos, depois testes. O corpo por último.",
-        "Pelos testes: se passam, o resto está certo.",
-        "Pedindo ao próprio agente para confirmar que está tudo certo."
+        "Escrever o teste de aceite, vê-lo falhar e só então escrever o código da feature.",
+        "Rodar a CI completa antes de abrir a revisão humana do PR.",
+        "Exigir dois aprovadores humanos em todo pull request do projeto.",
+        "Aprovar o PR porque a mensagem do agente diz \"pronto, testes passando\" e a CI está verde. Ou ler as 278 linhas na ordem em que aparecem e aprovar por cansaço no fim. As duas decidem antes de olhar a evidência."
       ],
-      "correta": 1,
-      "explicacao": "Leitura em camadas: cada camada é mais barata que a seguinte. Só a lista de arquivos já mostra teste de aceite alterado e dependência nova."
+      "correta": 3,
+      "explicacao": "Cuidado com a armadilha da ordem: o TDD (a primeira opção) é o veredito vindo ANTES, a ordem certa. A ordem da Rainha é aceitar a palavra de quem escreveu o código, ou desistir de ler no meio do caminho. Decisão sem evidência, com pressa ou com sono, é a mesma sentença."
     },
     {
       "etapa": "pre",
-      "pergunta": "O que é \"sentença primeiro, veredito depois\" numa revisão de código com IA?",
+      "pergunta": "Você leu só a camada 2 do diff de T1 (rotas, status, constantes, dependências, sem ler o corpo das funções). Que tipo de problema essa camada pega MELHOR do que a leitura linha a linha?",
       "opcoes": [
-        "Escrever o teste antes do código.",
-        "Aceitar o \"pronto, testes passando\" do agente antes de ver a evidência.",
-        "Rodar a CI antes da revisão humana.",
-        "Bloquear todo PR por padrão."
+        "Erros de sintaxe e variáveis declaradas sem uso.",
+        "Ausências: a spec pede 409 para vaga ocupada e nenhuma linha do diff menciona 409. Um caso de falha sumiu, e nenhuma leitura do corpo começa por aí a esse custo.",
+        "Condição faltando dentro de um if já existente.",
+        "Comentários desatualizados em relação ao código."
       ],
       "correta": 1,
-      "explicacao": "É a ordem da Rainha: decidir antes de olhar. O contrário é TDD, em que o veredito (o teste) vem antes do código."
+      "explicacao": "Ler o corpo mostra o que o código FAZ; a camada dos contratos mostra o que o código NÃO TEM. Presença errada e ausência pura são defeitos de contornos contra a spec, e o corpo é a camada mais cara para descobri-los."
     },
     {
       "etapa": "check",
-      "pergunta": "Um teste se chama \"T1 falha: vaga ocupada responde 409\", mas a asserção diz assert.equal(r.status, 201). Qual o diagnóstico?",
+      "pergunta": "Teste novo no PR: \"T2 libera a vaga ao cancelar\". Ele monta um repoFalso cujo cancelar() grava livre=true quando recebe o id certo, chama cancelar(7) direto no repoFalso e confere no fim que livre virou true, sem nunca chamar a rota DELETE. Que bug esse teste pegaria?",
       "opcoes": [
-        "Falsa Tartaruga: o teste só testa o mock.",
-        "Rosas pintadas: o teste de aceite foi alterado para passar e está escondendo um bug.",
-        "Erro de digitação sem importância.",
-        "Abstraction bloat."
+        "O cancelamento que não libera a vaga, porque é exatamente disso que o nome trata.",
+        "Bug de status: a rota devolvendo 200 onde a spec pede 201.",
+        "Praticamente nenhum: ele mede o comportamento do próprio arranjo de mentira, não o da rota. Se o DELETE real nunca tocar o repositório, o teste continua verde. Falsa Tartaruga.",
+        "Bug de concorrência entre dois cancelamentos ao mesmo tempo."
       ],
-      "correta": 1,
-      "explicacao": "O nome ainda diz 409, a asserção foi trocada. O agente não fez o código recusar a vaga ocupada e mudou o teste. O bug de agendamento duplo continua lá."
+      "correta": 2,
+      "explicacao": "A pergunta \"que bug este teste pegaria?\" é o detector: se a resposta depende de o mock estar certo, e o mock foi escrito pela mesma IA, o teste confirma o nome que deram a ele. O nome do teste e a asserção precisam medir a mesma coisa: o comportamento real."
     },
     {
       "etapa": "check",
-      "pergunta": "Um teste cria uma fonteFalsa que devolve [vaga 1] e confere que o adapter devolveu [vaga 1]. Que bug esse teste pegaria?",
+      "pergunta": "A guarda da CI compara os testes de aceite com um arquivo de checksums. Um PR alterou o teste E atualizou o arquivo de checksums no mesmo commit. A guarda ficou verde. Por quê, e o que precisa mudar?",
       "opcoes": [
-        "Vaga ocupada sendo agendada.",
-        "Status HTTP errado.",
-        "Praticamente nenhum: ele confere o próprio mock, não o comportamento.",
-        "Data em formato inválido."
+        "Checksums só funcionam uma vez; a guarda precisa recalcular as hashes a cada push.",
+        "A CI roda antes de o commit existir, e a ordem dos eventos esconde a alteração do checksum.",
+        "Checksum não detecta mudança pequena em arquivo, só renomeação e remoção.",
+        "Os checksums moravam dentro do alcance do agente: quem pode pintar a rosa também pode pintar o sensor. A referência precisa viver fora do diff (na main, protegida), ou a guarda vira mais uma rosa."
       ],
-      "correta": 2,
-      "explicacao": "É a Falsa Tartaruga. A cobertura sobe e nenhuma regra de negócio é testada. A pergunta \"que bug este teste pegaria?\" desmascara."
+      "correta": 3,
+      "explicacao": "Sensor cuja régua o medido pode editar não mede nada: é a mesma lógica de deixar o Valete escrever a própria sentença. Checksum versionado ao lado do código que ele protege é decoração com matemática."
     },
     {
       "etapa": "pos",
-      "pergunta": "Por que o subagent de review não deve ter Edit e Write?",
+      "pergunta": "O subagent \"cetico-de-testes\" estava com Edit e Write habilitados. Na revisão, em vez de apontar o problema, ele \"consertou\" a asserção do teste para combinar com o status que o código devolvia. Qual é o duplo diagnóstico?",
       "opcoes": [
-        "Porque fica mais barato.",
-        "Porque revisor que edita vira autor: conserta (às vezes o teste) em vez de apontar, e perde a independência.",
-        "Porque o Claude Code não permite.",
-        "Porque subagents não conseguem ler arquivos."
+        "Falhou só como executor: editar sem pedir confirmação foi o único problema.",
+        "Acertou: economizou um ciclo inteiro de revisão entre as pessoas.",
+        "Falhou só como modelo: modelos menores não entendem asserções de teste.",
+        "Virou autor (perdeu a independência do sensor: quem mede não conserta) e pintou a rosa pela própria mão (ajustou o teste ao comportamento, em vez de medir o comportamento contra a spec)."
+      ],
+      "correta": 3,
+      "explicacao": "Revisor existe para produzir sinal, não commit. Com permissão de escrita, a tendência de todo agente de \"terminar a tarefa\" vira risco concreto: a correção mais barata quase sempre é ajustar o teste. Leitura apenas, uma especialidade, uma rubrica."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Depois de três PRs revistos à mão e por subagent, o padrão: o humano achou ausências (o 409 que sumiu, o caso de falha sem teste); o agente achou diferenças exaustivas (cada mensagem de erro contra a tabela, caractere a caractere). Os dois erraram nas mesmas partes do PR: as que não tinham spec. Conclusão?",
+      "opcoes": [
+        "Dobrar o número de revisores humanos: ausência é o defeito mais caro e só gente pega.",
+        "Manter os dois: são sensores que cobrem defeitos diferentes. E tratar a spec como prioridade, porque a lacuna que derrubou os dois não é problema de gente nem de modelo, é de contexto.",
+        "Deixar o subagent assumir a revisão sozinho: é mais exaustivo e mais barato por achado.",
+        "Subir a cobertura mínima de testes: o erro dos dois lados é buraco de teste."
       ],
       "correta": 1,
-      "explicacao": "O revisor é um sensor. Sensor mede e devolve sinal. Quem corrige é o autor. Por isso tools de leitura e disallowedTools: Edit, Write."
-    },
-    {
-      "etapa": "pos",
-      "pergunta": "A IA alterou um teste de aceite duas vezes na semana. Qual resposta fecha o loop do harness?",
-      "opcoes": [
-        "Pedir de novo no chat para não mudar mais.",
-        "Trocar para um modelo maior.",
-        "Uma regra no AGENTS.md (guia) e um hook que bloqueia edição em tests/aceite/ com guarda na CI (sensores).",
-        "Apagar os testes de aceite para evitar o problema."
-      ],
-      "correta": 2,
-      "explicacao": "Erro repetido pede guia novo e sensor novo. Pedir no chat some na próxima sessão; trocar de modelo não muda o incentivo de \"fazer os testes passarem\"."
+      "explicacao": "Humano e máquina falhando no mesmo ponto é o sinal mais valioso do experimento: o problema é o mapa, não os leitores. Spec incompleta torna revisão uma briga de opiniões, para gente e para LLM."
     }
   ]
 }

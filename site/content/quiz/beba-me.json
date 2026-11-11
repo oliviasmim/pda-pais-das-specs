@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "Na frase \"Agente = LLM + Harness\", o que é o harness?",
+      "pergunta": "Duas equipes pararam de ver a IA inventar regra de negócio. A equipe A trocou para um modelo mais novo. A equipe B pôs a regra no AGENTS.md e um teste que falha quando a regra inventada reaparece. Qual diferença importa entre as duas soluções?",
       "opcoes": [
-        "Tudo em volta do modelo: ferramentas, regras, memória, permissões, testes, CI, subagents.",
-        "O modelo mais novo e mais caro.",
-        "O prompt que você digita no chat.",
-        "A interface do terminal."
+        "Nenhuma: contexto é contexto, as duas mudam o comportamento do agente do mesmo jeito.",
+        "A é melhor: modelo mais novo também escreve testes melhores, então cobre os dois lados.",
+        "B é melhor porque, uma vez escrito, o guia dispensa o sensor: o AGENTS.md já garante.",
+        "A age no LLM, que você não controla e que muda sem aviso. B age no harness, que você escreve, versiona e testa. Só a segunda é engenharia sua."
       ],
-      "correta": 0,
-      "explicacao": "O LLM só prevê tokens. O harness dá ferramentas, memória, limites e sinais de erro. É ele que transforma o modelo em agente."
+      "correta": 3,
+      "explicacao": "Quando o agente erra, a pergunta útil raramente é \"qual modelo?\" e quase sempre \"que peça do harness faltou?\". E guia sozinha é esperança: por isso a equipe B juntou regra E teste."
     },
     {
       "etapa": "pre",
-      "pergunta": "A IA inventou uma regra de negócio pela terceira vez. O que resolve de verdade?",
+      "pergunta": "No mapa guia-e-sensor, onde entra o teste de aceite escrito ANTES do código?",
       "opcoes": [
-        "Pedir de novo no chat, com mais ênfase.",
-        "Trocar de modelo.",
-        "Uma regra no AGENTS.md (guia) e um teste ou checagem de review que pegue a regra inventada (sensor).",
-        "Abrir uma sessão nova e torcer."
+        "Só guia: enquanto o código não existe, ele não mede nada.",
+        "Só sensor: depois de pronto, é ele quem aprova ou reprova a entrega.",
+        "Os dois ao mesmo tempo: antes, diz ao agente exatamente o que precisa passar; depois, mede se passou. Por isso TDD combina tão bem com agente.",
+        "Nenhum dos dois: TDD é metodologia de trabalho, não peça do harness."
       ],
       "correta": 2,
-      "explicacao": "Pedido no chat some na próxima sessão. Erro repetido pede um guia novo e um sensor novo."
+      "explicacao": "O teste escrito antes é o único componente que mora dos dois lados do tempo. Como guia, ele fecha a lacuna \"o que é pronto\". Como sensor, dá o veredito antes de qualquer sentença do agente."
     },
     {
       "etapa": "check",
-      "pergunta": "Qual destes é um SENSOR?",
+      "pergunta": "Sessão aberta há três horas, janela passando dos 70%, cheia de logs e tentativas. O agente repete um erro que tinha corrigido há uma hora. Qual a melhor reação, e por quê?",
       "opcoes": [
-        "Uma skill que ensina a criar endpoints.",
-        "O ADR que registra a fonte de dados.",
-        "Um hook PreToolUse que bloqueia edição em arquivos de teste.",
-        "O exemplo de código do GET /mentores."
-      ],
-      "correta": 2,
-      "explicacao": "O hook observa a ação do agente e barra antes do estrago. É feedback em tempo real. Skill, ADR e exemplo são guias: agem antes da geração."
-    },
-    {
-      "etapa": "check",
-      "pergunta": "Que problema um subagent resolve?",
-      "opcoes": [
-        "Economizar tokens no total.",
-        "Fazer o modelo ficar mais inteligente.",
-        "Rodar código mais rápido.",
-        "Isolamento de contexto: uma tarefa pesada roda numa janela própria e só o resumo volta para o principal."
+        "Instruir o agente a ignorar os logs antigos e focar na task: resolve sem perder o contexto acumulado.",
+        "Apagar os arquivos de log do disco para o modelo ler menos nas próximas chamadas.",
+        "Colar a correção de novo no chat: na terceira vez ele memoriza a regra.",
+        "Abrir sessão nova levando só a spec e a task. O problema não é falta de regra, é janela lotada (a dumb zone): colar mais texto em cima de texto só agrava a causa."
       ],
       "correta": 3,
-      "explicacao": "O subagent protege a janela principal. Ele não economiza tokens: no total, gasta mais. Você troca custo por um contexto principal limpo."
+      "explicacao": "Passou dos ~40% da janela, o agente esquece instruções do começo e mistura tarefas. Reforço no chat vira mais um texto disputando atenção dentro da mesma janela. Sessão nova com contexto mínimo devolve a smart zone. Log no disco não entra na janela sozinho; apagar arquivo não ensina nada."
     },
     {
-      "etapa": "pos",
-      "pergunta": "Um colega quer usar um swarm de 5 agentes para um CRUD de uma tabela. Qual é a melhor resposta?",
+      "etapa": "check",
+      "pergunta": "A CI já tem lint, type check, build, testes e npm audit. Onde um revisor que usa LLM (o sensor inferencial) agrega?",
       "opcoes": [
-        "Aceitar: é o jeito avançado.",
-        "Recusar com critério: as partes dependem do mesmo modelo de dados, o custo de coordenação é maior que a tarefa, e um agente com spec e testes resolve.",
-        "Aceitar, mas com 3 agentes em vez de 5.",
-        "Recusar porque swarm não funciona."
-      ],
-      "correta": 1,
-      "explicacao": "Recusar é decisão técnica quando vem com critério: dependência entre partes e custo de coordenação. \"Não funciona\" também não é argumento."
-    },
-    {
-      "etapa": "pos",
-      "pergunta": "Qual Carta de Destino passa no Teste do Gato?",
-      "opcoes": [
-        "Feature: agendar mentoria. Caso que funciona: 201 com o id. Caso que falha: a mesma vaga de novo → 409 {\"erro\":\"Vaga indisponível\"}. NFR: exatamente 1 confirmação para 2 pedidos simultâneos, medido por teste de concorrência na CI.",
-        "Feature: agendar mentoria. Caso que funciona: deve funcionar. Caso que falha: tratar o erro.",
-        "Feature: sistema de mentorias completo, rápido e seguro.",
-        "Feature: agendar mentoria. NFR: precisa ser rápido. Sensor: testar."
+        "No que os cinco não veem: regra não pedida, caso de falha que sumiu, teste que só testa o mock. Aceitando o preço: custa tokens, pode errar, e entra depois dos cinco, nunca no lugar.",
+        "Em tudo: com contexto bom, ele enxerga o que as regras enxergam e mais.",
+        "Só em estilo e nome de variável, que é o tipo de julgamento que sobra para um modelo.",
+        "Em nada: sensor que pode errar não é sensor; os cinco já são suficientes."
       ],
       "correta": 0,
-      "explicacao": "Só a primeira permite escrever um teste que falha: tem entrada, status e mensagem exatos, e um NFR com número e sensor."
+      "explicacao": "Os computacionais são determinísticos e baratos, mas cegos para intenção: o código certinho pode implementar a coisa errada. O inferencial cobre esse buraco, com custo e variância. Complementa; não substitui o que já é barato e confiável."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "Qual Carta de Destino vira teste sem precisar de nenhuma pergunta a mais?",
+      "opcoes": [
+        "Feature: cancelar mentoria. Funciona: cancelar um agendamento confirmado. Falha: cancelar de novo precisa ser impedido. NFR: rápido no pico. Sensor: rodar os testes.",
+        "Feature: cancelar mentoria. Funciona: DELETE /agendamentos/1 devolve 200 {\"id\":1,\"status\":\"cancelado\"} e a vaga 5 volta a livre. Falha: repetir o DELETE devolve 409 {\"erro\":\"Agendamento já cancelado\"}. Sensor: testes de aceite na CI.",
+        "Feature: cancelar mentoria. Funciona: DELETE /agendamentos/1 devolve 200. Falha: cancelar agendamento inexistente devolve 409 {\"erro\":\"Agendamento já cancelado\"}. Sensor: CI.",
+        "Feature: cancelar agendamento pela API. Funciona: 200 com status cancelado. Falha: 404. NFR: aguentar 200 requisições por minuto. Sensor: teste de carga."
+      ],
+      "correta": 1,
+      "explicacao": "A segunda tem entrada, status, corpo exato e o efeito colateral (a vaga liberada). A terceira troca o contrato de erro: agendamento inexistente é 404 {\"erro\":\"Agendamento não encontrado\"}, e 409 \"já cancelado\" é de quem cancela duas vezes. A última mistura NFR de desempenho com métrica de vazão sem meta."
+    },
+    {
+      "etapa": "pos",
+      "pergunta": "O subagent de investigação leu 20 mil tokens de log e devolveu 300 palavras com a causa raiz. A conta total de tokens foi MAIOR do que seria sem ele. Quando essa troca vale a pena?",
+      "opcoes": [
+        "Nunca: o ponto de dividir trabalho em agentes é gastar menos tokens no total.",
+        "Quando o subagent roda num modelo mais barato: aí o total sempre cai.",
+        "Quando você vai precisar do log inteiro na janela principal de qualquer jeito.",
+        "Quando o bem escasso não é token, é espaço limpo na janela principal: você paga os tokens do subagent para manter o principal na smart zone, decidindo bem."
+      ],
+      "correta": 3,
+      "explicacao": "Subagent não economiza token: ele compra isolamento de contexto. Os 20 mil tokens de log ficam na janela dele e somem; o principal recebe a conclusão e continua afiado. Se a sua janela principal está vazia e a tarefa cabe nela, o subagent é luxo."
     }
   ]
 }

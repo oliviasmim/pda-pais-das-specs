@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "Qual destes é um requisito NÃO funcional da agenda de mentorias?",
+      "pergunta": "Qual destas frases é um requisito não funcional verificável?",
       "opcoes": [
-        "O jovem agenda uma mentoria numa vaga livre.",
-        "Cancelar um agendamento devolve a vaga para a lista.",
-        "Com 150 tentativas no primeiro minuto, o agendamento responde com p95 abaixo de 300 ms.",
-        "A listagem mostra só as vagas livres do mentor."
+        "ENQUANTO houver muitas vagas, a listagem DEVE ser otimizada para não degradar.",
+        "QUANDO o sistema estiver sob a carga do pico de segunda, ele DEVE continuar respondendo rápido.",
+        "O sistema DEVE absorver o pico de abertura da agenda sem degradação perceptível para o jovem.",
+        "QUANDO a agenda abrir às 9h de segunda, com até 150 tentativas no primeiro minuto, o POST /agendamentos DEVE responder com p95 abaixo de 300 ms, medido por teste de carga na CI."
       ],
-      "correta": 2,
-      "explicacao": "Os outros dizem O QUE o sistema faz. Este diz QUÃO BEM ele faz, com carga e número."
+      "correta": 3,
+      "explicacao": "As quatro falam do mesmo assunto, mas três têm só pedaços: adjetivo no lugar de número, carga sem descrição, corpo sem sensor. A última atravessa as quatro etapas: carga descrita, número, percentil e onde mede."
     },
     {
       "etapa": "pre",
-      "pergunta": "Você pede \"crie um endpoint que lista as vagas livres\" e não fala nada de volume nem de concorrência. O que a IA costuma fazer?",
+      "pergunta": "Mil medições do GET /mentores/1/vagas: p50 = 40 ms, p95 = 180 ms, p99 = 700 ms. Um colega escreve no PR: \"a média fica entre 40 e 700, então a meta de 300 ms está cumprida\". Onde está o erro?",
       "opcoes": [
-        "Escolhe em silêncio o padrão mais simples: tudo em memória, sem concorrência, sem meta de tempo.",
-        "Pergunta qual é a carga esperada antes de começar.",
-        "Implementa cache distribuído por garantia.",
-        "Recusa a tarefa por falta de informação."
+        "Dois erros: a meta é sobre um percentil (p95), não sobre a média; e a média não precisa ficar entre p50 e p99, ela depende do rabo inteiro da distribuição.",
+        "Erro pequeno: a spec manda medir 200 requisições, não mil. O raciocínio sobre a média está certo.",
+        "Nenhum: se até o p50 está abaixo da meta, o serviço está dentro do combinado.",
+        "O erro é confiar no p99: cauda é estatística rara demais para entrar em requisito."
       ],
       "correta": 0,
-      "explicacao": "Sem requisito não funcional escrito, o agente preenche a lacuna com o padrão mais comum. O problema é um requisito que ninguém escreveu."
+      "explicacao": "A média não é obrigada a morar entre dois percentis, e nenhum número do meio da distribuição fala da cauda. Se a meta fosse p95 < 300 ms, o número relevante já estava na tela: 180 ms. Média boa convivendo com cauda ruim é o retrato clássico."
     },
     {
       "etapa": "check",
-      "pergunta": "Um endpoint tem média de 45 ms e p99 de 900 ms. O que isso diz?",
+      "pergunta": "O provedor de e-mail cai no pico de segunda. Qual desenho demonstra tolerância a falhas?",
       "opcoes": [
-        "Está tudo bem: a média é baixa.",
-        "O servidor caiu 1% do tempo.",
-        "O p99 está errado, porque deveria ser perto da média.",
-        "1 em cada 100 requisições demora 900 ms ou mais. A média esconde essa cauda."
+        "O POST /agendamentos responde 503 enquanto o e-mail estiver fora: falhar rápido é mais honesto do que enganar o jovem.",
+        "O agendamento confirma normalmente e o e-mail vai para uma fila tentada depois: a falha de uma parte não vira pane do sistema todo.",
+        "O sistema reinicia a cada 5 minutos até o provedor de e-mail voltar.",
+        "O e-mail é re-tentado em loop até o envio dar certo, segurando a resposta do agendamento."
+      ],
+      "correta": 1,
+      "explicacao": "Falha é uma parte quebrando; pane é o sistema parando de atender. Tolerância a falhas é impedir que uma vire a outra. Segurar a resposta ou derrubar o endpoint leva a pane do e-mail para dentro do agendamento, que era justamente o que se queria evitar."
+    },
+    {
+      "etapa": "check",
+      "pergunta": "A equipe decide manter a lista de vagas livres atualizada a cada agendamento, em vez de contar as vagas a cada GET. O que essa decisão compra e o que ela cobra?",
+      "opcoes": [
+        "Compra leitura e escrita baratas ao mesmo tempo: é uma otimização interna que não muda o contrato.",
+        "Compra escrita barata e cobra leitura mais cara: é a escolha padrão para qualquer sistema de agenda.",
+        "Nada de relevante: o resultado do GET é o mesmo nos dois desenhos, então tanto faz onde o cálculo mora.",
+        "Compra leitura barata no pico de segunda e cobra escrita mais cara e mais difícil de manter consistente. É a troca leitura-versus-escrita do DDIA: tem dona, depende da carga e fica registrada num ADR."
       ],
       "correta": 3,
-      "explicacao": "Percentil mostra a distribuição. A média é puxada pela maioria rápida e esconde quem espera muito."
-    },
-    {
-      "etapa": "check",
-      "pergunta": "Uma requisição chama 10 serviços em paralelo e só responde quando todos terminam. Cada serviço fica acima do seu p99 em 1% das chamadas. Aproximadamente quantas requisições esperam por pelo menos uma chamada lenta?",
-      "opcoes": [
-        "1%",
-        "Cerca de 10%",
-        "50%",
-        "0,1%"
-      ],
-      "correta": 1,
-      "explicacao": "1 − 0,99¹⁰ ≈ 9,6%. A latência de cauda se amplifica com o fan-out: quanto mais chamadas, mais gente sente a mais lenta."
+      "explicacao": "Não existe lado grátis: ou a leitura paga o cálculo a cada GET, ou a escrita paga a cada agendamento. Escolher depende da carga (pico de leitura na segunda) e das consequências (escrita dupla pode dessincronizar). Por isso é decisão registrada, não detalhe que a IA resolve no silêncio."
     },
     {
       "etapa": "pos",
-      "pergunta": "Qual destes é um requisito pronto para a spec?",
+      "pergunta": "Qual destas frases é uma PROMESSA (tem número, mas falta sensor)?",
       "opcoes": [
-        "O sistema deve ser rápido e escalável.",
-        "QUANDO duas requisições pedirem a mesma vaga ao mesmo tempo, o serviço DEVE confirmar exatamente uma (201) e recusar a outra (409). Sensor: teste de concorrência na CI.",
-        "O sistema deve tratar a concorrência corretamente.",
-        "ENQUANTO houver muitos acessos, o sistema DEVE responder bem."
+        "\"O sistema deve ser escalável para a abertura da agenda.\"",
+        "\"QUANDO duas requisições pedirem a mesma vaga livre ao mesmo tempo, o serviço DEVE confirmar exatamente uma (201) e recusar a outra (409).\"",
+        "\"ENQUANTO o mentor tiver até 1.000 vagas, o GET /mentores/:id/vagas DEVE responder com p95 abaixo de 50 ms. Sensor: tests/nfr/desempenho.test.js, na CI.\"",
+        "\"A listagem de vagas precisa aguentar o pico de segunda-feira.\""
       ],
       "correta": 1,
-      "explicacao": "Tem gatilho, número exato (uma 201, uma 409) e sensor. Os outros são desejo (sem número) ou promessa (sem sensor)."
+      "explicacao": "A segunda frase tem gatilho e número exato, mas ninguém mede: enquanto não existir o teste que dispara as duas requisições com Promise.all, ela é promessa. A primeira e a última são desejos (sem número). A terceira atravessou as quatro etapas."
     },
     {
       "etapa": "pos",
-      "pergunta": "\"Contar as vagas livres a cada GET\" ou \"manter a lista atualizada a cada agendamento\". Quem decide?",
+      "pergunta": "Rodaram 4 vezes o teste de duas requisições simultâneas para a mesma vaga. Resultados: [201, 201], [201, 409], [201, 409], [201, 500]. O NFR-1 pede exatamente um 201 e um 409. Um colega sugere: \"é flake, bota retry de 3 tentativas na CI\". O que os números dizem?",
       "opcoes": [
-        "A IA, porque ela conhece os padrões de mercado.",
-        "Tanto faz: o resultado é o mesmo.",
-        "A equipe, num ADR, com base na carga descrita. É uma troca entre leitura barata e escrita cara.",
-        "O banco de dados decide sozinho."
+        "É flake mesmo: com retry, a requisição lenta resolve e a CI fica estável.",
+        "O 201, 201 é evidência de que o teste mede errado; concorrência de verdade só aparece em produção.",
+        "Há um defeito de concorrência intermitente: numa das rodadas as duas pessoas levaram a mesma vaga, noutra uma recebeu 500. Requisito de exatidão não se cumpre na média, e retry esconde exatamente o bug que o requisito existe para proibir.",
+        "O 500 mostra que o tratamento de erro está certo: o sistema já recusa a disputa, só mudou o código de status."
       ],
       "correta": 2,
-      "explicacao": "É a decisão de calcular na leitura ou na escrita, o estudo de caso do capítulo 2 do DDIA. Depende da carga e tem consequências: vai num ADR, não fica para a IA adivinhar."
+      "explicacao": "Flake é teste instável sem causa no código. Aqui há causa: agendamento duplo, o bug mais caro do domínio. Retry transforma um defeito intermitente num CI verde permanente. Concorrência se testa de propósito, com as duas requisições ao mesmo tempo, e o NFR não admite 'quase sempre'."
     }
   ]
 }
