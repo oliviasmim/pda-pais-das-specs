@@ -141,6 +141,10 @@ Projete este laboratório e responda em voz alta:
 
 <div data-lab="percentis"></div>
 
+**Por dentro da máquina.** Agora siga um requisito do começo ao fim. Rode primeiro com "tem que ser rápido". Depois com o número. Depois com número e teste. Na terceira rodada, use o botão Quebrar para o sensor medir a média e veja o PR lento passar com a esteira verde.
+
+<div data-lab="motion-requisito"></div>
+
 ### 2. Construtor de requisitos
 
 Em grupo. Cada grupo recebe uma categoria (desempenho, confiabilidade, escalabilidade, manutenibilidade ou privacidade) e escreve **um** requisito para a agenda de mentorias, com número e sensor. Depois cada grupo lê o seu, e a turma aplica a carta ♣ Contraprova: *"que entrada provaria que esse requisito foi quebrado?"*

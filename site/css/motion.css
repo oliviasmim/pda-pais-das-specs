@@ -296,8 +296,8 @@ li[data-marca='ok'] .m-chip__n {
   border: 1px solid var(--line);
   border-radius: var(--r);
   background: color-mix(in srgb, var(--paper-2) 70%, var(--bg));
-  overflow: hidden;
-  min-height: 15rem;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .m-palco:focus-visible {
@@ -670,7 +670,7 @@ li[data-marca='ok'] .m-chip__n {
 
 .m-metricas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   border: 1px solid var(--line);
   border-radius: 0 0 var(--r) var(--r);
   background: var(--line);
@@ -983,6 +983,15 @@ li[data-marca='ok'] .m-chip__n {
 @media (max-width: 560px) {
   .m-grupo__nome {
     min-width: 100%;
+  }
+  .m-svg {
+    min-width: 620px;
+    max-height: none;
+  }
+  .m-dentro {
+    position: sticky;
+    left: 0.6rem;
+    max-width: calc(100vw - 4rem);
   }
   .m-teclas {
     display: none;

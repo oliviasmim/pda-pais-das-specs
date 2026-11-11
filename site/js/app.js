@@ -2,6 +2,7 @@ import { h, toast, copy, download, slug } from './ui.js';
 import { estadoDoLab, licaoFeita, marcarLicao, preferencia, definirPreferencia } from './store.js';
 import { renderQuiz } from './quiz.js';
 import { semanas, aulas, licoes, cartas, licaoPorId, vizinhas, aulaDaLicao } from '../content/curriculo.js';
+import { maquinas, maquinaPorId } from '../content/maquinas.js';
 
 const MARKED_URL = 'https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js';
 const main = document.getElementById('conteudo');
@@ -55,7 +56,7 @@ function definirTitulo(t) {
 function marcarNav(rota) {
   document.querySelectorAll('.nav a').forEach((a) => {
     const alvo = a.getAttribute('href').slice(1) || '/';
-    const atual = alvo === '/' ? rota === '/' : rota.startsWith(alvo);
+    const atual = alvo === '/' ? rota === '/' : rota.startsWith(alvo) || (alvo === '/maquinas' && rota.startsWith('/maquina/'));
     if (atual) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   });
@@ -250,6 +251,7 @@ function viewInicio() {
       'div',
       { class: 'atalhos' },
       [
+        { href: '#/maquinas', naipe: '⚙', t: 'Máquinas', d: 'Seis simulações para rodar, quebrar e abrir: agente, requisito, subagent, worktrees, esteira e review.' },
         { href: '#/baralho', naipe: '♠', t: 'Baralho do Gato', d: 'As seis perguntas da facilitadora, com a resposta que trava e a que avança. Dá para imprimir.' },
         { href: '#/speedrun', naipe: '⏱', t: 'Speedrun', d: 'Cronômetro de 40 minutos, placar dos times e os comandos prontos para copiar.' },
         { href: '#/trilha', naipe: '🗺', t: 'Trilha', d: 'Em que semana cada conceito apareceu e qual lição desta semana revisa ele.' },
@@ -446,6 +448,70 @@ async function viewGlossario() {
   );
 }
 
+function viewMaquinas() {
+  definirTitulo('Máquinas');
+  carregarCss('css/motion.css');
+  main.replaceChildren(
+    h(
+      'section',
+      { class: 'secao', style: { marginTop: '0.5rem' } },
+      h('div', { class: 'sobretitulo' }, 'Por dentro da caixa'),
+      h('h1', {}, 'As máquinas'),
+      h(
+        'p',
+        { class: 'heroi__lead' },
+        'Cada máquina abre uma peça do que a gente usou no curso e mostra o mecanismo funcionando, um passo por vez. Rode, quebre uma peça, abra a caixa e olhe o livro-razão. Toda máquina também aparece dentro da lição dela.',
+      ),
+      h(
+        'div',
+        { class: 'galeria-maquinas' },
+        maquinas.map((m) => {
+          const l = licaoPorId(m.licao);
+          return h(
+            'a',
+            { class: 'card maquina-card', href: `#/maquina/${m.id}` },
+            h('span', { class: 'fig' }, m.fig),
+            h('h3', {}, m.titulo),
+            h('p', {}, m.resumo),
+            l ? h('span', { class: 'onde' }, `Na lição ${l.numero}: ${l.titulo}`) : null,
+          );
+        }),
+      ),
+    ),
+  );
+}
+
+async function viewMaquina(id, params) {
+  const m = maquinaPorId(id);
+  if (!m) return viewNaoAchei();
+  definirTitulo(m.titulo);
+  carregarCss('css/motion.css');
+  const l = licaoPorId(m.licao);
+  const el = h('div', { class: 'lab', id: `lab-${m.id}` });
+  main.replaceChildren(
+    h(
+      'section',
+      { class: 'secao', style: { marginTop: '0.5rem' } },
+      h(
+        'p',
+        { class: 'muted', style: { margin: '0 0 0.5rem' } },
+        h('a', { href: '#/maquinas' }, '← Todas as máquinas'),
+        l ? [' · ', h('a', { href: `#/licao/${l.id}` }, `Lição ${l.numero}: ${l.titulo}`)] : null,
+      ),
+      el,
+    ),
+  );
+  try {
+    const [motor, def] = await Promise.all([import('./motion.js'), import(`./logic/${m.id}.js`)]);
+    if (location.hash.split('?')[0] !== `#/maquina/${id}`) return;
+    const fim = motor.montarMotion(el, ctxDe('maquinas', m.id), def.motion, { inicial: params.get('m') || '', telaCheia: true });
+    if (typeof fim === 'function') limpezas.push(fim);
+  } catch (erro) {
+    console.error(erro);
+    el.replaceChildren(h('p', { class: 'lab__erro' }, 'Esta máquina não carregou. Recarregue a página. Se continuar, avise a facilitadora.'));
+  }
+}
+
 async function viewSpeedrun() {
   definirTitulo('Speedrun');
   carregarCss('css/speedrun.css');
@@ -634,6 +700,8 @@ async function rotear() {
     else if (partes[0] === 'trilha') viewTrilha(params);
     else if (partes[0] === 'glossario') await viewGlossario();
     else if (partes[0] === 'speedrun') await viewSpeedrun();
+    else if (partes[0] === 'maquinas') viewMaquinas();
+    else if (partes[0] === 'maquina' && partes[1]) await viewMaquina(partes[1], params);
     else viewNaoAchei();
   } catch (erro) {
     console.error(erro);

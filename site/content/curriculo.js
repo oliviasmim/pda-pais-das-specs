@@ -66,7 +66,7 @@ export const licoes = [
       'Escrever um requisito não funcional (NFR) em EARS, com número e com o sensor que mede.',
       'Reconhecer os cinco padrões EARS e transformar um cenário BDD em teste.',
     ],
-    labs: ['percentis', 'construtor-nfr', 'ears-validador', 'bdd-para-teste'],
+    labs: ['percentis', 'motion-requisito', 'construtor-nfr', 'ears-validador', 'bdd-para-teste'],
   },
   {
     id: 'beba-me',
@@ -83,7 +83,7 @@ export const licoes = [
       'Explicar o problema que o subagent resolve: a janela do agente principal enchendo de busca e de log.',
       'Dizer não, com argumento, a um padrão avançado que a tarefa não pede.',
     ],
-    labs: ['temperatura', 'ciclo-harness', 'guias-sensores', 'faxina-contexto', 'contexto', 'disparo-skill', 'precisa-mesmo', 'carta-destino'],
+    labs: ['temperatura', 'ciclo-harness', 'guias-sensores', 'faxina-contexto', 'contexto', 'motion-subagent', 'disparo-skill', 'precisa-mesmo', 'carta-destino'],
   },
   {
     id: 'cha-do-chapeleiro',
@@ -99,7 +99,7 @@ export const licoes = [
       'Criar, listar e remover worktrees, com git e com claude -w.',
       'Integrar branches paralelas e resolver o conflito final.',
     ],
-    labs: ['worktrees', 'eixos-isolamento'],
+    labs: ['worktrees', 'eixos-isolamento', 'motion-worktrees'],
   },
   {
     id: 'baralho-da-rainha',
@@ -115,7 +115,7 @@ export const licoes = [
       'Estimar o custo de coordenação (tokens e conversa entre agentes) antes de abrir mais um.',
       'Decidir quando um agente único é melhor.',
     ],
-    labs: ['padroes-mapa', 'custo-coordenacao', 'orquestracao', 'log-paralelo'],
+    labs: ['padroes-mapa', 'custo-coordenacao', 'orquestracao', 'motion-subagent', 'log-paralelo'],
   },
   {
     id: 'cortem-lhe-a-cabeca',
@@ -133,7 +133,7 @@ export const licoes = [
       'Provar que um teste prova algo: quebrar o código de propósito e ver o teste cair.',
       'Provar que o gate bloqueia: check obrigatório na main e ordem de commits no histórico.',
     ],
-    labs: ['esteira', 'teste-nao-prova', 'protecao-main', 'vermelho-verde'],
+    labs: ['esteira', 'motion-ci', 'teste-nao-prova', 'protecao-main', 'vermelho-verde'],
   },
   {
     id: 'julgamento',
@@ -151,7 +151,7 @@ export const licoes = [
       'Transformar o erro repetido da IA em regra (guia) e checagem (sensor).',
       'Separar o que bloqueia o PR do que é só observação (nit).',
     ],
-    labs: ['diff-camadas', 'triagem-achados', 'fabrica-revisores', 'carta-rainha'],
+    labs: ['diff-camadas', 'motion-review', 'triagem-achados', 'fabrica-revisores', 'carta-rainha'],
   },
 ];
 

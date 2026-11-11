@@ -200,6 +200,10 @@ A carta ♣ Contraprova aplicada à CI pergunta: *"que mudança eu faço para pr
 
 <div data-lab="esteira"></div>
 
+**Por dentro da máquina.** Um PR de cada vez, atravessando a esteira. Rode o PR #15. Depois quebre os testes com `continue-on-error` e rode de novo: o vermelho aparece no log e o defeito chega à `main`.
+
+<div data-lab="motion-ci" data-montagem="pr=15,extras=nenhum"></div>
+
 **Quebre de propósito.** Escolha um teste, quebre o código de cinco jeitos e veja quais quebras ele percebe. Compare a barra de cobertura de cada teste com o número de quebras que ele pega.
 
 <div data-lab="teste-nao-prova"></div>

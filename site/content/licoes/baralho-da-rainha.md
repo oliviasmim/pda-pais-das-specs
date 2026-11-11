@@ -79,6 +79,10 @@ Frase pronta para recusar o swarm com argumento:
 
 <div data-lab="orquestracao"></div>
 
+**Por dentro da máquina.** A mesma decisão, com a conta à mostra: tokens, minutos, conflitos e o frasco da janela principal. Esta máquina começa no paralelo com a T2 dependendo da T1. Rode, troque para supervisor e veja onde o retrabalho some.
+
+<div data-lab="motion-subagent" data-montagem="padrao=paralelo,tarefa=grande,dependencia=dependentes"></div>
+
 **Em dupla, cenário por cenário.** Antes de clicar, cada pessoa escolhe um padrão e diz em voz alta o porquê, usando as quatro perguntas do teste da Rainha. Depois rodem. Errou o palpite? Perguntem: "**qual das quatro perguntas eu respondi errado?**"
 
 Terminem no cenário **Speedrun**: ele é o plano da Aula 2. Depois, em **Monte o seu**, descrevam uma feature do projeto de vocês e vejam qual padrão ganha.

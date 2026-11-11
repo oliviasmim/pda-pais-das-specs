@@ -133,6 +133,10 @@ O agente vai implementar a T1 do speedrun (`POST /agendamentos`). Primeiro, rode
 
 <div data-lab="contexto"></div>
 
+**Por dentro da máquina.** A face da frente do agente principal é o frasco: a altura do líquido é quanto da janela está ocupado, e a linha tracejada marca o limite da smart zone. Rode a tarefa grande com agente único e veja em qual task ele passa da linha. Troque para sequencial e compare. Por fim, encolha a tarefa e confira qual padrão sai mais barato.
+
+<div data-lab="motion-subagent"></div>
+
 ### 6. Dispara ou não dispara?
 
 São quatro versões da description da mesma skill, testadas contra dez pedidos. Ache a versão que acerta os dez e diga o que ela tem que as outras não têm.

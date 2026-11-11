@@ -18,7 +18,7 @@ export const TIPOS = {
   sub: { rotulo: 'Subagent', cor: 'uva' },
   contexto: { rotulo: 'Contexto', cor: 'uva' },
   ferramenta: { rotulo: 'Ferramenta do harness', cor: 'ink-3' },
-  humano: { rotulo: 'Pessoa', cor: 'copas' },
+  humano: { rotulo: 'Pessoa', cor: 'ink' },
   repo: { rotulo: 'Repositório', cor: 'ink-3' },
   pasta: { rotulo: 'Pasta de trabalho', cor: 'ouro' },
   saida: { rotulo: 'Saída', cor: 'ink-2' },
@@ -108,7 +108,7 @@ export function limitesCena(estacoes, aberta = false, u = U) {
   const m = mesa(estacoes);
   const pts = [...Object.values(prisma(m, -0.7, 0, u)).flat()];
   estacoes.forEach((e, i) => {
-    const topo = alturaTopo(e, aberta) + alturaEtiqueta(i);
+    const topo = alturaTopo(e, aberta) + (e.etiqueta ?? alturaEtiqueta(i));
     const c = centro(e);
     pts.push(iso(c.x, c.y, topo + 0.9, u));
     const [ex] = iso(e.x + e.w, e.y, 0, u);

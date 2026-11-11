@@ -40,6 +40,8 @@ site/
 | `#/trilha` | Mapa das 14 semanas |
 | `#/speedrun` | Cronômetro e placar do speedrun |
 | `#/glossario` | Glossário |
+| `#/maquinas` | Galeria das máquinas (motions) |
+| `#/maquina/<id>?m=<montagem>` | Uma máquina em tela cheia, já montada (link copiável de dentro da máquina) |
 
 ## Lição
 
@@ -111,6 +113,26 @@ Regras:
 - Componentes base disponíveis: `.btn`, `.btn--primary`, `.btn--ghost`, `.btn--sm`, `.chip`, `.chip--ok`, `.chip--warn`, `.chip--bad`, `.card`, `.callout`, `.kbd`, `.mono`, `.muted`, `.stack`, `.row`, `.grid-2`, `.sr-only`.
 - Resultado e feedback em região `aria-live="polite"`.
 - Tudo operável por teclado (botões de verdade, não `div` clicável).
+
+## Máquina (motion)
+
+Uma máquina é um laboratório especial: uma simulação passo a passo, no estilo das figuras interativas do AI Engineering from Scratch. Ela tem estações numa mesa isométrica, um pacote que anda entre elas, peças que você quebra e conserta, a opção de abrir a caixa (camadas de cada estação), um livro-razão e um rastro baixável.
+
+| Peça | Onde |
+|---|---|
+| Motor puro (geometria, montagem, estado acumulado, validação) | `site/js/logic/motion.js` |
+| Interface do motor (palco SVG, controles, abas) | `site/js/motion.js` |
+| Estilos compartilhados | `site/css/motion.css` (cada `css/labs/motion-<id>.css` só importa este) |
+| Definição de cada máquina | `site/js/logic/motion-<id>.js`, exporta `motion` |
+| Laboratório | `site/js/labs/motion-<id>.js` chama `montarMotion(el, ctx, motion)` |
+| Catálogo da galeria | `site/content/maquinas.js` |
+| Testes | `tests/motion.test.js` |
+
+A definição (`motion`) tem: `id`, `fig`, `titulo`, `lead`, `dica`, `ideia`, `pronto`, `nota` (o que é simulado e de onde vêm os dados), `estacoes` (com `x`, `y`, `w`, `d`, `h`, `tipo`, `rotulo`, `oQueE` e, opcionais, `camadas`, `arquivo`, `nomeComercial`, `medidor`, `etiqueta`), `trilhos`, `montagem` (selects), `avarias` (peças quebráveis), `legenda` do livro-razão, `metricas`, 4 `licoes` e pelo menos 3 `desafios`. A função `simular(montagem, avarias)` é pura e devolve `{ entrada, desligadas, passos, saida }`. Cada passo diz a `estacao`, o `titulo`, a `narracao` e, se quiser, `dentro`, `marca`, `pacotes`, `trilhos`, `niveis`, `metricas`, `razao` e `rastro`.
+
+Para começar a máquina já montada numa lição: `<div data-lab="motion-subagent" data-montagem="padrao=paralelo,tarefa=grande"></div>`.
+
+`npm run verificar` roda `validarMotion` em todas as montagens e avarias de cada máquina do catálogo. Se um passo citar estação que não existe, a verificação falha.
 
 ## Tokens de design (`style.css`)
 

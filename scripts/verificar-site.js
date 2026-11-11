@@ -39,7 +39,7 @@ async function conferirLab(labId, onde) {
 function conferirLinksInternos(texto, onde) {
   for (const m of texto.matchAll(/#\/licao\/([a-z0-9-]+)/g)) if (!idsLicoes.has(m[1])) erros.push(`${onde}: link para lição inexistente "${m[1]}"`);
   for (const m of texto.matchAll(/#\/baralho\?carta=([a-z0-9-]+)/g)) if (!idsCartas.has(m[1])) erros.push(`${onde}: link para carta inexistente "${m[1]}"`);
-  for (const m of texto.matchAll(/#\/([a-z]+)/g)) if (!['licao', 'baralho', 'trilha', 'speedrun', 'glossario'].includes(m[1])) erros.push(`${onde}: rota desconhecida "#/${m[1]}"`);
+  for (const m of texto.matchAll(/#\/([a-z]+)/g)) if (!['licao', 'baralho', 'trilha', 'speedrun', 'glossario', 'maquinas', 'maquina'].includes(m[1])) erros.push(`${onde}: rota desconhecida "#/${m[1]}"`);
 }
 
 for (const l of licoes) {
@@ -94,6 +94,21 @@ for (const dir of ['js/labs', 'js/logic', 'js/views', 'content/licoes']) {
 }
 
 if (!(await existe(join(site, 'js', 'views', 'speedrun.js')))) erros.push('falta site/js/views/speedrun.js');
+
+const { maquinas } = await import('../site/content/maquinas.js');
+const { validarMotion } = await import('../site/js/logic/motion.js');
+for (const m of maquinas) {
+  if (!idsLicoes.has(m.licao)) erros.push(`maquinas: "${m.id}" aponta para lição inexistente "${m.licao}"`);
+  else if (!licoes.find((l) => l.id === m.licao).labs.includes(m.id)) erros.push(`maquinas: "${m.id}" não está na lição "${m.licao}"`);
+  await conferirLab(m.id, `máquina ${m.id}`);
+  try {
+    const { motion } = await import(`../site/js/logic/${m.id}.js`);
+    if (motion.id !== m.id) erros.push(`máquina ${m.id}: o id da definição é "${motion.id}"`);
+    for (const e of validarMotion(motion)) erros.push(`máquina ${m.id}: ${e}`);
+  } catch (e) {
+    erros.push(`máquina ${m.id}: falta site/js/logic/${m.id}.js (${e.message})`);
+  }
+}
 
 for (const a of avisos) console.log(`aviso  ${a}`);
 for (const e of erros) console.log(`ERRO   ${e}`);

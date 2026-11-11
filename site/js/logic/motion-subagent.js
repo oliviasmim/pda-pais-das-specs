@@ -61,6 +61,7 @@ export const motion = {
     },
     {
       id: 'sub1',
+      etiqueta: 1.4,
       rotulo: 'Sub T1',
       tipo: 'sub',
       x: 8.4,
@@ -76,8 +77,8 @@ export const motion = {
         texto: '---\nname: implementador\ndescription: Implementa UMA task de docs/tasks/ e devolve um resumo curto. Use para tasks independentes.\ntools: Read, Edit, Bash\nisolation: worktree\n---\nImplemente só a task recebida. Rode npm run gates.\nDevolva: arquivos alterados, testes rodados, dúvidas.\nMáximo de 200 palavras.',
       },
     },
-    { id: 'sub2', rotulo: 'Sub T2', tipo: 'sub', x: 8.4, y: 0, w: 2, d: 2, h: 1.2, camadas: ['prompt recebido', 'janela própria'], oQueE: 'Outro subagent, com outra janela limpa. Ele também não vê o que o Sub T1 está fazendo.' },
-    { id: 'sub3', rotulo: 'Sub T3', tipo: 'sub', x: 8.4, y: 3.8, w: 2, d: 2, h: 1.2, camadas: ['prompt recebido', 'janela própria'], oQueE: 'Terceiro subagent. Em paralelo, os três rodam ao mesmo tempo, cada um na sua xícara (worktree).' },
+    { id: 'sub2', etiqueta: 1.4, rotulo: 'Sub T2', tipo: 'sub', x: 8.4, y: 0, w: 2, d: 2, h: 1.2, camadas: ['prompt recebido', 'janela própria'], oQueE: 'Outro subagent, com outra janela limpa. Ele também não vê o que o Sub T1 está fazendo.' },
+    { id: 'sub3', etiqueta: 1.4, rotulo: 'Sub T3', tipo: 'sub', x: 8.4, y: 3.8, w: 2, d: 2, h: 1.2, camadas: ['prompt recebido', 'janela própria'], oQueE: 'Terceiro subagent. Em paralelo, os três rodam ao mesmo tempo, cada um na sua xícara (worktree).' },
     {
       id: 'integra',
       rotulo: 'Integração',

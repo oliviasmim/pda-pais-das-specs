@@ -107,6 +107,10 @@ Na integração, a carta ♣ Contraprova vira: *"que comando prova que nenhuma r
 
 <div data-lab="eixos-isolamento"></div>
 
+**Por dentro da máquina.** O mesmo chá, visto de cima. Rode com três worktrees, depois com todos na mesma pasta. Use o botão Quebrar para esquecer o `npm install` e para pôr os três servidores na porta 3000. O worktree isola arquivos e branch; a porta e o `node_modules` continuam sendo da máquina.
+
+<div data-lab="motion-worktrees"></div>
+
 **Antes de clicar em Revelar**, diga em voz alta o que está em jogo: o disco (alguém vai escrever arquivo?) ou a conversa do agente (alguém vai ler muita coisa que você não precisa ver?). Se errar, releia a explicação do cartão e ache na situação a palavra que você pulou.
 
 **No seu terminal (5 minutos).** Num projeto seu, sem mudanças pendentes:

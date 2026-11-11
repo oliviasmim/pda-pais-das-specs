@@ -190,6 +190,10 @@ Red team é revisar procurando falha de propósito, como quem está do outro lad
 
 <div data-lab="diff-camadas"></div>
 
+**Por dentro do tribunal.** O mesmo tipo de diff, com os revisores à vista. Rode com pessoa e subagents. Depois só subagents (o que escapa?) e só a pessoa lendo de cima para baixo (onde a atenção acaba?). O livro-razão monta sozinho o comparativo do red team da S9.
+
+<div data-lab="motion-review"></div>
+
 <div data-quiz="check"></div>
 
 **2. Fábrica de revisores (8 min).** Monte dois revisores para o seu projeto do speedrun: um `rastreador-de-spec` e um `cetico-de-testes`. Salve os dois em `.claude/agents/` e reinicie a sessão do Claude Code. Você deve ver os dois nomes quando digitar `/agents`.

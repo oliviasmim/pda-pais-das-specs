@@ -301,7 +301,7 @@ export function montarMotion(el, ctx, def, opcoes = {}) {
       // etiqueta com pino
       const c = centro(e);
       const zTopo = alturaTopo(e, st.aberta);
-      const zTag = zTopo + alturaEtiqueta(idx);
+      const zTag = zTopo + (e.etiqueta ?? alturaEtiqueta(idx));
       const [px, py] = iso(c.x, c.y, zTopo);
       const [tx, ty] = iso(c.x, c.y, zTag);
       const texto = e.rotulo.toUpperCase();

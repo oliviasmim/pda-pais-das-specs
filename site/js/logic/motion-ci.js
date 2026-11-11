@@ -109,7 +109,7 @@ export const motion = {
   licoes: [
     { titulo: 'Cada sensor é cego para o resto.', texto: 'O type check não vê dependência vulnerável. O audit não vê regra errada. Desligar um sensor não deixa a esteira "mais leve": abre um buraco com o formato exato daquele defeito.' },
     { titulo: 'Gate que não bloqueia é decoração.', texto: 'Com continue-on-error, o PR #15 fica vermelho no log e chega à main mesmo assim. O mesmo vale para a main sem branch protection.' },
-    { titulo: 'O primeiro que pega paga menos.', texto: 'O PR #12 é pego pelo lint em 20 s. Sem lint, o type check pega aos 50 s. A ordem barata primeiro é economia de tempo de quem espera.' },
+    { titulo: 'O primeiro que pega paga menos.', texto: 'O PR #12 é pego pelo lint em 20 s. Sem lint, o type check pega aos 30 s. A ordem barata primeiro é economia de tempo de quem espera.' },
     { titulo: 'O que nenhum sensor pega pede guia e pergunta.', texto: 'Regra inventada (#21) e Factory sem motivo (#18) passam pelos cinco. Para eles: regra no AGENTS.md antes, e a carta Rastro ou Navalha no review depois.' },
   ],
   desafios: [
@@ -130,9 +130,9 @@ export const motion = {
     },
     {
       pergunta: 'PR #12 (erro de sintaxe) sem lint. Quem pega e quanto tempo depois?',
-      opcoes: ['Ninguém', 'Type check, aos 50 s', 'Testes, aos 2 min', 'Audit'],
+      opcoes: ['Ninguém', 'Type check, aos 30 s', 'Testes, aos 2 min', 'Audit'],
       correta: 1,
-      explicacao: 'Erro de sintaxe é pego por vários sensores. Sem o lint (20 s), o type check pega na sequência: 20 s de runner já contados mais 30 s.',
+      explicacao: 'Erro de sintaxe é pego por vários sensores. Sem o lint, que pegaria aos 20 s, o próximo da fila é o type check, aos 30 s. O defeito não escapa, só custa mais espera.',
       montagem: { pr: '12', extras: 'nenhum' },
       avarias: ['sem-lint'],
     },
