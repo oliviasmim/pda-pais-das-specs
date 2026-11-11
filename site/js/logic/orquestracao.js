@@ -112,7 +112,7 @@ export function gerarCenario({ n = 3, dur = 10, compartilha = 'trivial', deps = 
   return {
     id: 'seu',
     nome: 'O seu caso',
-    descricao: 'Cenário montado por você.',
+    descricao: 'Cenário montado com os controles abaixo.',
     maxAgentes: 3,
     custoConflito: { 'src/app.js': 2, 'src/nucleo.js': 6 },
     tasks,
@@ -167,8 +167,8 @@ function simularUnico(cenario) {
     t = arred(t + dur);
     tokens += ctx;
   }
-  if (dumb) notas.push(`O contexto passou de ${Math.round(JANELA * ZONA_SMART)}k na task ${dumb}: dumb zone, mais retrabalho e mais chance de erro.`);
-  else notas.push('O contexto ficou na smart zone o tempo todo. Sem pedágio de coordenação.');
+  if (dumb) notas.push(`O contexto passou de ${Math.round(JANELA * ZONA_SMART)}k na task ${dumb}: dumb zone. O agente começa a esquecer instruções e a refazer trabalho.`);
+  else notas.push(`O contexto ficou abaixo de ${Math.round(ZONA_SMART * 100)}% da janela o tempo todo, e ninguém pagou pedágio de coordenação.`);
   return {
     faixas: [{ id: 'agente', rotulo: 'Agente' }],
     blocos,
@@ -193,7 +193,7 @@ function simularSequencial(cenario) {
   ordem.forEach((task, i) => {
     const faixa = `sub${i + 1}`;
     faixas.push({ id: faixa, rotulo: `Subagent ${i + 1}` });
-    blocos.push({ faixa, inicio: t, fim: t + CUSTOS.spawn, tipo: 'coord', rotulo: 'spawn' });
+    blocos.push({ faixa, inicio: t, fim: t + CUSTOS.spawn, tipo: 'coord', rotulo: 'subir' });
     t += CUSTOS.spawn;
     overhead += CUSTOS.spawn;
     blocos.push({ faixa, inicio: t, fim: t + task.dur, tipo: 'task', rotulo: task.nome, taskId: task.id });
@@ -216,7 +216,7 @@ function simularSequencial(cenario) {
     conflitos: [],
     picoContexto: pico,
     dumb: null,
-    notas: ['Cada subagent começa limpo e devolve só um resumo. Nada roda ao mesmo tempo, então não há conflito, mas também não há ganho de tempo.'],
+    notas: ['Cada subagent começa limpo e devolve só um resumo. Como nada roda ao mesmo tempo, não há conflito, e também não há ganho de tempo.'],
   };
 }
 
@@ -283,7 +283,7 @@ function simularParalelo(cenario) {
   let tokens = 0;
   let pico = 0;
   for (const a of agendados) {
-    blocos.push({ faixa: `w${a.faixa}`, inicio: a.inicio, fim: a.inicio + CUSTOS.spawn, tipo: 'coord', rotulo: 'spawn' });
+    blocos.push({ faixa: `w${a.faixa}`, inicio: a.inicio, fim: a.inicio + CUSTOS.spawn, tipo: 'coord', rotulo: 'subir' });
     blocos.push({ faixa: `w${a.faixa}`, inicio: a.inicio + CUSTOS.spawn, fim: a.fim, tipo: 'task', rotulo: a.task.nome, taskId: a.task.id });
     const ctx = CUSTOS.bootstrap + a.task.tokens;
     pico = Math.max(pico, ctx);
@@ -309,17 +309,17 @@ function simularParalelo(cenario) {
   const overhead = agendados.length * CUSTOS.spawn + integrar + custoConflitos;
   const notas = [];
   const semParalelo = agendados.every((a, i) => agendados.every((b, j) => i === j || !sobrepoe(a, b)));
-  if (agendados.length === 1) notas.push('Só existe uma task. Não há nada para rodar ao mesmo tempo: sobra só o pedágio de subir agente e integrar.');
+  if (agendados.length === 1) notas.push('Só existe uma task, então não há nada para rodar junto. Sobra só o pedágio de subir agente e integrar.');
   else if (semParalelo) notas.push('As dependências em cadeia impedem rodar junto. O paralelo vira sequencial com pedágio.');
   if (conflitos.length) {
     const graves = conflitos.filter((c) => c.custo >= CUSTOS.limiteTrivial).length;
     notas.push(
       graves
-        ? `${graves} conflito${graves > 1 ? 's' : ''} sério${graves > 1 ? 's' : ''}: tasks editaram o mesmo trecho ao mesmo tempo. A integração come o tempo ganho.`
+        ? `${graves} conflito${graves > 1 ? 's' : ''} sério${graves > 1 ? 's' : ''}: tasks editaram o mesmo trecho ao mesmo tempo, e a integração come o tempo ganho.`
         : `${conflitos.length} conflito${conflitos.length > 1 ? 's' : ''} pequeno${conflitos.length > 1 ? 's' : ''} (uma linha de registro). Barato de resolver.`,
     );
   }
-  if (cenario.consolidar) notas.push('Sem supervisor, uma pessoa junta os relatórios e remove duplicados à mão.');
+  if (cenario.consolidar) notas.push('Sem supervisor, uma pessoa lê todos os relatórios, tira os duplicados e desempata à mão.');
   if (agendados.length > max) notas.push(`Só cabem ${max} agentes por vez; as outras tasks esperam vaga.`);
   return { faixas, blocos, tempo: arred(tempo), tokens: Math.round(tokens), overhead: arred(overhead), conflitos, picoContexto: pico, dumb: null, notas };
 }
@@ -333,7 +333,7 @@ function simularSupervisor(cenario) {
   let tokens = CUSTOS.planejarTokens;
   let pico = 0;
   for (const a of agendados) {
-    blocos.push({ faixa: `w${a.faixa}`, inicio: a.inicio, fim: a.inicio + CUSTOS.spawn, tipo: 'coord', rotulo: 'spawn' });
+    blocos.push({ faixa: `w${a.faixa}`, inicio: a.inicio, fim: a.inicio + CUSTOS.spawn, tipo: 'coord', rotulo: 'subir' });
     blocos.push({ faixa: `w${a.faixa}`, inicio: a.inicio + CUSTOS.spawn, fim: a.fim, tipo: 'task', rotulo: a.task.nome, taskId: a.task.id });
     const ctx = CUSTOS.bootstrap + a.task.tokens;
     pico = Math.max(pico, ctx);
@@ -369,7 +369,7 @@ function simularSupervisor(cenario) {
       if (disputa && !a.task.deps.length && !b.task.deps.length) serializadas.push([a.task.id, b.task.id]);
     }
   }
-  const notas = ['O supervisor gasta tempo planejando e revisando cada entrega. Em troca, nada chega sem conferência.'];
+  const notas = ['O supervisor gasta tempo planejando e revisando cada entrega. Em troca, nada chega à main sem conferência.'];
   if (serializadas.length) notas.push('Tasks que disputam o mesmo arquivo foram colocadas em fila pelo supervisor: zero conflito, menos paralelismo.');
   if (cenario.tasks.length === 1) notas.push('Para uma task só, planejar e revisar custa mais que a própria task.');
   const overhead = plano + agendados.length * CUSTOS.spawn + revisoes + CUSTOS.consolidar + (leitura ? 0 : CUSTOS.integrar + custoTriviais);

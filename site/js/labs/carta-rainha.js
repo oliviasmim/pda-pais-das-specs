@@ -44,7 +44,7 @@ export function mount(el, ctx) {
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag', text: 'Laboratório' }),
       h('h3', { text: 'Carta à Rainha' }),
-      h('p', { class: 'muted', text: 'Escolha o erro que a IA repetiu hoje. Transforme em uma regra que o agente lê antes (guia) e uma checagem que pega depois (sensor).' }),
+      h('p', { class: 'muted', text: 'Escolha o erro que a IA repetiu hoje, cole onde ele apareceu e escreva duas coisas: a regra que o agente lê antes (guia) e a checagem que pega o erro depois (sensor).' }),
     ),
     h('div', { class: 'lab__body' },
       h('p', { class: 'cr-passo', text: '1 · Que erro a IA repetiu?' }),
@@ -75,7 +75,7 @@ export function mount(el, ctx) {
           h('span', { class: 'cr-seta', 'aria-hidden': 'true', text: '←' }),
           h('div', {},
             h('h4', { id: `${uid}-s`, text: 'Sensor · feedback' }),
-            h('p', { class: 'muted', text: 'Age depois. Mede e bloqueia, obedeça o agente ou não.' }),
+            h('p', { class: 'muted', text: 'Age depois. Mede e bloqueia, tenha o agente obedecido ou não.' }),
           ),
         ),
         h('label', { for: `${uid}-sensor` }, tipoSensor),
@@ -133,7 +133,7 @@ export function mount(el, ctx) {
     const lista = avaliarCarta(carta);
     avisos.replaceChildren(...(lista.length
       ? lista.map((a) => h('li', { class: 'cr-aviso' }, a.msg))
-      : [h('li', { class: 'cr-aviso cr-aviso--ok' }, 'Carta precisa: evidência, regra verificável e sensor com sim ou não.')]));
+      : [h('li', { class: 'cr-aviso cr-aviso--ok' }, 'Carta completa: tem evidência, uma regra que dá para conferir e um sensor que responde sim ou não.')]));
     previa.firstChild.textContent = montarCarta(carta);
   }
 

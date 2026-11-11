@@ -2,16 +2,16 @@ import { h } from './ui.js';
 import { registrarQuiz } from './store.js';
 
 const ROTULOS = {
-  pre: { titulo: 'Antes de começar', sub: 'Chute sem medo. Serve para ver o que você já sabe.' },
-  check: { titulo: 'Confira', sub: 'Duas perguntas para ver se o conceito ficou.' },
-  pos: { titulo: 'Saída', sub: 'Responda sem voltar no texto.' },
+  pre: { titulo: 'Antes de ler', sub: 'Vai sem medo, não vale nota. Serve para você ver o que já sabe.' },
+  check: { titulo: 'Confira', sub: 'Duas perguntas sobre o que você acabou de ler. Errou? Volte no bloco acima antes de seguir.' },
+  pos: { titulo: 'Antes de sair', sub: 'Responda sem voltar no texto. Depois compare com o seu chute do começo.' },
 };
 
 const LETRAS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 export function renderQuiz(licaoId, etapa, perguntas) {
   const rotulo = ROTULOS[etapa] || { titulo: 'Quiz', sub: '' };
-  const placar = h('span', { class: 'chip', 'aria-live': 'polite' }, `0 de ${perguntas.length}`);
+  const placar = h('span', { class: 'chip', 'aria-live': 'polite' }, `0 de ${perguntas.length} certas`);
   let respondidas = 0;
   let acertos = 0;
 
@@ -40,8 +40,8 @@ export function renderQuiz(licaoId, etapa, perguntas) {
       respondidas += 1;
       if (certo) acertos += 1;
       exp.hidden = false;
-      exp.textContent = `${certo ? 'Isso. ' : `Resposta: ${LETRAS[q.correta]}. `}${q.explicacao || ''}`;
-      placar.textContent = `${acertos} de ${perguntas.length}`;
+      exp.textContent = `${certo ? 'Isso. ' : `Não é essa. A certa é a ${LETRAS[q.correta]}. `}${q.explicacao || ''}`;
+      placar.textContent = `${acertos} de ${perguntas.length} certas`;
       placar.className = `chip ${respondidas === perguntas.length ? (acertos === perguntas.length ? 'chip--ok' : 'chip--warn') : ''}`;
       if (respondidas === perguntas.length) registrarQuiz(licaoId, etapa, acertos, perguntas.length);
     }

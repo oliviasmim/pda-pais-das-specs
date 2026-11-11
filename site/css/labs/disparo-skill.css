@@ -1,0 +1,69 @@
+.lab-disparo-skill .ds-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.lab-disparo-skill .ds-skill {
+  margin: 0 0 0.3rem;
+  font-size: 0.8rem;
+}
+
+.lab-disparo-skill .ds-desc {
+  margin: 0 0 0.9rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--uva);
+  border-radius: var(--r-sm);
+  font-size: 0.85rem;
+}
+
+.lab-disparo-skill .ds-placar {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+}
+
+.lab-disparo-skill .ds-linhas {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.lab-disparo-skill .ds-linha {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-size: 0.88rem;
+}
+
+.lab-disparo-skill .ds-linha .chip {
+  justify-self: start;
+}
+
+.lab-disparo-skill .ds-linha__esperado {
+  font-size: 0.74rem;
+}
+
+.lab-disparo-skill .ds-nota p {
+  margin: 0;
+}
+
+.lab-disparo-skill .ds-aviso {
+  margin: 0.8rem 0 0;
+  font-size: 0.8rem;
+}
+
+@media (min-width: 640px) {
+  .lab-disparo-skill .ds-linha {
+    grid-template-columns: 1fr 8rem auto;
+    align-items: center;
+  }
+}

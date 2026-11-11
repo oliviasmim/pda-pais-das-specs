@@ -1,0 +1,169 @@
+.lab-custo-coordenacao .cc-campos {
+  display: grid;
+  gap: 0.6rem 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  margin-bottom: 1rem;
+}
+
+.lab-custo-coordenacao .cc-campo {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.lab-custo-coordenacao .cc-campo input {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--uva);
+}
+
+.lab-custo-coordenacao .cc-campo output {
+  color: var(--ink);
+}
+
+.lab-custo-coordenacao .cc-campo--n span {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.lab-custo-coordenacao .cc-grafico {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 0.5rem 0.5rem 0.2rem;
+}
+
+.lab-custo-coordenacao .cc-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--font-body);
+}
+
+.lab-custo-coordenacao .cc-grade {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.lab-custo-coordenacao .cc-eixo {
+  fill: var(--ink-3);
+  font-size: 12px;
+}
+
+.lab-custo-coordenacao .cc-eixo--tit {
+  fill: var(--ink-2);
+}
+
+.lab-custo-coordenacao .cc-eixo--melhor {
+  fill: var(--folha);
+  font-weight: 600;
+}
+
+.lab-custo-coordenacao .cc-sel {
+  stroke: var(--tinta);
+  stroke-width: 2;
+  stroke-dasharray: 3 4;
+}
+
+.lab-custo-coordenacao .cc-linha {
+  fill: none;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.lab-custo-coordenacao .cc-linha--ideal {
+  stroke: var(--ink-3);
+  stroke-dasharray: 7 6;
+}
+
+.lab-custo-coordenacao .cc-linha--real {
+  stroke: var(--copas);
+}
+
+.lab-custo-coordenacao .cc-ponto {
+  fill: var(--copas);
+  stroke: var(--paper);
+  stroke-width: 2;
+}
+
+.lab-custo-coordenacao .cc-ponto--melhor {
+  fill: var(--folha);
+}
+
+.lab-custo-coordenacao .cc-ponto--sel {
+  stroke: var(--tinta);
+  stroke-width: 3;
+}
+
+.lab-custo-coordenacao .cc-chaves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin: 0.2rem 0 0.3rem 0.5rem;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.lab-custo-coordenacao .cc-chave::before {
+  content: '';
+  display: inline-block;
+  width: 1.6rem;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+  border-top: 3px solid var(--copas);
+}
+
+.lab-custo-coordenacao .cc-chave--ideal::before {
+  border-top: 3px dashed var(--ink-3);
+}
+
+.lab-custo-coordenacao .cc-leitura {
+  margin: 0.9rem 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 3px solid var(--tinta);
+  background: var(--tinta-soft);
+  border-radius: var(--r-sm);
+}
+
+.lab-custo-coordenacao .cc-leitura p {
+  margin: 0.2rem 0;
+}
+
+.lab-custo-coordenacao .cc-tabela-wrap {
+  overflow-x: auto;
+}
+
+.lab-custo-coordenacao .cc-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.lab-custo-coordenacao .cc-tabela th,
+.lab-custo-coordenacao .cc-tabela td {
+  padding: 0.3rem 0.5rem;
+  text-align: right;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.lab-custo-coordenacao .cc-tabela thead th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+.lab-custo-coordenacao .cc-tabela tbody th {
+  text-align: left;
+}
+
+.lab-custo-coordenacao .cc-linha-sel {
+  background: var(--tinta-soft);
+  font-weight: 600;
+}
+
+.lab-custo-coordenacao .cc-aviso {
+  font-size: 0.82rem;
+  margin: 0.8rem 0 0;
+}

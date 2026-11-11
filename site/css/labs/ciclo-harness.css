@@ -1,0 +1,127 @@
+.lab-ciclo-harness .ch-opcoes {
+  gap: 0.6rem 1.4rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.lab-ciclo-harness .ch-opcao {
+  cursor: pointer;
+}
+
+.lab-ciclo-harness .ch-palco {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 0.5rem;
+}
+
+.lab-ciclo-harness .ch-palco svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lab-ciclo-harness .ch-no rect {
+  fill: var(--paper);
+  stroke: var(--line);
+  stroke-width: 1.5;
+  transition: fill 0.25s, stroke 0.25s, opacity 0.25s;
+}
+
+.lab-ciclo-harness .ch-no__nome {
+  font-family: var(--font-display);
+  font-size: 17px;
+  fill: var(--ink);
+}
+
+.lab-ciclo-harness .ch-no__sub {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  fill: var(--ink-2);
+}
+
+.lab-ciclo-harness .ch-no--guia.is-ativo rect {
+  fill: var(--tinta-soft);
+  stroke: var(--tinta);
+  stroke-width: 2.5;
+}
+
+.lab-ciclo-harness .ch-no--llm.is-ativo rect {
+  fill: var(--uva-soft);
+  stroke: var(--uva);
+  stroke-width: 2.5;
+}
+
+.lab-ciclo-harness .ch-no--ferr.is-ativo rect {
+  fill: var(--ouro-soft);
+  stroke: var(--ouro);
+  stroke-width: 2.5;
+}
+
+.lab-ciclo-harness .ch-no--sensor.is-ativo rect {
+  fill: var(--folha-soft);
+  stroke: var(--folha);
+  stroke-width: 2.5;
+}
+
+.lab-ciclo-harness .ch-no.is-falha rect {
+  fill: var(--copas-soft);
+  stroke: var(--copas);
+}
+
+.lab-ciclo-harness .ch-no.is-off {
+  opacity: 0.35;
+}
+
+.lab-ciclo-harness .ch-fio {
+  stroke: var(--ink-3);
+  stroke-width: 1.5;
+}
+
+.lab-ciclo-harness .ch-volta {
+  stroke-dasharray: 5 4;
+}
+
+.lab-ciclo-harness .ch-seta {
+  fill: var(--ink-3);
+}
+
+.lab-ciclo-harness .ch-rotulo,
+.lab-ciclo-harness .ch-etiqueta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--ink-3);
+}
+
+.lab-ciclo-harness .ch-passo {
+  margin-top: 0.8rem;
+  min-height: 7.5rem;
+}
+
+.lab-ciclo-harness .ch-passo__titulo {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.lab-ciclo-harness .ch-passo__texto {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink-2);
+}
+
+.lab-ciclo-harness .ch-controles {
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.lab-ciclo-harness .ch-leitura {
+  margin: 0.8rem 0 0;
+  font-size: 0.9rem;
+  min-height: 1.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-ciclo-harness .ch-no rect {
+    transition: none;
+  }
+}

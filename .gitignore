@@ -3,3 +3,4 @@ node_modules/
 coverage/
 .claude/worktrees/
 *.log
+/ai-engineering-from-scratch

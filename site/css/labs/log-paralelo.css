@@ -1,0 +1,136 @@
+.lab-log-paralelo .lp-form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.lab-log-paralelo .lp-grupo {
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 0.6rem 0.9rem 0.9rem;
+  margin: 0;
+  background: var(--paper);
+}
+
+.lab-log-paralelo .lp-grupo legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.lab-log-paralelo .lp-grade {
+  display: grid;
+  gap: 0.6rem 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+}
+
+.lab-log-paralelo .lp-campo {
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.lab-log-paralelo .lp-campo input,
+.lab-log-paralelo .lp-campo select {
+  font: inherit;
+  padding: 0.4rem 0.55rem;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  min-width: 0;
+}
+
+.lab-log-paralelo .lp-campo input:focus-visible,
+.lab-log-paralelo .lp-campo select:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.lab-log-paralelo .lp-extra {
+  gap: 1.2rem;
+  align-items: end;
+}
+
+.lab-log-paralelo .lp-check {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.lab-log-paralelo .lp-resultado {
+  margin: 1.1rem 0 0.8rem;
+}
+
+.lab-log-paralelo .lp-erros,
+.lab-log-paralelo .lp-avisos {
+  margin: 0.4rem 0;
+  padding-left: 1.2rem;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.lab-log-paralelo .lp-avisos {
+  color: var(--ouro);
+}
+
+.lab-log-paralelo .lp-barras {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.lab-log-paralelo .lp-barra {
+  display: grid;
+  grid-template-columns: minmax(8rem, 11rem) 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 480px) {
+  .lab-log-paralelo .lp-barra {
+    grid-template-columns: 1fr auto;
+  }
+  .lab-log-paralelo .lp-trilho {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+}
+
+.lab-log-paralelo .lp-trilho {
+  background: var(--paper-2);
+  border-radius: 999px;
+  height: 0.8rem;
+  overflow: hidden;
+}
+
+.lab-log-paralelo .lp-preenche {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+.lab-log-paralelo .lp-preenche--a {
+  background: var(--ink-3);
+}
+
+.lab-log-paralelo .lp-preenche--b {
+  background: var(--folha);
+}
+
+.lab-log-paralelo .lp-preenche--ruim {
+  background: var(--copas);
+}
+
+.lab-log-paralelo .lp-conta {
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-log-paralelo .lp-preenche {
+    transition: none;
+  }
+}

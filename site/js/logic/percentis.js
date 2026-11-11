@@ -82,7 +82,7 @@ export function frase({ fanout, stats }) {
   const p99 = Math.round(stats.p99);
   const base = `A média diz ${media} ms. Mas 1 em cada 100 pessoas espera ${p99} ms ou mais.`;
   if (fanout <= 1) {
-    return `${base} Com uma chamada por requisição, só 1% das pessoas cai na cauda de um backend.`;
+    return `${base} Com uma chamada por requisição, só 1% das pessoas cai na cauda de um backend. Um requisito escrito com a média não enxerga essas pessoas.`;
   }
   return `${base} Com fan-out ${fanout}, ${afetados}% das requisições esperam pelo menos uma chamada na cauda (acima do p99 de um backend).`;
 }

@@ -12,7 +12,7 @@ export const CENARIOS = [
     contexto: 'Alguém sugeriu usar 3 subagents: um acha o erro, um corrige, um revisa.',
     recomendada: 'unico',
     aceitaveis: [],
-    criterio: 'A tarefa leva um minuto. Coordenar três agentes custa mais tokens e mais tempo do que a tarefa inteira. Recusar aqui é julgamento, não preguiça.',
+    criterio: 'A tarefa leva um minuto. Coordenar três agentes custa mais tokens e mais tempo do que a tarefa inteira. Um agente corrige e você confere o diff de uma linha.',
   },
   {
     id: 'crud',

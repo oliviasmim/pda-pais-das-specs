@@ -70,7 +70,7 @@ export function mount(el, ctx) {
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag', text: 'Laboratório' }),
       h('h3', { text: 'Fábrica de revisores' }),
-      h('p', { class: 'muted', text: 'Monte um subagent de review com uma especialidade só. O arquivo sai pronto para .claude/agents/.' }),
+      h('p', { class: 'muted', text: 'Escolha uma especialidade, as ferramentas e o que o revisor confere. O arquivo .md sai pronto para salvar em .claude/agents/ do seu projeto.' }),
     ),
     h('div', { class: 'lab__body fr-grade' },
       h('form', { class: 'fr-form', onsubmit: (e) => e.preventDefault() },
@@ -86,7 +86,7 @@ export function mount(el, ctx) {
           h('label', { class: 'fr-check fr-bloqueio', for: `${uid}-bloq` }, bloqueio, h('span', {}, h('strong', { text: 'Bloquear edição' }), h('span', { class: 'muted', text: ' Adiciona disallowedTools: Edit, Write.' }))),
           h('details', { class: 'fr-porque' },
             h('summary', { text: 'Por que revisor não edita?' }),
-            h('p', { text: 'Revisor que edita vira autor. Se ele pode mudar o código, vai "consertar" em vez de apontar, e às vezes conserta o teste em vez do bug. Pior: perde a independência. O valor do subagent de review é olhar o diff com contexto limpo, sem o viés de quem escreveu. Sensor bom só mede; quem corrige é a pessoa ou o agente autor.' }),
+            h('p', { text: 'Revisor que edita vira autor. Se ele pode mudar o código, vai "consertar" em vez de apontar, e às vezes conserta o teste em vez do bug. Aí você perde o motivo de ter um revisor separado: alguém que olha o diff com contexto limpo, sem as justificativas de quem escreveu. O revisor aponta com arquivo:linha; quem corrige é você ou o agente que escreveu o código.' }),
           ),
         ),
         h('fieldset', {}, h('legend', { text: '4 · Modelo' }), h('label', { for: `${uid}-modelo`, class: 'sr-only', text: 'Modelo' }), modelo),
@@ -180,12 +180,12 @@ export function mount(el, ctx) {
     const msgs = validar(cfg);
     const ok = podeGerar(cfg);
     caminho.textContent = caminhoArquivo(cfg);
-    previa.firstChild.textContent = ok ? gerarAgente(cfg) : 'Corrija os erros acima para gerar o arquivo.';
+    previa.firstChild.textContent = ok ? gerarAgente(cfg) : 'O arquivo aparece aqui quando os erros acima forem corrigidos.';
     botaoCopiar.disabled = !ok;
     botaoBaixar.disabled = !ok;
     mensagens.replaceChildren(...(msgs.length
       ? msgs.map((m) => h('li', { class: `fr-msg fr-msg--${m.nivel}` }, h('strong', { text: m.nivel === 'erro' ? 'Erro' : 'Atenção' }), ` ${m.msg}`))
-      : [h('li', { class: 'fr-msg fr-msg--ok' }, h('strong', { text: 'Pronto.' }), ' Revisor só leitura, com quando usar, rubrica e formato definidos.')]));
+      : [h('li', { class: 'fr-msg fr-msg--ok' }, h('strong', { text: 'Pronto para salvar.' }), ' O revisor só lê, sabe quando ser chamado, tem rubrica e formato de resposta.')]));
     comoUsar.replaceChildren(
       h('p', { class: 'fr-rotulo', text: 'Como usar no seu projeto' }),
       h('ol', {},

@@ -74,14 +74,14 @@ export const ITENS = [
     nome: 'Hook PreToolUse que bloqueia edição de teste',
     desc: 'Script que roda antes de cada Edit/Write e sai com código 2 se o arquivo for de teste.',
     resposta: 'sensor',
-    explicacao: 'Sensor que bloqueia: observa a ação do agente e barra antes do estrago. É feedback em tempo real, não instrução.',
+    explicacao: 'Sensor que bloqueia: olha a ação que o agente pediu (o Edit em tests/) e barra antes de gravar no disco. Roda antes da escrita, mas reage ao que o agente já decidiu, por isso é sensor.',
   },
   {
     id: 'teste-antes',
     nome: 'Teste escrito antes da implementação (TDD)',
     desc: 'O teste vermelho existe antes do código.',
     resposta: 'ambos',
-    explicacao: 'Os dois: antes, guia (diz ao agente o que precisa passar); depois, sensor (mede se passou). Por isso TDD é tão forte com IA.',
+    explicacao: 'Os dois: antes, guia (diz ao agente o que precisa passar); depois, sensor (mede se passou). Por isso TDD combina tão bem com agente.',
   },
   {
     id: 'adr',

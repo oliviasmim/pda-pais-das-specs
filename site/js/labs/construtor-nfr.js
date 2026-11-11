@@ -49,7 +49,7 @@ export function mount(el, ctx) {
   const sugestao = h('div', { class: 'nfr-sugestao' });
   const lista = h('ol', { class: 'nfr-lista' });
 
-  const btnExemplo = h('button', { class: 'btn btn--sm', type: 'button', onclick: usarExemplo }, 'Preencher com exemplo do domínio');
+  const btnExemplo = h('button', { class: 'btn btn--sm', type: 'button', onclick: usarExemplo }, 'Usar exemplo da agenda');
   const btnLimpar = h('button', { class: 'btn btn--sm btn--ghost', type: 'button', onclick: limpar }, 'Limpar');
   const btnCopiar = h('button', { class: 'btn btn--sm', type: 'button', onclick: () => ctx.copy(paraMarkdown(estado.atual)) }, 'Copiar markdown');
   const btnGuardar = h('button', { class: 'btn btn--sm btn--primary', type: 'button', onclick: guardar }, 'Guardar na minha spec');
@@ -58,8 +58,8 @@ export function mount(el, ctx) {
   el.append(
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
-      h('h3', {}, 'Construtor de requisitos não funcionais'),
-      h('p', {}, 'Escolha uma categoria, escreva o requisito em EARS, coloque um número e diga qual sensor mede.'),
+      h('h3', {}, 'Do desejo ao requisito: número, sensor e onde ele vive'),
+      h('p', {}, 'Escolha uma categoria, escreva a frase em EARS, coloque um número e diga qual teste mede. O botão de guardar só libera quando os avisos somem.'),
     ),
     h('div', { class: 'lab__body' },
       h('p', { class: 'nfr-passo' }, h('span', { class: 'nfr-passo__n' }, '1'), 'Que qualidade você precisa garantir?'),
@@ -143,17 +143,17 @@ export function mount(el, ctx) {
   function guardar() {
     const problemas = avaliar(estado.atual);
     if (problemas.length) {
-      ctx.toast('Ainda não: resolva os avisos antes de guardar.');
+      ctx.toast('Não guardei: ainda tem aviso aberto ao lado do requisito.');
       return;
     }
     estado.lista.push({ ...estado.atual, onde: [...(estado.atual.onde || [])] });
-    ctx.toast('Guardado na sua spec.');
+    ctx.toast('Guardado. Ele aparece em "Minha spec de NFRs", logo abaixo.');
     render();
   }
 
   function baixar() {
     if (!estado.lista.length) {
-      ctx.toast('Guarde pelo menos um requisito antes.');
+      ctx.toast('A lista está vazia. Guarde pelo menos um requisito para baixar o nfr.md.');
       return;
     }
     const corpo = ['# Requisitos não funcionais', '', ...estado.lista.map(paraMarkdown)].join('\n');

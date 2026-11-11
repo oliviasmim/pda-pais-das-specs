@@ -62,7 +62,7 @@ export function mount(el, ctx) {
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag', text: 'Laboratório' }),
       h('h3', { text: 'Pedido, assumido ou inventado?' }),
-      h('p', { class: 'muted', text: 'Clique em cada trecho marcado com ◆. O interrogatório abre logo abaixo da linha, como um comentário de revisão. Decidam em dupla de onde ele veio antes de ver o veredito.' }),
+      h('p', { class: 'muted', text: 'Clique num trecho marcado com ◆ e decidam em dupla de onde ele veio. O veredito abre embaixo da linha, no formato de um comentário de revisão.' }),
     ),
     h('div', { class: 'lab__body' },
       h('div', { class: 'ig-pedido' },
@@ -138,7 +138,7 @@ export function mount(el, ctx) {
       h('ul', { class: 'ig-legenda' },
         ...Object.entries(CLASSES).map(([k, c]) => h('li', {}, h('span', { class: `ig-ponto ig-ponto--${k}` }), h('strong', { text: c.nome }), h('span', { class: 'muted', text: ` ${c.descricao}` }))),
       ),
-      h('p', { class: 'ig-faltam mono', text: p.completo ? 'Todos os trechos interrogados.' : `${ACHADOS.length - p.respondidas} trechos ◆ esperando` }),
+      h('p', { class: 'ig-faltam mono', text: p.completo ? 'Os 13 trechos têm veredito. O padrão aparece no placar.' : `Faltam ${ACHADOS.length - p.respondidas} trechos ◆` }),
     );
     if (!achado) return;
     const resposta = estado.respostas[achado.id];
@@ -149,7 +149,7 @@ export function mount(el, ctx) {
     if (!resposta) {
       painel.replaceChildren(
         ...cabecalho,
-        h('p', { class: 'ig-pergunta', text: 'De onde veio este trecho?' }),
+        h('p', { class: 'ig-pergunta', text: 'De onde veio este trecho? Procure no pedido antes de escolher.' }),
         h('div', { class: 'ig-opcoes' },
           ...Object.entries(CLASSES).map(([k, c]) => h('button', {
             type: 'button',
@@ -226,7 +226,7 @@ export function mount(el, ctx) {
         ),
       ),
       h('ul', { class: 'ig-extras' }, ...SPEC_T1.extras.map((t) => h('li', { text: t }))),
-      h('p', { class: 'muted ig-dica', text: 'Com a spec, a pergunta muda de "isso faz sentido?" para "em que linha da spec está isso?". Repare quantos "assumidos" passam a ter resposta.' }),
+      h('p', { class: 'muted ig-dica', text: 'Com a spec aberta, a pergunta deixa de ser "isso faz sentido?" e vira "em que linha da spec está isso?". Conte quantos assumidos agora têm resposta.' }),
     );
   }
 
@@ -255,7 +255,7 @@ export function mount(el, ctx) {
         ? h('div', { class: 'ig-padrao' },
           h('span', { class: 'ig-rotulo', text: 'O padrão de erro da IA' }),
           h('p', { text: PADRAO }),
-          h('p', { class: 'muted', text: 'Pergunta para a dupla: que regra no AGENTS.md teria evitado metade desses trechos? Guardem a resposta para a Carta à Rainha.' }),
+          h('p', { class: 'muted', text: 'Para a dupla: que linha no AGENTS.md teria impedido os 6 inventados de nascer? Anotem. Ela vai para a Carta à Rainha.' }),
         )
         : null,
       h('div', { class: 'row' },
@@ -267,7 +267,7 @@ export function mount(el, ctx) {
             estado = { respostas: {}, spec: estado.spec, atual: null };
             salvar();
             desenhar();
-            ctx.toast('Interrogatório reiniciado.');
+            ctx.toast('Respostas apagadas. Podem começar de novo.');
           },
         }, 'Recomeçar'),
       ),

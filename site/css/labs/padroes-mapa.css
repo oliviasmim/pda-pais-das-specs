@@ -1,0 +1,165 @@
+.lab-padroes-mapa .pmapa-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.lab-padroes-mapa .pmapa-aba {
+  appearance: none;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.lab-padroes-mapa .pmapa-aba[aria-checked='true'] {
+  color: var(--ink);
+  border-color: var(--uva);
+  background: var(--uva-soft);
+  font-weight: 600;
+}
+
+.lab-padroes-mapa .pmapa-aba:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.lab-padroes-mapa .pmapa-aba__naipe {
+  color: var(--copas);
+}
+
+.lab-padroes-mapa .pmapa-palco {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 0.5rem;
+}
+
+.lab-padroes-mapa .pmapa-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 20rem;
+  font-family: var(--font-body);
+}
+
+.lab-padroes-mapa .pmapa-no rect,
+.lab-padroes-mapa .pmapa-no polygon {
+  fill: var(--paper);
+  stroke: var(--line);
+  stroke-width: 2;
+  transition: fill 0.25s, stroke 0.25s;
+}
+
+.lab-padroes-mapa .pmapa-no--integracao polygon {
+  stroke: var(--ouro);
+}
+
+.lab-padroes-mapa .pmapa-no--supervisor rect {
+  stroke: var(--uva);
+}
+
+.lab-padroes-mapa .pmapa-no--ok rect {
+  stroke: var(--folha);
+}
+
+.lab-padroes-mapa .pmapa-no--ativo rect,
+.lab-padroes-mapa .pmapa-no--ativo polygon {
+  fill: var(--uva-soft);
+  stroke: var(--uva);
+  stroke-width: 3;
+}
+
+.lab-padroes-mapa .pmapa-no--integracao.pmapa-no--ativo polygon {
+  fill: var(--ouro-soft);
+  stroke: var(--ouro);
+}
+
+.lab-padroes-mapa .pmapa-no--ok.pmapa-no--ativo rect {
+  fill: var(--folha-soft);
+  stroke: var(--folha);
+}
+
+.lab-padroes-mapa .pmapa-no__rotulo {
+  fill: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lab-padroes-mapa .pmapa-no__sub {
+  fill: var(--ink-2);
+  font-size: 11px;
+}
+
+.lab-padroes-mapa .pmapa-seta {
+  stroke: var(--ink-3);
+  stroke-width: 2;
+  transition: stroke 0.25s;
+}
+
+.lab-padroes-mapa .pmapa-seta--viva {
+  stroke: var(--uva);
+  stroke-width: 3;
+}
+
+.lab-padroes-mapa .pmapa-ponta {
+  fill: var(--ink-3);
+}
+
+.lab-padroes-mapa .pmapa-rotulo-seta {
+  fill: var(--ink-2);
+  font-size: 11px;
+}
+
+.lab-padroes-mapa .pmapa-controles {
+  margin: 0.8rem 0 0.4rem;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.lab-padroes-mapa .pmapa-contador {
+  color: var(--ink-3);
+  font-size: 0.85rem;
+}
+
+.lab-padroes-mapa .pmapa-legenda {
+  min-height: 3em;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.lab-padroes-mapa .pmapa-ficha {
+  display: grid;
+  gap: 0.6rem 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.lab-padroes-mapa .pmapa-ficha dt {
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.lab-padroes-mapa .pmapa-ficha dd {
+  margin: 0.15rem 0 0;
+}
+
+.lab-padroes-mapa .pmapa-ficha__custo dd {
+  color: var(--copas);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-padroes-mapa .pmapa-no rect,
+  .lab-padroes-mapa .pmapa-no polygon,
+  .lab-padroes-mapa .pmapa-seta {
+    transition: none;
+  }
+}

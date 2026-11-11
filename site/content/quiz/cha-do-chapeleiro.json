@@ -5,73 +5,73 @@
       "etapa": "pre",
       "pergunta": "Três agentes na mesma pasta, um por task. Cada task registra uma rota em src/app.js, nenhum comando falha, e no fim só uma das três rotas existe na main. O git não apontou conflito nenhum. De onde veio a perda?",
       "opcoes": [
-        "Do merge: o git escolheu um lado em silêncio e escondeu os outros dois.",
-        "Da pasta compartilhada: cada agente gravou a versão do src/app.js que tinha lido, e a última gravação apagou as outras, sem erro e sem aviso. O merge só recebeu o que sobrou.",
-        "Do npm install concorrente, que corrompe o node_modules e remove arquivos de rota.",
-        "Dos testes de aceite, que removem do registro as rotas que não estavam na spec."
+        "Do merge: quando três branches tocam o mesmo arquivo, o git escolhe um dos lados por conta própria e descarta todo o resto sem emitir aviso nenhum.",
+        "Da pasta compartilhada: cada agente gravou o app.js que tinha lido, a última gravação apagou as outras, e o merge juntou o que sobrou.",
+        "Do npm install: três instalações disputando a mesma pasta ao mesmo tempo corrompem o node_modules e somem com arquivos de rota.",
+        "Dos testes de aceite rodando fora de ordem, que removem do registro de rotas aquilo que não estava coberto pela spec."
       ],
       "correta": 1,
-      "explicacao": "A armadilha está em 'nenhum comando falhou'. O estrago aconteceu antes do git: três processos editando o mesmo arquivo, cada um salvando por cima da leitura que fez. Bug silencioso não gera conflito, gera rota sumida."
+      "explicacao": "A armadilha está em 'nenhum comando falhou'. O estrago aconteceu antes do git: três processos editando o mesmo arquivo, cada um salvando por cima da leitura que fez. Por isso o git não tinha conflito para mostrar: quando o merge rodou, as rotas já tinham sumido do arquivo."
     },
     {
       "etapa": "pre",
-      "pergunta": "git worktree add ../wt-x main devolve: fatal: 'main' is already used by worktree. Por que o git RECUSA em vez de só avisar e deixar?",
+      "pergunta": "git worktree add ../wt-x main devolve: fatal: 'main' is already used by worktree. Por que o git recusa, em vez de só avisar e deixar você seguir?",
       "opcoes": [
-        "Porque branch protegida só pode ser aberta uma vez por questões de licença do repositório.",
-        "Porque worktree é recurso experimental, e o git não confia nele o suficiente.",
-        "É um comportamento defeituoso das versões antigas, e a saída padrão é rodar com --force.",
-        "Porque dois worktrees na mesma branch seriam a mesa sem xícaras de novo: duas pastas apontando para a mesma ref, commits e checkouts se atropelando. A recusa é a proteção pela qual você escolheu worktree."
+        "Porque worktree ainda é um recurso experimental do git, e a ferramenta evita por precaução as combinações que ela não consegue proteger sozinha contra erro.",
+        "Porque branch protegida pelas regras do repositório só pode ser aberta por uma pessoa de cada vez em qualquer pasta do time.",
+        "Porque dois worktrees na mesma branch viram a mesa sem xícaras de novo: duas pastas mexendo na mesma branch, com um commit atropelando o outro.",
+        "É um comportamento defeituoso das versões antigas do git, e a saída aceita pela comunidade é rodar o mesmo comando com --force."
       ],
-      "correta": 3,
+      "correta": 2,
       "explicacao": "Uma branch em duas pastas devolve o problema que o worktree veio resolver, com um passo a mais de distância. Crie uma branch nova com -b. O --force existe para quem sabe que está quebrando a proteção de propósito."
     },
     {
       "etapa": "check",
-      "pergunta": "Você abre a sessão no worktree novo e o servidor não sobe: faltam o .env e o node_modules. Seu colega conclui que o worktree veio quebrado. O que aconteceu?",
+      "pergunta": "Você abre a sessão no worktree novo e o servidor não sobe: faltam o .env e o node_modules. Seu colega conclui que o worktree veio quebrado. O que você responde?",
       "opcoes": [
-        "Worktree compartilha o .git, não os arquivos ignorados: node_modules, .env e afins não entram na xícara. Rode npm install em cada uma e copie o .env (ou liste no .worktreeinclude).",
-        "O worktree clonou só a branch, sem os objetos: rode git fetch dentro da pasta nova.",
-        "O agente não tem permissão de escrita em pastas de worktree: um chmod resolve.",
-        "O .env só pode existir na main: crie uma branch de configuração com ele versionado para todos os worktrees."
+        "O worktree clonou só a branch, sem os objetos do repositório inteiro: é preciso rodar git fetch dentro da pasta nova para baixar todo o restante antes de começar.",
+        "O agente não tem permissão de escrita em pastas criadas como worktree: um chmod recursivo nas pastas novas resolve.",
+        "O .env só pode existir na branch main: crie uma branch separada de configuração com ele versionado para todos os worktrees.",
+        "Nada quebrado: o worktree compartilha o .git, não os arquivos ignorados. Rode npm install em cada xícara e copie o .env (ou liste no .worktreeinclude)."
       ],
-      "correta": 0,
-      "explicacao": "Cada xícara se serve sozinha: o que está no .gitignore não viaja. E cuidado com a última opção: versionar .env na branch é vazar segredo para o histórico inteiro do repositório."
+      "correta": 3,
+      "explicacao": "Cada xícara se serve sozinha: o que está no .gitignore não viaja. E cuidado com a terceira opção: versionar .env em branch é vazar segredo para o histórico inteiro do repositório."
     },
     {
       "etapa": "check",
-      "pergunta": "No speedrun, o conflito em src/app.js se resolveu mantendo as duas linhas app.use(...). Agora seu colega generaliza: \"conflito se resolve sempre aceitando os dois lados\". Onde essa regra quebra?",
+      "pergunta": "No speedrun, o conflito em src/app.js se resolveu mantendo as duas linhas app.use(...). Seu colega generaliza: \"conflito se resolve sempre aceitando os dois lados\". Onde essa regra quebra?",
       "opcoes": [
-        "Em arquivos de teste, que por regra nunca devem entrar em conflito.",
-        "Quando os dois lados mudaram a MESMA lógica de formas diferentes: juntar os dois textos gera código contraditório, não resolução. O git só se recusa a adivinhar; quem decide é você, lendo o arquivo inteiro com a spec na mão.",
-        "Quando as branches têm mais de dez commits, porque o diff fica grande demais para juntar.",
-        "Não quebra: manter os dois lados é literalmente a definição de resolver conflito."
+        "Só em arquivos de teste, que por convenção de equipe jamais deveriam entrar em conflito, então ali a regra nem chega a valer.",
+        "Não quebra: aceitar os dois lados e apagar os marcadores de conflito é a definição mesma de resolução de merge em qualquer fluxo de trabalho moderno com git.",
+        "Quando os dois lados mudaram a mesma lógica de formas diferentes: juntar os dois textos gera código contraditório. Quem decide é você, de spec na mão.",
+        "Quando a branch acumula muitos commits seguidos, porque o diff resultante fica grande demais para qualquer junção automática."
       ],
-      "correta": 1,
-      "explicacao": "\"Manter os dois\" funcionou no speedrun porque eram duas rotas independentes registradas no mesmo ponto. Duas implementações diferentes da mesma validação juntas no mesmo trecho não dão uma solução: dão duas. Conflito não é problema de texto, é decisão."
+      "correta": 2,
+      "explicacao": "\"Manter os dois\" funcionou no speedrun porque eram duas rotas independentes registradas no mesmo ponto. Duas implementações diferentes da mesma validação, juntas no mesmo trecho, viram código que faz duas coisas ao mesmo tempo. Aí quem escolhe qual fica é você, com a spec aberta."
     },
     {
       "etapa": "pos",
       "pergunta": "Você mergeou as três branches de uma vez, resolveu os conflitos e agora npm test quebra em T1 e T2 ao mesmo tempo. Qual hábito teria mantido o problema pequeno?",
       "opcoes": [
-        "Mergear em ordem alfabética das branches.",
-        "Rodar os testes dentro de cada worktree e confiar: se passou na xícara, passa na mesa.",
-        "Um merge por vez, com os testes das três tasks verdes na main antes do próximo: o culpado é sempre o último merge, e você só olha um conflito por vez.",
-        "Resolver todos os conflitos pela interface do GitHub e rodar os testes uma vez, no fim."
+        "Mergear sempre em ordem alfabética das branches, porque assim a ordem fica determinística e o histórico da integração fica fácil de reler depois, com calma.",
+        "Um merge por vez, com os testes das três tasks verdes na main antes do próximo: o culpado é sempre o último merge, e é um conflito por vez.",
+        "Rodar os testes dentro de cada worktree e partir para o merge: o que está verde dentro da xícara estará verde na mesa.",
+        "Resolver todos os conflitos pela interface do GitHub e rodar os testes uma única vez, já no fim de tudo."
       ],
-      "correta": 2,
+      "correta": 1,
       "explicacao": "Teste verde dentro do worktree não fala da main: o conflito mora na junção. Um merge por vez transforma 'quem quebrou?' em pergunta com resposta imediata. Merge de tudo junto transforma três problemas pequenos num único mistério."
     },
     {
       "etapa": "pos",
-      "pergunta": "O que o comando claude -w agendar faz, exatamente?",
+      "pergunta": "Seu colega rodou claude -w agendar, o agente terminou T1 e agora o git status da pasta principal mostra .claude/ como pasta nova, não rastreada. Ele quer dar git add . e commitar. O que você responde?",
       "opcoes": [
-        "Clona o repositório numa pasta chamada agendar e abre a sessão com o histórico duplicado.",
-        "Cria .claude/worktrees/agendar numa branch worktree-agendar e abre a sessão lá dentro. Se você sair sem mudanças, o worktree é removido. Detalhe seu: pôr .claude/worktrees/ no .gitignore.",
-        "Cria a pasta agendar na branch atual, sem trocar de branch, e serve para qualquer agente de terminal.",
-        "Só etiqueta a sessão com o nome agendar; os arquivos continuam sendo editados na pasta principal."
+        "Não: o claude -w clonou o repositório inteiro ali dentro, e o commit duplicaria o histórico no projeto.",
+        "Pode: .claude/worktrees/ guarda a configuração da sessão, e o time precisa dela versionada para usar o mesmo agente.",
+        "Pode, desde que apague a pasta depois: o claude -w só dá um nome à sessão, e a pasta é cache que o Claude Code recria.",
+        "Não: ali está o worktree .claude/worktrees/agendar, da branch worktree-agendar. O código de T1 já está nos commits dessa branch. Ponha .claude/worktrees/ no .gitignore."
       ],
-      "correta": 1,
-      "explicacao": "É o atalho que faz a mesa posta inteira: worktree, branch e sessão em um comando. Não é clone (o histórico é compartilhado) e não é só nome (a pasta é de verdade). A limpeza automática sem mudanças e o .gitignore ficam por sua conta."
+      "correta": 3,
+      "explicacao": "claude -w agendar cria o worktree em .claude/worktrees/agendar, numa branch nova worktree-agendar, e abre a sessão lá dentro. O trabalho mora nos commits da branch, então a pasta fica fora do git. Também não é clone: o histórico é o mesmo. Ao sair sem mudanças, o Claude Code remove a pasta sozinho; o .gitignore é com você."
     }
   ]
 }

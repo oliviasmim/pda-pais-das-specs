@@ -1,0 +1,83 @@
+.lab-teste-nao-prova .tnp-grade {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 860px) {
+  .lab-teste-nao-prova .tnp-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+}
+
+.lab-teste-nao-prova .tnp-col { min-width: 0; display: grid; gap: 0.7rem; align-content: start; }
+.lab-teste-nao-prova .tnp-h { margin: 0; font-family: var(--font-display); font-weight: 600; }
+
+.lab-teste-nao-prova .tnp-escolha { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
+
+.lab-teste-nao-prova .tnp-opcao {
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.lab-teste-nao-prova .tnp-opcao--on { border-color: var(--tinta); background: var(--tinta-soft); }
+.lab-teste-nao-prova .tnp-opcao:focus-visible { outline: none; box-shadow: var(--focus); }
+
+.lab-teste-nao-prova .tnp-codigo {
+  margin: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--paper-2);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.lab-teste-nao-prova .tnp-cob__barra {
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.lab-teste-nao-prova .tnp-cob__barra span { display: block; height: 100%; background: var(--ouro); transition: width 0.3s; }
+.lab-teste-nao-prova .tnp-cob__texto { margin: 0.35rem 0 0; font-size: 0.82rem; color: var(--ink-2); }
+
+.lab-teste-nao-prova .tnp-quebras { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+
+.lab-teste-nao-prova .tnp-q {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-left-width: 4px;
+  border-radius: var(--r);
+  background: var(--paper);
+}
+
+.lab-teste-nao-prova .tnp-q--passou { border-left-color: var(--copas); }
+.lab-teste-nao-prova .tnp-q--pegou { border-left-color: var(--folha); }
+
+.lab-teste-nao-prova .tnp-q__topo { display: flex; justify-content: space-between; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+
+.lab-teste-nao-prova .tnp-q__diff {
+  margin: 0;
+  font-size: 0.74rem;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.lab-teste-nao-prova .tnp-q__fim { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; font-size: 0.82rem; }
+
+.lab-teste-nao-prova .tnp-ver--ok { border-left-color: var(--folha); }
+.lab-teste-nao-prova .tnp-ver--ruim { border-left-color: var(--copas); }
+.lab-teste-nao-prova .tnp-ver p { margin: 0.3rem 0 0; }

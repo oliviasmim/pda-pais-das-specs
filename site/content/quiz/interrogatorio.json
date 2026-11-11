@@ -5,25 +5,25 @@
       "etapa": "pre",
       "pergunta": "A IA entregou o POST /agendamentos. Você testou: o caminho feliz devolveu 200 e vagaId 999 devolveu 404. O que está provado?",
       "opcoes": [
-        "Que o endpoint atende à spec: sucesso e vaga inexistente são os dois casos centrais.",
-        "Esses dois casos funcionam na sua máquina. Vaga ocupada, campos faltando, concorrência e tudo o que a IA assumiu continuam sem veredito.",
-        "Que não há regra inventada: regra inventada sempre quebra o caminho feliz dos testes.",
-        "Que a revisão pode ir direto para o corpo do código, porque o comportamento já foi conferido."
+        "Que o endpoint atende à spec nos pontos centrais: o caminho feliz respondeu e a vaga inexistente saiu com 404 em vez de um 500.",
+        "Que esses dois casos funcionam na sua máquina. Vaga ocupada, campos faltando e o que a IA assumiu seguem sem veredito.",
+        "Que não há regra inventada, porque regra inventada sempre quebra o caminho feliz logo na primeira chamada ao endpoint.",
+        "Que a revisão já pode começar pelo corpo das funções, já que o comportamento externo foi conferido na prática."
       ],
       "correta": 1,
-      "explicacao": "Duas chamadas provam dois casos. Todo o resto da tabela, e tudo o que a IA preencheu por conta própria, segue sem evidência. Cuidado com a primeira opção: ela parece técnica, mas transforma dois testes em atestado de spec."
+      "explicacao": "Duas chamadas provam dois casos. O resto da tabela da T1 (400, 409, o 201 do sucesso) e tudo o que a IA preencheu sozinha continuam sem evidência. A primeira opção é a armadilha comum: dois testes viram atestado de spec inteira."
     },
     {
       "etapa": "pre",
       "pergunta": "Qual destas é uma contraprova de verdade?",
       "opcoes": [
-        "\"POST /agendamentos com vagaId 1 livre. Espero 201. Rodei, devolveu 201.\"",
-        "\"Vou rodar POST /agendamentos com vagaId 999 e ver o que devolve, aí comparo com a spec.\"",
-        "\"Testei 20 e-mails válidos seguidos e todos responderam rápido.\"",
-        "\"POST /agendamentos com jovemEmail 'ana', sem formato de e-mail. Espero 400 {\\\"erro\\\":\\\"jovemEmail inválido\\\"}. O código devolveu 201 e gravou 'ana'.\""
+        "\"POST /agendamentos com a vaga 1 livre. Espero 201 com o agendamento criado. Rodei três vezes seguidas e devolveu 201 certinho nas três tentativas.\"",
+        "\"Vou rodar POST /agendamentos com vagaId 999, anotar o que ele devolve e só depois conferir com a tabela de erros da spec.\"",
+        "\"Testei 20 e-mails válidos seguidos na vaga 3, um atrás do outro, e todos responderam rápido, sem erro e sem duplicata.\"",
+        "\"POST /agendamentos com jovemEmail 'ana', sem formato. Espero 400 {\\\"erro\\\":\\\"jovemEmail inválido\\\"}. O código devolveu 201 e gravou 'ana'.\""
       ],
       "correta": 3,
-      "explicacao": "Contraprova precisa de três coisas: entrada exata, resposta esperada pela spec e resposta que o código deu, diferentes. A primeira só confirma o que funciona. As outras duas não dizem o que esperavam ver antes de rodar."
+      "explicacao": "Contraprova tem três partes: a entrada exata, a resposta que a spec manda e a resposta que o código deu, e as duas respostas são diferentes. A primeira opção só confirma o que já funciona. A segunda e a terceira não escreveram antes de rodar o que esperavam ver."
     },
     {
       "etapa": "check",
@@ -32,46 +32,46 @@
         "if (agendamentosNoMes >= 3) return 403;",
         "await enviarEmailConfirmacao(jovemEmail);",
         "res.status(200).json(agendamento);",
-        "import moment from 'moment';"
+        "import moment from 'moment';  // formatar datas"
       ],
       "correta": 2,
-      "explicacao": "A resposta precisava de algum status e algum corpo: a escolha era obrigatória e ficou com a IA. Limite mensal, e-mail e dependência de data ninguém pediu e o problema não exige: invenção. O assumido vira decisão escrita ou pergunta; os inventados saem."
+      "explicacao": "Toda resposta HTTP precisa de um status e de um corpo. O pedido não disse quais, então a IA teve de escolher: isso é assumido, e vira decisão escrita ou pergunta. Limite mensal, e-mail e biblioteca de data ninguém pediu e o endpoint funciona sem eles: isso é inventado, e sai do código."
     },
     {
       "etapa": "check",
       "pergunta": "Todo sistema de agenda do mundo manda e-mail de confirmação. Por que, mesmo assim, o e-mail do diff é INVENTADO e não assumido?",
       "opcoes": [
-        "Porque a lacuna não era obrigatória: dava para entregar o endpoint sem e-mail nenhum. Ser comum nos outros sistemas não torna algo pedido.",
-        "Porque e-mail nunca é requisito legítimo num sistema de agenda.",
-        "Porque a spec proíbe e-mail em qualquer circunstância, agora e para sempre.",
-        "Porque e-mail de confirmação é requisito não funcional, e NFR não pode aparecer num diff de feature."
+        "Porque a lacuna não era obrigatória: o endpoint se entrega sem e-mail nenhum. Ser comum nos outros sistemas não torna pedido.",
+        "Porque e-mail em sistema de agenda é decisão de produto, não de engenharia, e decisão de produto jamais aparece em diff de feature.",
+        "Porque a spec proíbe explicitamente qualquer envio de e-mail pelo sistema, agora e em qualquer versão futura do projeto.",
+        "Porque e-mail de confirmação é requisito não funcional, e requisito não funcional não pode entrar num diff de feature."
       ],
       "correta": 0,
-      "explicacao": "Assumido é uma lacuna que precisava ser preenchida. Inventado é uma lacuna que nem existia. A spec lista e-mail como fora do escopo e diz: se parecer necessário, pergunte. A resposta certa é conversa com quem decidiu, não código. As opções exageradas são apegadas à forma, não ao critério."
+      "explicacao": "Assumido preenche uma lacuna que precisava de resposta. Inventado cria uma lacuna que nem existia. A spec põe e-mail em \"Fora do escopo\" e diz: se parecer necessário, pergunte. As outras opções usam palavras absolutas (jamais, qualquer versão futura, não pode) que a spec não diz em lugar nenhum."
     },
     {
       "etapa": "pos",
       "pergunta": "Duas pessoas deram o mesmo pedido de 9 palavras a agentes diferentes. Um diff veio com limite de 3 agendamentos por mês; o outro, com bloqueio de agendamento no domingo. Isso é aleatório?",
       "opcoes": [
-        "É bug da versão atual do modelo, e some na próxima.",
-        "Sim, e por isso com pedido vago os erros se cancelam na média.",
-        "Sim, é o não-determinismo sorteando erros: não há padrão para aprender.",
-        "Não. Os detalhes mudam, o padrão não: cada lacuna vira a continuação mais provável, a média dos sistemas parecidos. A defesa é a mesma nos dois diffs: menos lacunas antes, rastro depois."
+        "É bug conhecido e documentado desta geração de modelos, e a próxima versão já vem com a correção, então não faz sentido adaptar o processo de revisão agora.",
+        "Sim. É o não-determinismo (mesmo pedido, resposta diferente) sorteando entre erros possíveis, sem padrão para aprender.",
+        "Não. Os detalhes mudam, o padrão não: cada lacuna vira a continuação mais provável, a média dos sistemas parecidos. Menos lacunas antes, rastro depois.",
+        "Sim, e por isso o pedido vago acaba sendo seguro: com tentativas suficientes do mesmo pedido, os erros se cancelam na média."
       ],
-      "correta": 3,
-      "explicacao": "O não-determinismo muda o presente que você recebe, não o mecanismo: preencher lacunas pelo que é mais provável estatisticamente. Por isso duas pessoas com o mesmo pedido ruim receberam suposições plausíveis diferentes. Não é sorte, e não some com modelo novo."
+      "correta": 2,
+      "explicacao": "O não-determinismo muda qual suposição aparece em cada execução. O mecanismo é sempre o mesmo: cada lacuna do pedido é preenchida com o que é mais provável em sistemas de agenda. Limite mensal e bloqueio de domingo são dois exemplos dessa média. Modelo novo continua prevendo o mais provável, então a defesa segue sendo menos lacuna antes e rastro depois."
     },
     {
       "etapa": "pos",
       "pergunta": "Você pôs no AGENTS.md a regra 'ao terminar, liste o que você assumiu'. O agente devolve: 'Nenhuma suposição feita'. O que concluir?",
       "opcoes": [
-        "Que o modelo é ruim para seguir instrução simples e deve ser trocado.",
-        "Que o pedido estava completo: lista vazia é evidência de que não havia lacuna.",
-        "Quase nada. A declaração também é texto gerado: o agente pode não enxergar as próprias suposições, porque suposição plausível raramente se apresenta como suposição. A lista ajuda a caçar; o rastro continua sendo seu.",
-        "Que a regra funcionou e, nas próximas sessões, dá para confiar e pular o rastro."
+        "Que o pedido estava completo de fato: uma lista de suposições vazia vinda do agente é a evidência de que não restava lacuna nenhuma para preencher.",
+        "Que a regra do AGENTS.md funcionou e, nas sessões seguintes, já dá para confiar nessa lista e pular o rastro linha a linha.",
+        "Quase nada. A lista também é texto gerado: suposição plausível não se enxerga como suposição. Ela ajuda a caçar; o rastro continua seu.",
+        "Que o modelo não consegue seguir instrução simples: se ele não admite suposição nenhuma, está na hora de trocar por outro."
       ],
       "correta": 2,
-      "explicacao": "A lista do próprio agente é um indício barato, não uma prova. Se ele soubesse que estava assumindo, teria perguntado. O rastro (onde está escrito?) continua sendo a ferramenta que confere."
+      "explicacao": "A lista do agente é um ponto de partida barato para a revisão. Ela não prova nada: se o agente percebesse que estava assumindo, teria perguntado antes. Quem confere é você, perguntando a cada linha \"onde está escrito isso?\"."
     }
   ]
 }

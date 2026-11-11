@@ -150,7 +150,7 @@ export function mount(el, ctx) {
     } else {
       decisao.append(
         h('div', { class: 'row' },
-          h('p', { class: 'cx-decisao__prox' }, h('strong', {}, 'T1 pronta. '), r.zonaFinal === 'smart' ? 'O principal terminou com folga para a próxima task.' : 'O principal terminou na dumb zone: a próxima task começa com a cabeça cheia.'),
+          h('p', { class: 'cx-decisao__prox' }, h('strong', {}, 'T1 pronta. '), r.zonaFinal === 'smart' ? 'O principal terminou com folga para a próxima task.' : 'O principal terminou na dumb zone: a próxima task começa numa janela cheia de log que não serve mais.'),
           h('button', { type: 'button', class: 'btn btn--sm', onclick: reiniciar }, 'Recomeçar'),
         ),
       );
@@ -168,7 +168,7 @@ export function mount(el, ctx) {
             h('tr', {}, h('th', {}, 'Tokens gastos no total'), h('td', { class: 'mono' }, formatarTokens(c.sem.gastoTotal)), h('td', { class: 'mono' }, formatarTokens(c.com.gastoTotal))),
           ),
         ),
-        h('p', { class: 'callout' }, `Subagent não economiza tokens: gasta ${formatarTokens(c.custoExtra)} a mais no total. O que ele economiza é a janela do principal (${formatarTokens(c.economiaPrincipal)} a menos). Isolamento de contexto custa dinheiro. Use quando a investigação é pesada e só a conclusão importa.`),
+        h('p', { class: 'callout' }, `Perceba a conta: delegando, você gasta ${formatarTokens(c.custoExtra)} tokens a mais no total e a janela do principal fica ${formatarTokens(c.economiaPrincipal)} mais leve. Você paga para manter o principal na smart zone. Vale quando a investigação é pesada e só a conclusão importa.`),
       );
     }
   }

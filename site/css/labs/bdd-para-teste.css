@@ -1,0 +1,67 @@
+.lab-bdd-para-teste .bdd-exemplos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.lab-bdd-para-teste .bdd-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  align-items: start;
+}
+
+.lab-bdd-para-teste .bdd-rotulo {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin: 0 0 0.3rem;
+}
+
+.lab-bdd-para-teste textarea {
+  width: 100%;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.lab-bdd-para-teste textarea:focus {
+  outline: none;
+  border-color: var(--tinta);
+  box-shadow: var(--focus);
+}
+
+.lab-bdd-para-teste .bdd-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.lab-bdd-para-teste .bdd-avisos p {
+  margin: 0.8rem 0 0;
+  font-size: 0.9rem;
+}
+
+.lab-bdd-para-teste .bdd-codigo {
+  margin: 0 0 0.6rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+}

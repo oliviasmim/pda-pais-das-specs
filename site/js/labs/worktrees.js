@@ -73,8 +73,8 @@ export function mount(el, ctx) {
 
   const salvar = () => ctx.state.save({ estado, log: log.slice(-200), aba });
 
-  const abaSem = h('button', { class: 'wt-aba', role: 'tab', type: 'button', id: 'wt-tab-sem', 'aria-controls': 'wt-painel-sem' }, h('span', { class: 'wt-aba__n' }, '1'), ' Sem xícaras: a mesma pasta');
-  const abaCom = h('button', { class: 'wt-aba', role: 'tab', type: 'button', id: 'wt-tab-com', 'aria-controls': 'wt-painel-com' }, h('span', { class: 'wt-aba__n' }, '2'), ' Uma xícara para cada');
+  const abaSem = h('button', { class: 'wt-aba', role: 'tab', type: 'button', id: 'wt-tab-sem', 'aria-controls': 'wt-painel-sem' }, h('span', { class: 'wt-aba__n' }, '1'), ' Mesma pasta, três agentes');
+  const abaCom = h('button', { class: 'wt-aba', role: 'tab', type: 'button', id: 'wt-tab-com', 'aria-controls': 'wt-painel-com' }, h('span', { class: 'wt-aba__n' }, '2'), ' Um worktree por agente');
 
   const painelSem = h('div', { class: 'wt-painel', role: 'tabpanel', id: 'wt-painel-sem', 'aria-labelledby': 'wt-tab-sem' });
   const painelCom = h('div', { class: 'wt-painel', role: 'tabpanel', id: 'wt-painel-com', 'aria-labelledby': 'wt-tab-com' });
@@ -113,8 +113,8 @@ export function mount(el, ctx) {
   const discoSem = h('pre', { class: 'wt-arquivo', 'aria-label': 'Conteúdo de src/app.js no disco' });
   const eventosSem = h('ol', { class: 'wt-eventos', 'aria-live': 'polite' });
   const veredSem = h('div', { class: 'wt-veredito', 'aria-live': 'polite' });
-  const btnSoltar = h('button', { class: 'btn btn--primary', type: 'button' }, 'Soltar 3 agentes na mesma pasta');
-  const btnPasso = h('button', { class: 'btn btn--ghost', type: 'button' }, 'Passo a passo');
+  const btnSoltar = h('button', { class: 'btn btn--primary', type: 'button' }, 'Rodar os 3 agentes');
+  const btnPasso = h('button', { class: 'btn btn--ghost', type: 'button' }, 'Ver um passo por vez');
 
   function desenharArquivo(pre, linhas, destaque = {}) {
     pre.replaceChildren(
@@ -156,9 +156,9 @@ export function mount(el, ctx) {
           'div',
           { class: 'callout wt-callout-copas' },
           h('strong', {}, `Sobreviveu só ${sim.sobreviventes.join(', ')}. ${sim.perdidas.join(' e ')} sumiram.`),
-          h('p', {}, 'Nenhum comando falhou. Nenhum agente avisou. Cada um gravou a versão do arquivo que leu antes, e a última escrita apagou as outras. Os testes rodaram com código pela metade de outro agente.'),
-          h('p', {}, 'É por isso que paralelismo de agentes começa com isolamento: uma pasta, uma branch e um agente por task.'),
-          h('button', { class: 'btn btn--primary btn--sm', type: 'button', onclick: () => { trocarAba('xicaras'); abaCom.focus(); } }, 'Agora com uma xícara para cada →'),
+          h('p', {}, 'Nenhum comando falhou e nenhum agente avisou. Cada um gravou a versão do arquivo que tinha lido antes, e a última gravação apagou as outras. No meio disso, os testes rodaram com o código pela metade de outro agente.'),
+          h('p', {}, 'Para rodar agentes em paralelo, cada um precisa da própria pasta e da própria branch. É isso que você monta na aba 2.'),
+          h('button', { class: 'btn btn--primary btn--sm', type: 'button', onclick: () => { trocarAba('xicaras'); abaCom.focus(); } }, 'Montar um worktree por agente →'),
         ),
       );
       btnPasso.disabled = true;
@@ -194,7 +194,7 @@ export function mount(el, ctx) {
       { class: 'wt-intro' },
       'Três agentes recebem T1, T2 e T3 do speedrun. Todos rodam na mesma pasta, na mesma branch. Cada task só precisa registrar uma linha em ',
       h('code', {}, 'src/app.js'),
-      '. O que pode dar errado?',
+      '. Antes de rodar, aposte: qual rota chega viva no fim?',
     ),
     h('div', { class: 'row wt-acoes' }, btnSoltar, btnPasso),
     agentesSem,
@@ -247,7 +247,7 @@ export function mount(el, ctx) {
     if (!log.length) {
       saidaTerm.append(
         linhaTerminal('Você está na pasta principal do projeto agenda-mentorias, na branch main.', 'dica'),
-        linhaTerminal('Missão: três agentes, três xícaras, nenhuma rota perdida. Digite help ou use as sugestões.', 'dica'),
+        linhaTerminal('Missão: um agente por worktree e as três rotas na main no fim. Digite help para ver os comandos ou clique numa sugestão.', 'dica'),
       );
     }
     saidaTerm.scrollTop = saidaTerm.scrollHeight;
@@ -274,7 +274,7 @@ export function mount(el, ctx) {
           ? h('span', { class: 'wt-lugar__estado' }, `cabeceira · ${estado.branches.main.ancoras.usos.length}/3 rotas integradas`)
           : agente
             ? h('span', { class: 'wt-lugar__estado' }, `Agente ${agente.id} · ${task.id} ${task.titulo}`, h('span', { class: 'mono' }, ` ${agente.sha}`))
-            : h('span', { class: 'wt-lugar__estado muted' }, 'xícara limpa, sem agente'),
+            : h('span', { class: 'wt-lugar__estado muted' }, 'xícara pronta, ainda sem agente'),
         br && br.mesclada && !w.principal ? h('span', { class: 'chip chip--ok' }, 'mesclada') : null,
         aqui ? h('span', { class: 'wt-lugar__aqui' }, 'você está aqui') : null,
       );
@@ -306,8 +306,8 @@ export function mount(el, ctx) {
         h(
           'div',
           { class: 'callout wt-callout-folha' },
-          h('strong', {}, 'Mesa arrumada: três agentes, três xícaras, três rotas na main.'),
-          h('p', {}, 'É exatamente isso que vocês fazem no speedrun, com agentes de verdade. O conflito em src/app.js vai aparecer lá também. Agora vocês sabem que a resposta é manter as duas linhas.'),
+          h('strong', {}, 'As três rotas estão na main e nenhum worktree sobrou.'),
+          h('p', {}, 'No speedrun o fluxo é este, com agentes de verdade. O conflito em src/app.js vai aparecer lá também, e a saída é a mesma: manter as duas linhas e rodar npm test na main.'),
         ),
       );
     } else fim.replaceChildren();
@@ -322,7 +322,7 @@ export function mount(el, ctx) {
               'div',
               { class: 'callout wt-callout-copas' },
               h('strong', {}, `A main perdeu a rota de ${perdidas.join(', ')}.`),
-              h('p', {}, 'O merge "resolveu" o conflito apagando o trabalho de outra task. O teste de aceite dela vai quebrar na CI. Use Desfazer e escolha manter as duas.'),
+              h('p', {}, 'O git aceitou sua escolha sem reclamar e apagou a linha da outra task. O teste de aceite dela vai quebrar na CI. Clique em Desfazer e escolha Manter as duas.'),
             )
           : '',
       );
@@ -354,22 +354,22 @@ export function mount(el, ctx) {
       const r = resolverConflito(estado, escolha);
       estado = r.estado;
       escreverLog([
-        { texto: `[resolução: ${escolha === 'ambas' ? 'manter as duas' : escolha === 'ours' ? 'manter HEAD' : 'manter a deles'}]`, tipo: 'cmd' },
+        { texto: `[resolução: ${escolha === 'ambas' ? 'manter as duas' : escolha === 'ours' ? 'manter só HEAD' : 'manter só a branch nova'}]`, tipo: 'cmd' },
         { texto: `[main ${r.sha}] Merge branch '${desfazer[desfazer.length - 1].conflito.branch}'`, tipo: r.ok ? 'out' : 'erro' },
         ...(r.ok ? [] : [{ texto: `cuidado: a rota de ${r.perdidas.join(', ')} sumiu de src/app.js`, tipo: 'erro' }]),
       ]);
-      ctx.toast(r.ok ? 'Conflito resolvido sem perder rota.' : 'Conflito resolvido, mas uma rota sumiu.');
+      ctx.toast(r.ok ? 'Conflito resolvido. As rotas das duas tasks ficaram.' : 'Conflito resolvido, mas a rota de uma task sumiu.');
       atualizar();
     };
     conflitoBox.replaceChildren(
       h('h4', { class: 'wt-h4' }, 'Conflito no merge'),
-      h('p', { class: 'muted' }, 'HEAD é a main (o que já foi integrado). Embaixo do ======= está a branch que você está trazendo. Qual versão fica?'),
+      h('p', { class: 'muted' }, 'Em cima do =======, HEAD: o que a main já tem. Embaixo, o que a branch nova traz. Cada lado tem a rota de uma task diferente. O que fica no arquivo?'),
       pre,
       h(
         'div',
         { class: 'row wt-acoes' },
-        h('button', { class: 'btn btn--sm', type: 'button', onclick: () => escolher('ours') }, 'Manter HEAD'),
-        h('button', { class: 'btn btn--sm', type: 'button', onclick: () => escolher('theirs') }, 'Manter a deles'),
+        h('button', { class: 'btn btn--sm', type: 'button', onclick: () => escolher('ours') }, 'Manter só HEAD'),
+        h('button', { class: 'btn btn--sm', type: 'button', onclick: () => escolher('theirs') }, 'Manter só a branch nova'),
         h('button', { class: 'btn btn--primary btn--sm', type: 'button', onclick: () => escolher('ambas') }, 'Manter as duas'),
       ),
     );
@@ -442,7 +442,7 @@ export function mount(el, ctx) {
     h(
       'p',
       { class: 'wt-intro' },
-      'Agora cada agente ganha uma xícara limpa: um worktree, com a própria pasta e a própria branch, ligado ao mesmo repositório. A cabeceira (pasta principal) fica para a integração.',
+      'Agora cada agente ganha uma xícara: um worktree, com pasta e branch próprias e o mesmo histórico. A pasta principal (a cabeceira da mesa) fica na main e serve só para integrar.',
     ),
     h(
       'div',
@@ -466,8 +466,8 @@ export function mount(el, ctx) {
       'header',
       { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
-      h('h3', {}, 'A mesa do Chá Maluco'),
-      h('p', {}, 'Primeiro veja três agentes dividindo a mesma pasta. Depois arrume uma xícara para cada e integre sem perder trabalho.'),
+      h('h3', {}, 'Três agentes, um app.js: qual rota sobrevive?'),
+      h('p', {}, 'Na aba 1, veja três agentes gravando o mesmo arquivo. Na aba 2, dê um worktree para cada um e integre na main sem perder rota.'),
     ),
     h('div', { class: 'lab__body' }, h('div', { class: 'wt-abas', role: 'tablist', 'aria-label': 'Modos' }, abaSem, abaCom), painelSem, painelCom),
   );

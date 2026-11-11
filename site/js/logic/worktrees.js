@@ -143,11 +143,11 @@ function criarWorktree(estado, dir, branch, novaBranch) {
 
 function iniciarAgente(estado, wt, nomePedido) {
   const task = taskPara(estado, nomePedido || wt.branch);
-  if (!task) return { ok: false, msg: 'Todas as 3 tasks já têm agente. Mais agentes aqui só aumentam o custo de coordenação.' };
+  if (!task) return { ok: false, msg: 'As 3 tasks já têm agente. Um quarto agente não teria task própria e só aumentaria o custo de coordenação.' };
   if (estado.agentes.some((a) => a.dir === wt.dir)) {
     return {
       ok: false,
-      msg: 'Este worktree já tem um agente. Duas sessões na mesma xícara voltam ao problema da mesa sem xícaras.',
+      msg: 'Este worktree já tem um agente. Duas sessões na mesma pasta voltam ao problema da aba 1: uma grava por cima da outra.',
     };
   }
   const br = estado.branches[wt.branch];
@@ -203,7 +203,7 @@ function cmdWorktree(estado, args) {
     if (ocupado) {
       return erro(estado, [
         `fatal: '${nome}' is already used by worktree at '${ocupado.dir}'`,
-        'dica: uma branch só pode estar em uma xícara por vez. Crie uma branch nova com -b.',
+        'dica: uma branch só pode estar em um worktree por vez. Crie uma branch nova com -b <nome>.',
       ]);
     }
     criarWorktree(estado, dir, nome, false);
@@ -220,7 +220,7 @@ function cmdWorktree(estado, args) {
     if (estado.cwd === dir) {
       return erro(estado, [
         `fatal: '${alvo}' is the current working tree`,
-        'dica: saia da xícara antes de lavá-la. Rode cd para a pasta principal.',
+        'dica: você está dentro desse worktree. Volte para a pasta principal com cd e remova de lá.',
       ]);
     }
     const br = estado.branches[wt.branch];
@@ -300,7 +300,7 @@ function cmdMerge(estado, args) {
       'Auto-merging src/app.js',
       'CONFLICT (content): Merge conflict in src/app.js',
       'Automatic merge failed; fix conflicts and then commit the result.',
-      'dica: as duas tasks adicionaram uma linha no mesmo lugar. Abra o conflito abaixo e escolha.',
+      'dica: as duas tasks adicionaram uma linha no mesmo ponto de src/app.js. Decida no painel abaixo o que fica.',
     ],
     { conflito: true },
   );
@@ -434,8 +434,8 @@ function cmdClaude(estado, args) {
   const wt = worktreeAtual(estado);
   if (wt.principal) {
     return erro(estado, [
-      'dica: a pasta principal é a cabeceira da mesa, onde acontece a integração.',
-      'Rode o agente dentro de um worktree (cd <pasta>) ou use claude -w <nome>.',
+      'dica: a pasta principal fica na main, só para integrar. Um agente aqui disputaria arquivo com o seu merge.',
+      'Entre num worktree (cd <pasta>) e rode claude, ou use claude -w <nome>.',
     ]);
   }
   const r = iniciarAgente(estado, wt, wt.branch);
@@ -454,10 +454,10 @@ function cmdClaude(estado, args) {
 
 export const AJUDA = [
   'Comandos aceitos:',
-  '  git worktree add <pasta> -b <branch>   cria uma xícara nova',
-  '  git worktree list                      lista as xícaras',
-  '  git worktree remove <pasta>            lava a xícara',
-  '  cd <pasta>                             senta em outra xícara',
+  '  git worktree add <pasta> -b <branch>   cria um worktree numa branch nova',
+  '  git worktree list                      lista os worktrees e suas branches',
+  '  git worktree remove <pasta>            apaga a pasta (a branch fica)',
+  '  cd <pasta>                             entra em outro worktree',
   '  claude                                 inicia um agente na pasta atual',
   '  claude -w <nome>                       cria worktree + inicia agente',
   '  git merge <branch>                     integra na main',
@@ -503,12 +503,12 @@ export function executar(estadoAtual, linha) {
 }
 
 export const PASSOS = [
-  { id: 'criar', titulo: 'Arrume três xícaras', dica: 'git worktree add ../wt-agendar -b agendar  (ou claude -w agendar)' },
-  { id: 'agentes', titulo: 'Um agente em cada xícara', dica: 'cd ../wt-agendar e depois claude  (claude -w já faz os dois)' },
-  { id: 'listar', titulo: 'Volte à cabeceira e confira a mesa', dica: 'cd /agenda-mentorias e git worktree list' },
+  { id: 'criar', titulo: 'Crie três worktrees', dica: 'git worktree add ../wt-agendar -b agendar  (ou claude -w agendar)' },
+  { id: 'agentes', titulo: 'Rode um agente em cada worktree', dica: 'cd ../wt-agendar e depois claude  (claude -w já faz os dois)' },
+  { id: 'listar', titulo: 'Volte à pasta principal e liste os worktrees', dica: 'cd /agenda-mentorias e git worktree list' },
   { id: 'mesclar', titulo: 'Integre as três branches na main', dica: 'git merge agendar  (repita para as outras)' },
-  { id: 'rotas', titulo: 'Nenhuma rota perdida no conflito', dica: 'No conflito, mantenha as linhas das duas tasks.' },
-  { id: 'limpar', titulo: 'Lave as xícaras', dica: 'git worktree remove ../wt-agendar' },
+  { id: 'rotas', titulo: 'Resolva o conflito sem perder rota', dica: 'No conflito, mantenha as linhas das duas tasks.' },
+  { id: 'limpar', titulo: 'Remova os worktrees', dica: 'git worktree remove ../wt-agendar' },
 ];
 
 export function progressoMissao(estado) {

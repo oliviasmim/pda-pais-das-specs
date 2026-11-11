@@ -121,16 +121,16 @@ export function render(el, ctx) {
     campoDuracao.disabled = rodando(c);
     const textos = {
       pronto: 'Pronto para começar. 3 tasks, 3 xícaras, 1 main verde.',
-      normal: rodando(c) ? 'Valendo! Teste vermelho primeiro.' : 'Pausado.',
-      alerta: rodando(c) ? 'Últimos 5 minutos: hora de integrar na main.' : 'Pausado nos últimos 5 minutos.',
-      fim: 'Tempo! Mãos longe do teclado. Rodem o npm run gates.',
+      normal: rodando(c) ? 'Valendo. Primeiro o commit do teste vermelho, depois o código.' : 'Pausado. O tempo não corre até você retomar.',
+      alerta: rodando(c) ? 'Faltam 5 minutos. Pare de codar e faça o merge na main.' : 'Pausado nos últimos 5 minutos.',
+      fim: 'Tempo. Mãos longe do teclado. Rodem o npm run gates na main.',
     };
     faseEl.textContent = textos[f];
     if (faseAnterior && f !== faseAnterior) {
       if (f === 'alerta' && rodando(c)) avisoEl.textContent = 'Faltam 5 minutos.';
       if (f === 'fim') {
         avisoEl.textContent = 'Tempo esgotado.';
-        ctx.toast('Tempo! Hora do avaliador.');
+        ctx.toast('Tempo. Agora rodem o avaliador oficial (passo 5).');
       }
     }
     if (f === 'fim' && rodando(c)) {
@@ -176,7 +176,7 @@ export function render(el, ctx) {
               h('span', { class: 'sr-ranking__pontos' }, `${total}`, h('small', {}, ' pts')),
             ),
           )
-        : [h('li', { class: 'sr-ranking__vazio muted' }, 'Cadastre os times para ver o ranking.')]),
+        : [h('li', { class: 'sr-ranking__vazio muted' }, 'O ranking aparece quando o primeiro time entrar.')]),
     );
   }
 
@@ -260,7 +260,7 @@ export function render(el, ctx) {
       const min = minutosRestantes(estado.cronometro, Date.now());
       campoMin.value = String(min);
       atualizar(id, (t) => ({ ...t, minutosRestantes: min }));
-      ctx.toast(`${time.nome}: ${min} min restantes.`);
+      ctx.toast(`${time.nome} terminou com ${min} min sobrando: +${min} pts.`);
     });
 
     const campoPlacar = h('textarea', {
@@ -268,7 +268,7 @@ export function render(el, ctx) {
       placeholder: 'PLACAR {"versao":1,"casos":{...}}',
     });
     const retornoPlacar = h('p', { class: 'sr-placar__retorno', 'aria-live': 'polite' });
-    const aplicar = h('button', { type: 'button', class: 'btn btn--sm' }, 'Aplicar');
+    const aplicar = h('button', { type: 'button', class: 'btn btn--sm' }, 'Aplicar no placar');
     aplicar.addEventListener('click', () => {
       const lido = lerPlacar(campoPlacar.value);
       if (!lido.ok) {
@@ -277,7 +277,7 @@ export function render(el, ctx) {
         return;
       }
       atualizar(id, (t) => aplicarPlacar(t, lido.dados), { redesenhar: true });
-      ctx.toast(`${time.nome}: ${lido.dados.casos}/${lido.dados.casosTotal} casos aplicados.`);
+      ctx.toast(`${time.nome}: ${lido.dados.casos} de ${lido.dados.casosTotal} casos passaram no avaliador.`);
     });
 
     return h(
@@ -288,7 +288,7 @@ export function render(el, ctx) {
         { class: 'sr-time__cab' },
         h('h3', { id: `${idBase}-nome` }, time.nome),
         h('p', { class: 'sr-time__placar' }, h('span', { class: 'sr-time__total' }, '0'), h('small', {}, ' pts')),
-        botaoConfirmar('Remover', 'Confirmar remoção', () => {
+        botaoConfirmar('Remover', 'Remover mesmo?', () => {
           estado.times = estado.times.filter((t) => t.id !== id);
           salvar();
           desenharTimes();
@@ -307,7 +307,7 @@ export function render(el, ctx) {
       h(
         'fieldset',
         { class: 'sr-grupo' },
-        h('legend', {}, 'TDD visível (test antes de feat)'),
+        h('legend', {}, 'TDD no git log (commit test: antes do feat:)'),
         ...TASKS.map((task) =>
           caixa(task, time.tdd[task], (v) => atualizar(id, (t) => ({ ...t, tdd: { ...t.tdd, [task]: v } }))),
         ),
@@ -334,7 +334,7 @@ export function render(el, ctx) {
       h(
         'details',
         { class: 'sr-colar' },
-        h('summary', {}, 'Colar do avaliador'),
+        h('summary', {}, 'Colar a saída do avaliador'),
         h('label', { for: `${idBase}-placar`, class: 'sr-only' }, `Linha PLACAR do time ${time.nome}`),
         campoPlacar,
         h('div', { class: 'row' }, aplicar),
@@ -347,7 +347,7 @@ export function render(el, ctx) {
     listaTimes.replaceChildren(
       ...(estado.times.length
         ? estado.times.map(cardTime)
-        : [h('p', { class: 'muted sr-times__vazio' }, 'Nenhum time ainda. Trios ou pessoas sozinhas: cada um é um time.')]),
+        : [h('p', { class: 'muted sr-times__vazio' }, 'Nenhum time ainda. Trio ou pessoa sozinha, cada um conta como um time. Digite o nome acima.')]),
     );
     for (const t of estado.times) atualizarTotal(t.id);
   }
@@ -378,7 +378,7 @@ export function render(el, ctx) {
   const exportar = h('button', { type: 'button', class: 'btn btn--ghost' }, 'Exportar CSV');
   exportar.addEventListener('click', () => {
     if (!estado.times.length) {
-      ctx.toast('Ainda não há times para exportar.');
+      ctx.toast('Sem times, o CSV sairia vazio. Adicione um time primeiro.');
       return;
     }
     ctx.download(`placar-speedrun-${new Date().toISOString().slice(0, 10)}.csv`, '﻿' + paraCSV(estado.times));
@@ -391,7 +391,7 @@ export function render(el, ctx) {
     desenharTimes();
     desenharRanking();
     desenharRelogio();
-    ctx.toast('Placar zerado.');
+    ctx.toast('Placar e cronômetro zerados.');
   }, 'btn btn--ghost');
 
   // ---------- comandos e regras ----------
@@ -399,7 +399,7 @@ export function render(el, ctx) {
     'section',
     { class: 'sr-secao', 'aria-labelledby': 'sr-comandos' },
     h('h2', { id: 'sr-comandos' }, 'Comandos'),
-    h('p', { class: 'muted' }, 'Passo a passo completo no README do projeto. Quem digita é a turma.'),
+    h('p', { class: 'muted' }, 'Copie na ordem. O passo a passo com explicação está no README do projeto. Quem digita é a turma.'),
     ...COMANDOS.map(({ titulo, codigo }) => {
       const copiar = h('button', { type: 'button', class: 'copiar', 'aria-label': `Copiar: ${titulo}` }, 'copiar');
       copiar.addEventListener('click', () => ctx.copy(codigo));
@@ -422,7 +422,7 @@ export function render(el, ctx) {
       { class: 'callout' },
       'O avaliador oficial confere casos, TDD no git log e rosas pintadas. ',
       'Sensores, integração, cartas e minutos ficam com a facilitadora. ',
-      'Rosa pintada é teste de aceite alterado para passar: como os jardineiros da Rainha pintando rosas brancas de vermelho.',
+      'Rosa pintada é teste de aceite alterado para passar, como os jardineiros da Rainha pintando rosas brancas de vermelho. Custa 30 pontos porque esconde o defeito em vez de corrigir.',
     ),
   );
 

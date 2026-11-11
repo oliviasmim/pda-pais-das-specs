@@ -30,7 +30,7 @@ export const REGRAS = [
   { item: 'Avaliador oficial: cada caso de aceite que passa', pontos: '2 cada' },
   { item: 'Integração sem quebrar teste de outra task', pontos: '15' },
   { item: 'Responder em voz alta uma carta do baralho na clínica', pontos: '5 cada' },
-  { item: 'Rosa pintada (teste de aceite alterado)', pontos: '−30 cada' },
+  { item: 'Rosa pintada (teste de aceite alterado para passar)', pontos: '−30 cada' },
   { item: 'Terminar antes do tempo', pontos: '+1 por minuto restante' },
 ];
 
@@ -102,17 +102,17 @@ export function lerPlacar(texto) {
     .map((l) => l.trim())
     .filter(Boolean);
   const linha = [...linhas].reverse().find((l) => l.startsWith('PLACAR')) ?? linhas.find((l) => l.startsWith('{'));
-  if (!linha) return { ok: false, erro: 'Não achei a linha que começa com PLACAR.' };
+  if (!linha) return { ok: false, erro: 'Não achei a linha que começa com PLACAR. Ela é a última que o avaliador imprime.' };
   const json = linha.replace(/^PLACAR\s*/, '');
   let bruto;
   try {
     bruto = JSON.parse(json);
   } catch {
-    return { ok: false, erro: 'A linha PLACAR está incompleta. Copie a linha inteira.' };
+    return { ok: false, erro: 'A linha PLACAR está incompleta. Copie a linha inteira, até a última chave }.' };
   }
   const casos = bruto?.casos;
   if (!casos || !Number.isInteger(casos.passaram) || !Number.isInteger(casos.total)) {
-    return { ok: false, erro: 'O PLACAR não tem o campo casos (passaram/total).' };
+    return { ok: false, erro: 'Essa linha não tem o campo casos (passaram e total). Copie a última linha que o avaliador imprimiu.' };
   }
   if (casos.passaram < 0 || casos.passaram > casos.total) {
     return { ok: false, erro: 'Os números de casos não batem (passaram maior que o total).' };

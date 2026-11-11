@@ -43,10 +43,10 @@ export function validarCarta(carta = VAZIA) {
     erros.push({ campo: 'falha.mensagem', msg: 'Teste do Gato: "tratar o erro" não é contrato. Qual erro, qual mensagem?' });
   }
 
-  if (!norm(c.nfr.texto)) erros.push({ campo: 'nfr.texto', msg: 'Escreva um requisito não funcional.' });
+  if (!norm(c.nfr.texto)) erros.push({ campo: 'nfr.texto', msg: 'Escreva um requisito não funcional (como o sistema deve se comportar: tempo, carga, concorrência).' });
   else if (!/\d/.test(c.nfr.texto)) {
     const vaga = contemPalavra(c.nfr.texto, VAGAS_NFR);
-    erros.push({ campo: 'nfr.texto', msg: vaga ? `"${vaga}" sem número é desejo. Quanto? Em que percentil?` : 'Requisito sem número é desejo. Coloque uma meta medível.' });
+    erros.push({ campo: 'nfr.texto', msg: vaga ? `"${vaga}" sem número é desejo. Quanto? Em que percentil?` : 'Requisito sem número é desejo: ninguém consegue escrever o teste. Coloque uma meta (ex.: p95 abaixo de 50 ms).' });
   }
   const sensor = norm(c.nfr.sensor);
   if (!sensor) erros.push({ campo: 'nfr.sensor', msg: 'Requisito sem sensor é promessa. Qual teste ou ferramenta mede isso?' });

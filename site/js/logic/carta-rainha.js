@@ -134,19 +134,19 @@ export function termosVagos(texto) {
 
 export function avaliarCarta({ erroId, evidencia = '', regra = '', sensor = '' }) {
   const avisos = [];
-  if (!erroPorId(erroId)) avisos.push({ campo: 'erro', msg: 'Escolha qual erro a IA repetiu.' });
+  if (!erroPorId(erroId)) avisos.push({ campo: 'erro', msg: 'Escolha no passo 1 o erro que a IA repetiu.' });
   if (!evidencia.trim()) {
     avisos.push({ campo: 'evidencia', msg: 'Sem evidência (arquivo:linha ou entrada → resposta), a carta vira opinião.' });
   }
-  if (!regra.trim()) avisos.push({ campo: 'regra', msg: 'Falta a regra do AGENTS.md (o guia).' });
+  if (!regra.trim()) avisos.push({ campo: 'regra', msg: 'Falta a regra que vai para o AGENTS.md (o guia que o agente lê antes).' });
   if (!sensor.trim()) avisos.push({ campo: 'sensor', msg: 'Falta o sensor. Regra sem sensor é promessa.' });
   const vagosRegra = termosVagos(regra);
   if (vagosRegra.length) {
-    avisos.push({ campo: 'regra', msg: `A regra tem termo vago (${vagosRegra.join(', ')}). O agente não sabe o que é "adequado". Diga o arquivo, o status, a mensagem.` });
+    avisos.push({ campo: 'regra', msg: `A regra tem termo vago (${vagosRegra.join(', ')}). O agente não sabe o que é "adequado" para você. Diga o arquivo, o status e a mensagem.` });
   }
   const vagosSensor = termosVagos(sensor);
   if (vagosSensor.length) {
-    avisos.push({ campo: 'sensor', msg: `O sensor tem termo vago (${vagosSensor.join(', ')}). Sensor precisa de um sim ou não objetivo.` });
+    avisos.push({ campo: 'sensor', msg: `O sensor tem termo vago (${vagosSensor.join(', ')}). Sensor precisa responder sim ou não, sem depender de opinião.` });
   }
   if (regra.length > 300) {
     avisos.push({ campo: 'regra', msg: 'Regra longa. O AGENTS.md é lido em toda sessão: cada linha custa contexto. Corte para uma ou duas frases.' });

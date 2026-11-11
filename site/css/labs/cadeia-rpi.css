@@ -1,0 +1,71 @@
+.lab-cadeia-rpi .cr-trilho {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.lab-cadeia-rpi .cr-etapa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--tinta);
+  border-radius: var(--r);
+  background: var(--paper-2);
+  font-size: 0.85rem;
+}
+
+.lab-cadeia-rpi .cr-etapa[data-etapa='plan'] {
+  border-left-color: var(--uva);
+}
+
+.lab-cadeia-rpi .cr-etapa[data-etapa='implement'] {
+  border-left-color: var(--folha);
+}
+
+.lab-cadeia-rpi .cr-resumo {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+}
+
+.lab-cadeia-rpi .cr-lista {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+
+.lab-cadeia-rpi .cr-cartao {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 0.9rem 1rem;
+  box-shadow: var(--shadow);
+}
+
+.lab-cadeia-rpi .cr-cartao.is-respondido {
+  background: var(--paper-2);
+}
+
+.lab-cadeia-rpi .cr-n {
+  font-size: 0.72rem;
+}
+
+.lab-cadeia-rpi .cr-sintoma {
+  margin: 0.2rem 0 0.6rem;
+  font-weight: 600;
+}
+
+.lab-cadeia-rpi .cr-veredito p {
+  margin: 0.5rem 0 0;
+  font-size: 0.86rem;
+}
+
+.lab-cadeia-rpi .cr-alcance {
+  padding: 0.4rem 0.6rem;
+  border-left: 3px solid var(--ouro);
+  background: var(--paper);
+}

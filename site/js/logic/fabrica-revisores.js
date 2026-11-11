@@ -22,7 +22,7 @@ export const ESPECIALIDADES = {
     titulo: 'Cético de testes',
     resumo: 'Teste verde não é prova. Prova é teste que falharia com o bug.',
     description: 'Revisa os testes de um diff. Use antes de aceitar um PR que mexeu em tests/ ou quando a cobertura subiu rápido demais. Procura teste de aceite alterado, teste que só testa mock e caso de falha sem teste.',
-    missao: 'Você desconfia de todo teste verde. Para cada teste novo ou alterado, pergunte que bug ele pegaria. Teste de aceite alterado é sempre bloqueio.',
+    missao: 'Você não aceita teste verde como prova. Para cada teste novo ou alterado, pergunte que bug ele pegaria. Teste de aceite alterado é sempre bloqueio.',
     rubrica: ['rosas', 'tartaruga', 'par', 'contraprova'],
   },
   'guardiao-de-contrato': {
@@ -35,8 +35,8 @@ export const ESPECIALIDADES = {
   'navalha-de-complexidade': {
     titulo: 'Navalha de complexidade',
     resumo: 'O código mais simples que passa nos mesmos testes.',
-    description: 'Procura complexidade acidental: abstrações, dependências e camadas que os testes não exigem. Use em diffs com classes novas, arquivos novos fora de src/routes ou mudança no package.json.',
-    missao: 'Você corta o que não paga o próprio custo. Cada abstração, dependência ou arquivo novo precisa de um teste que quebraria sem ele.',
+    description: 'Procura complexidade que os testes não pedem: abstrações, dependências e camadas novas. Use em diffs com classes novas, arquivos novos fora de src/rotas ou mudança no package.json.',
+    missao: 'Você procura o que dá para apagar sem quebrar nenhum teste. Cada abstração, dependência ou arquivo novo precisa de um teste que quebraria sem ele.',
     rubrica: ['navalha', 'dependencia'],
   },
 };
@@ -97,7 +97,7 @@ export function validar(config) {
     msgs.push({ nivel: 'aviso', campo: 'description', msg: 'A description diz o que o revisor faz, mas não QUANDO usar. Inclua algo como "Use depois que... / antes de abrir o PR".' });
   }
   if (!config.ferramentas || config.ferramentas.length === 0) {
-    msgs.push({ nivel: 'erro', campo: 'ferramentas', msg: 'Sem ferramentas o revisor não consegue nem ler o código.' });
+    msgs.push({ nivel: 'erro', campo: 'ferramentas', msg: 'Sem ferramentas, o revisor não consegue nem abrir o código. Marque pelo menos Read.' });
   }
   const edita = (config.ferramentas || []).filter((f) => f === 'Edit' || f === 'Write');
   if (edita.length) {
@@ -116,7 +116,7 @@ export function validar(config) {
     msgs.push({ nivel: 'erro', campo: 'modelo', msg: `Modelo inválido. Use um destes: ${MODELOS.join(', ')}.` });
   }
   if (!config.rubrica || config.rubrica.length === 0) {
-    msgs.push({ nivel: 'aviso', campo: 'rubrica', msg: 'Revisor sem rubrica escreve opinião, como os jurados do tribunal que anotavam bobagens na lousa.' });
+    msgs.push({ nivel: 'aviso', campo: 'rubrica', msg: 'Sem rubrica, o revisor escreve opinião, como os jurados do tribunal anotando bobagem na lousa. Marque pelo menos um item do passo 5.' });
   }
   return msgs;
 }

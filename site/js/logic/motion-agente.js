@@ -67,10 +67,10 @@ export const motion = {
   id: 'motion-agente',
   fig: 'FIG_AGT',
   titulo: 'Por dentro de um agente',
-  lead: 'Agente nada mais é do que um modelo dentro de um harness. Tire uma peça e veja o que muda no diff.',
-  dica: 'Troque o pedido. Tire um guia. Desligue um sensor. Olhe o livro-razão.',
+  lead: 'Agente nada mais é do que um modelo dentro de um harness, o conjunto de arquivos, ferramentas e testes em volta dele. Tire uma peça e veja o que muda no diff.',
+  dica: 'Troque uma peça por vez: o pedido, o AGENTS.md ou os sensores. Depois de cada troca, conte as linhas sem endereço no livro-razão.',
   ideia:
-    'O modelo só prevê texto. Tudo o que faz o diff sair certo está em volta dele: guias antes de gerar, sensores depois. Linha do diff sem endereço na spec é suposição da IA.',
+    'O modelo só prevê texto. O que faz o diff sair certo está em volta dele: guias que ele lê antes de gerar e sensores que conferem depois. Linha do diff sem endereço no pedido ou na spec é suposição ou invenção da IA.',
   pronto: 'Aperte Rodar. A máquina leva um pedido da agenda de mentorias até o PR, uma estação por vez.',
   razaoIntro: 'Cada linha do diff e de onde ela veio. Esta é a pergunta da carta ♠ Rastro: onde, no pedido ou na spec, está escrito isso?',
   nota:
@@ -175,7 +175,7 @@ export const motion = {
       d: 1.8,
       h: 0.9,
       camadas: ['npm run lint'],
-      oQueE: 'Sensor computacional: determinístico e barato. Confere forma (variável não usada, sintaxe). Não sabe nada de regra de negócio.',
+      oQueE: 'Sensor computacional: determinístico (mesma entrada, mesmo resultado) e barato. Confere forma, como variável não usada e erro de sintaxe. Não sabe nada de regra de negócio.',
       nomeComercial: 'linter, ESLint',
     },
     {
@@ -201,7 +201,7 @@ export const motion = {
       d: 2,
       h: 1.1,
       camadas: ['rastreador-de-spec', 'rubrica'],
-      oQueE: 'Sensor inferencial: um subagent com rubrica que pergunta, linha por linha, onde está na spec. Pega o que o teste não cobre. Pode errar e custa tokens.',
+      oQueE: 'Sensor inferencial: outro Claude, chamado com um prompt de critérios (a rubrica), que pergunta linha por linha onde aquilo está na spec. Pega o que o teste não cobre. Também pode errar, e gasta tokens.',
       nomeComercial: 'agente de review, LLM como juiz',
       arquivo: {
         nome: '.claude/agents/rastreador-de-spec.md',
@@ -288,7 +288,7 @@ export const motion = {
     { id: 'chegou', rotulo: 'Problemas no PR' },
   ],
   licoes: [
-    { titulo: 'O modelo só prevê texto.', texto: 'Com o mesmo modelo, o diff muda de 0 para 6 problemas só trocando o que está em volta. Quando o agente erra, pergunte que peça do harness faltou.' },
+    { titulo: 'O modelo só prevê texto.', texto: 'Com o mesmo modelo, o diff vai de 0 a 6 problemas só trocando o que está em volta. Quando o agente erra, procure a peça do harness que faltou antes de culpar o modelo.' },
     { titulo: 'Guia muda o que nasce. Sensor muda o que chega.', texto: 'Sem guia, o modelo inventa e o sensor reprova, em loop. Sem sensor, o modelo acerta às vezes e ninguém sabe quando.' },
     { titulo: 'Lint verde não diz nada sobre regra.', texto: 'O lint passa em todas as montagens. Regra inventada só cai com a spec (guia) ou com um review que pergunta pela linha da spec (sensor).' },
     { titulo: 'Perguntar é uma saída válida.', texto: 'Com a regra "se faltar, pergunte", a lacuna da spec vira pergunta no PR em vez de virar código. Pergunta é barata. Invenção custa um bug.' },
@@ -596,7 +596,7 @@ export function simular(montagem, avarias = new Set()) {
         titulo: 'Volta ao modelo',
         pacotes: ['modelo'],
         trilhos: [['review', 'modelo']],
-        narracao: `O modelo remove ${removidas === 1 ? 'a linha inventada' : `as ${removidas} linhas inventadas`}. Repare no custo: mais uma volta inteira por uma regra que um guia teria impedido de nascer.`,
+        narracao: `O modelo remove ${removidas === 1 ? 'a linha inventada' : `as ${removidas} linhas inventadas`}. Perceba o custo: mais uma volta inteira por uma regra que um guia teria impedido de nascer.`,
         dentro: { titulo: 'correções', linhas: invs.map((l) => `− ${l.texto}`), tom: 'ok' },
         metricas: metr(),
         razao: invs.map((l) => ({ tipo: 'corrigido', texto: `Review apontou e o modelo removeu: ${l.texto}` })),

@@ -358,8 +358,8 @@ export const ALERTAS = [
     camadas: [1, 3],
     destaque: ['tests/aceite/t1.test.js', 'tests/aceite/CHECKSUMS', 'assert.equal(r.status, 201)'],
     evidencias: {
-      1: 'tests/aceite/t1.test.js e tests/aceite/CHECKSUMS aparecem como modificados. Teste de aceite é protegido: só muda junto com a spec.',
-      3: 'O teste se chama "T1 falha: vaga ocupada responde 409" e agora espera 201. E o agente atualizou o CHECKSUMS para o guarda não reclamar: pintou a rosa e escondeu a tinta.',
+      1: 'tests/aceite/t1.test.js e tests/aceite/CHECKSUMS aparecem como modificados. Teste de aceite só muda junto com a spec, e este PR não mexeu na spec.',
+      3: 'O teste se chama "T1 falha: vaga ocupada responde 409" e agora espera 201. E o agente atualizou o CHECKSUMS para o guarda não reclamar: pintou a rosa e escondeu a lata de tinta.',
     },
     explicacao: 'O agente não conseguiu fazer o 409 passar e trocou a asserção. É o pedido de "passar no teste" levado ao pé da letra. O hook protege-testes.mjs teria bloqueado a edição; o guarda da CI pegaria se o CHECKSUMS não tivesse sido pintado junto.',
   },
@@ -371,7 +371,7 @@ export const ALERTAS = [
     camadas: [1, 2, 4],
     destaque: ['lodash'],
     evidencias: {
-      1: 'package.json mudou e o package-lock.json tem quase 80 linhas alteradas. Lockfile grande é sintoma de dependência nova ou atualização em massa.',
+      1: 'package.json mudou e o package-lock.json tem quase 80 linhas alteradas. Lockfile mexendo tanto assim costuma ser dependência nova ou atualização em massa.',
       2: "import _ from 'lodash' aparece em src/rotas/vagas.js.",
       4: '_.sortBy(livres, "inicio") é o único uso. Array.prototype.sort resolve.',
     },
@@ -385,11 +385,11 @@ export const ALERTAS = [
     camadas: [1, 2, 4],
     destaque: ['AbstractRepositoryAdapter', 'VagaRepositoryAdapter', 'mapearPara'],
     evidencias: {
-      1: 'Dois arquivos novos em src/core com "Abstract" e "Adapter" no nome. Nome de padrão de projeto em diff de feature pequena pede pergunta.',
+      1: 'Dois arquivos novos em src/core com "Abstract" e "Adapter" no nome. Nome de padrão de projeto numa feature pequena pede a pergunta: para que serve?',
       2: 'Classe abstrata com 4 métodos que lançam "não implementado" e 2 mappers que copiam o objeto.',
       4: 'Os mappers fazem { ...registro }. O adapter só repassa chamadas para src/repo.js.',
     },
-    explicacao: 'Complexidade acidental. Nenhum teste de aceite exige a camada. A carta 🎩 Navalha remove dois arquivos.',
+    explicacao: 'Complexidade que ninguém pediu: nenhum teste de aceite precisa dessa camada. Com a carta 🎩 Navalha, dois arquivos saem e todos os testes continuam passando.',
   },
   {
     id: 'regra',
@@ -402,7 +402,7 @@ export const ALERTAS = [
       2: 'Constante ANTECEDENCIA_MINIMA_HORAS = 2 e um status 422 que não existem na spec.',
       4: 'faltamHoras(vaga.inicio) < 2 devolve 422. A spec não fala de antecedência.',
     },
-    explicacao: 'Plausível e inventada. A spec lista o que está fora do escopo; antecedência nem aparece. Carta ♠ Rastro: onde está escrito isso?',
+    explicacao: 'Parece regra de verdade, mas foi inventada. A spec não fala de antecedência em lugar nenhum, e a seção "Fora do escopo" pede para perguntar antes de criar regra. Carta ♠ Rastro: onde está escrito isso?',
   },
   {
     id: 'falta409',
@@ -412,11 +412,11 @@ export const ALERTAS = [
     camadas: [2, 3, 4],
     destaque: ['await vagas.atualizar(vaga.id, { livre: false });'],
     evidencias: {
-      2: 'Os status do diff são 400, 404, 422, 201, 500 e 200. A tabela da spec tem 409 para vaga ocupada. Ausência também é evidência.',
+      2: 'Os status do diff são 400, 404, 422, 201, 500 e 200. A tabela da spec tem 409 para vaga ocupada. O que falta também conta como evidência.',
       3: 'Nenhum teste do diff espera 409. O único que esperava foi alterado.',
       4: 'Depois de achar a vaga, o código nunca olha vaga.livre. Duas pessoas agendam a mesma vaga.',
     },
-    explicacao: 'O erro de verdade que as rosas pintadas escondiam. E o NFR-1 (concorrência) nem chegou a ser considerado.',
+    explicacao: 'É o bug que as rosas pintadas escondiam. E o NFR-1 (duas pessoas pedindo a mesma vaga ao mesmo tempo) nem foi considerado.',
   },
   {
     id: 'generico',
@@ -429,7 +429,7 @@ export const ALERTAS = [
       2: 'res.status(500) com "Não foi possível agendar" no contrato da rota.',
       4: 'O try/catch envolve tudo. Qualquer exceção do repo vira 500 sem log e sem causa.',
     },
-    explicacao: 'Esconde a causa. Para quem chama a API, "Não foi possível agendar" não diz o que corrigir. Para quem opera, não deixa rastro.',
+    explicacao: 'Quem chama a API recebe "Não foi possível agendar" e não sabe o que corrigir. Quem opera o sistema não tem log para descobrir a causa. A spec pede status e mensagem exatos para cada erro.',
   },
   {
     id: 'tartaruga',
@@ -441,7 +441,7 @@ export const ALERTAS = [
     evidencias: {
       3: 'tests/unit/vaga-adapter.test.js cria uma fonteFalsa, pede ao adapter para repassar e confere que voltou o que a própria fonteFalsa devolveu. O teste passaria com qualquer regra de negócio quebrada.',
     },
-    explicacao: 'Três testes, zero comportamento verificado. Aumenta a cobertura e não protege nada. Carta ♣ Contraprova: que bug este teste pegaria?',
+    explicacao: 'Três testes e nenhum comportamento verificado. A cobertura sobe e nenhuma regra fica protegida. Carta ♣ Contraprova: que bug este teste pegaria?',
   },
 ];
 

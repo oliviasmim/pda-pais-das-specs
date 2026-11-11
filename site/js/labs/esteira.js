@@ -126,7 +126,7 @@ export function mount(el, ctx) {
       h('pre', { class: 'es-diff' }, pr.trecho.map((l) => h('span', { class: l.startsWith('+') ? 'es-add' : l.startsWith('-') ? 'es-del' : '' }, l))),
     ];
     if (!revelar) {
-      partes.push(h('p', { class: 'muted' }, 'Rode a fila para ver o que a esteira acha deste PR. Antes: o que você acha que está errado aqui?'));
+      partes.push(h('p', { class: 'muted' }, 'Antes de rodar: o que você acha que está errado neste diff? Depois rode a fila e confira.'));
       return partes;
     }
     partes.push(h('p', {}, h('strong', {}, pr.defeito ? 'Defeito plantado: ' : 'Sem defeito: '), pr.defeito || 'este PR é o controle. Esteira boa deixa passar.'));
@@ -172,7 +172,7 @@ export function mount(el, ctx) {
             { class: 'callout es-callout es-callout--copas' },
             h('strong', {}, 'Escaparam por sensor desligado: '),
             r.escaparamPorSensorDesligado.map((p) => `#${p.numero}`).join(', '),
-            '. Ligue o sensor certo e rode de novo.',
+            '. Abra o PR, leia o defeito e ligue o sensor que pega esse tipo de erro.',
           )
         : null,
       r.precisamDeReview.length
@@ -181,7 +181,7 @@ export function mount(el, ctx) {
             { class: 'callout es-callout es-callout--uva' },
             h('strong', {}, 'Nenhuma esteira pega tudo. '),
             r.precisamDeReview.map((p) => `#${p.numero} (${p.titulo})`).join(' e '),
-            ' passam em qualquer combinação de sensores. Isso é trabalho de review humano e de subagent de review: é a lição 7.',
+            ' passam com qualquer combinação de sensores: o código roda e os testes passam, o erro é ele não ser o que a spec pediu. Quem pega é review humano ou subagent de review (lição 7).',
           )
         : null,
     ];
@@ -197,8 +197,8 @@ export function mount(el, ctx) {
     const m3 = Object.values(checks).filter(Boolean).length === PERGUNTAS_YAML.length;
     metas.replaceChildren(
       meta(m1, 'Nenhum defeito evitável chega na main.'),
-      meta(m2, `Com isso, gaste no máximo ${formatarTempo(ideal)} de CI na fila (dica: fail fast).`),
-      meta(m3, 'Revise o YAML com as 5 perguntas.'),
+      meta(m2, `E gaste no máximo ${formatarTempo(ideal)} de CI na fila (dica: o sensor mais rápido roda primeiro).`),
+      meta(m3, 'Marque as 5 perguntas depois de conferir cada uma no YAML.'),
     );
   }
 
@@ -264,7 +264,7 @@ export function mount(el, ctx) {
     const off = ordem.filter((id) => !ligados.has(id));
     ordem = [...on, ...off];
     mudou();
-    ctx.toast('Ordem: mais barato primeiro.');
+    ctx.toast('Reordenado: o sensor mais rápido roda primeiro.');
   });
   btnPadrao.addEventListener('click', () => {
     ordem = SENSORES.map((s) => s.id);
@@ -278,7 +278,7 @@ export function mount(el, ctx) {
       { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
       h('h3', {}, 'A esteira da Rainha'),
-      h('p', {}, 'Ligue, desligue e ordene os sensores. Dez PRs gerados por agente passam pela esteira. Quais defeitos chegam na main?'),
+      h('p', {}, 'Dez PRs gerados por agente vão passar pela esteira. Escolha quais sensores rodam e em que ordem, rode a fila e veja o que chega na main.'),
     ),
     h(
       'div',
@@ -322,7 +322,7 @@ export function mount(el, ctx) {
           'div',
           { class: 'es-yaml-grid' },
           yamlPre,
-          h('div', {}, h('p', { class: 'es-yaml-nota' }, h('strong', {}, 'Revise o YAML que a IA te der com estas 5 perguntas.'), ' Um gate configurado errado é pior que nenhum: dá a sensação de segurança.'), perguntas),
+          h('div', {}, h('p', { class: 'es-yaml-nota' }, h('strong', {}, 'Revise o YAML que a IA te der com estas 5 perguntas.'), ' Gate configurado errado é pior que nenhum: o check fica verde e todo mundo para de olhar.'), perguntas),
         ),
       ),
     ),

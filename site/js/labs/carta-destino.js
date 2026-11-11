@@ -111,7 +111,7 @@ export function mount(el, ctx) {
     sincronizar();
     salvar();
     if (tentou) render();
-    ctx.toast('Exemplo da T2 carregado. Agora escreva a sua.');
+    ctx.toast('Exemplo da T2 (cancelar) carregado. Leia, clique em Limpar e escreva a sua.');
   }
 
   function limpar() {
@@ -150,7 +150,7 @@ export function mount(el, ctx) {
       );
     } else {
       resultado.append(
-        h('p', { class: 'cd-reprovada' }, h('span', { class: 'chip chip--bad' }, `${v.erros.length} ${v.erros.length === 1 ? 'problema' : 'problemas'}`), ' O Gato ainda não sabe para onde você quer ir. Veja os avisos em cada campo.'),
+        h('p', { class: 'cd-reprovada' }, h('span', { class: 'chip chip--bad' }, `${v.erros.length} ${v.erros.length === 1 ? 'problema' : 'problemas'}`), ' O Gato ainda não sabe para onde você quer ir. O aviso embaixo de cada campo diz o que falta para virar teste.'),
       );
       if (focar) {
         const primeiro = v.erros.find((e) => inputs[e.campo]);

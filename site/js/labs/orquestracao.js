@@ -149,7 +149,7 @@ export function mount(el, ctx) {
 
   function desenharEscolha() {
     pergunta.replaceChildren(
-      palpite ? h('span', {}, 'Clique nos outros padrões para comparar.') : h('strong', {}, 'Antes de rodar: qual padrão você escolhe para este cenário? Diga em voz alta por quê.'),
+      palpite ? h('span', {}, 'Agora rode os outros padrões e veja onde cada um perde tempo.') : h('strong', {}, 'Antes de rodar: qual padrão você escolhe para este cenário? Diga em voz alta por quê.'),
     );
     escolha.replaceChildren(
       ...PADROES.map((p) =>
@@ -171,7 +171,7 @@ export function mount(el, ctx) {
   }
 
   function limparResultado() {
-    gantt.replaceChildren(h('p', { class: 'muted or-vazio' }, 'A linha do tempo aparece aqui.'));
+    gantt.replaceChildren(h('p', { class: 'muted or-vazio' }, 'Escolha um padrão acima para ver a linha do tempo.'));
     metricas.replaceChildren();
     notas.replaceChildren();
     vered.replaceChildren();
@@ -320,7 +320,7 @@ export function mount(el, ctx) {
           ),
         ),
       ),
-      h('p', { class: 'muted or-nota-pontos' }, 'Critério do "melhor": tempo + tokens (10k ≈ 1 min) + minutos de conflito + penalidade por dumb zone. Mude o critério e a resposta pode mudar. Isso também é julgamento.'),
+      h('p', { class: 'muted or-nota-pontos' }, 'Critério do "melhor": tempo + tokens (10k ≈ 1 min) + minutos de conflito + penalidade por dumb zone. Se o seu time paga mais caro por token do que por minuto, o vencedor pode mudar.'),
     );
   });
 
@@ -337,8 +337,8 @@ export function mount(el, ctx) {
       'header',
       { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
-      h('h3', {}, 'O jogo de cartas da Rainha'),
-      h('p', {}, 'Escolha um cenário, aposte num padrão e veja a linha do tempo: tempo, tokens, coordenação e conflitos.'),
+      h('h3', {}, 'Qual padrão você joga?'),
+      h('p', {}, 'Escolha um cenário, aposte num padrão antes de rodar e compare a linha do tempo: minutos, tokens, coordenação e conflitos.'),
     ),
     h(
       'div',

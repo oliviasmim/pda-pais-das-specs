@@ -2,8 +2,8 @@
 // A interface está em site/js/motion.js. Cada máquina define estações, montagem, avarias e simular().
 
 export const U = 24;
-const EIXO_X = [0.94, 0.3];
-const EIXO_Y = [-0.6, 0.45];
+const EIXO_X = [0.95, 0.21];
+const EIXO_Y = [-0.62, 0.42];
 const EIXO_Z = 0.95;
 
 export const ESPESSURA_CAMADA = 0.32;

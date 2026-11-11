@@ -1,0 +1,124 @@
+.lab-eixos-isolamento .ei-mapa {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 0.6rem 0.6rem 0.3rem;
+}
+
+.lab-eixos-isolamento .ei-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 18rem;
+  font-family: var(--font-body);
+}
+
+.lab-eixos-isolamento .ei-q rect {
+  fill: var(--paper);
+  stroke: var(--line);
+  stroke-width: 2;
+  transition: fill 0.25s, stroke 0.25s;
+}
+
+.lab-eixos-isolamento .ei-q--certa rect {
+  fill: var(--folha-soft);
+  stroke: var(--folha);
+  stroke-width: 3;
+}
+
+.lab-eixos-isolamento .ei-q--errada rect {
+  fill: var(--copas-soft);
+  stroke: var(--copas);
+  stroke-width: 3;
+}
+
+.lab-eixos-isolamento .ei-q__nome {
+  fill: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.lab-eixos-isolamento .ei-q__dica {
+  fill: var(--ink-2);
+  font-size: 12px;
+}
+
+.lab-eixos-isolamento .ei-eixo {
+  fill: var(--ink-3);
+  font-size: 12px;
+}
+
+.lab-eixos-isolamento .ei-eixo--tit {
+  fill: var(--ink-2);
+}
+
+.lab-eixos-isolamento .ei-mapa__legenda {
+  margin: 0.2rem 0 0.2rem 0.3rem;
+  font-size: 0.82rem;
+}
+
+.lab-eixos-isolamento .ei-topo {
+  justify-content: space-between;
+  margin: 0.9rem 0;
+}
+
+.lab-eixos-isolamento .ei-placar {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.lab-eixos-isolamento .ei-lista {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+
+.lab-eixos-isolamento .ei-carta {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 0.9rem 1rem 1rem;
+  box-shadow: var(--shadow);
+}
+
+.lab-eixos-isolamento .ei-texto {
+  margin: 0 0 0.7rem;
+  font-size: 0.92rem;
+}
+
+.lab-eixos-isolamento .ei-n {
+  color: var(--ink-3);
+}
+
+.lab-eixos-isolamento .ei-escolha {
+  border: 0;
+  padding: 0;
+  margin: 0 0 0.7rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.lab-eixos-isolamento .ei-op {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.88rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: var(--r-sm);
+}
+
+.lab-eixos-isolamento .ei-op:focus-within {
+  box-shadow: var(--focus);
+}
+
+.lab-eixos-isolamento .ei-resposta p {
+  margin: 0.5rem 0;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-eixos-isolamento .ei-q rect {
+    transition: none;
+  }
+}

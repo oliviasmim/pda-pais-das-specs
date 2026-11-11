@@ -22,6 +22,8 @@ O modelo é o motor. O harness é o resto do carro: volante, freio, painel, cint
 
 Quando o agente erra, a pergunta útil quase nunca é "qual modelo é melhor?". É: **que peça do harness faltou?**
 
+O LLM também **sorteia** o próximo token. A temperatura controla quanto esse sorteio se abre: com 0, sai sempre o mais provável; mais alto, o mesmo prompt dá textos diferentes. Por isso você testa o comportamento (status, corpo, regra) e não a frase.
+
 ### Guias e sensores
 
 Todo componente do harness faz uma de duas coisas:
@@ -30,21 +32,48 @@ Todo componente do harness faz uma de duas coisas:
 |---|---|---|
 | Quando age | **Antes** de o agente gerar | **Depois** que o agente gerou |
 | O que faz | Aumenta a chance de acertar de primeira | Detecta o erro e devolve um sinal |
-| Exemplos | AGENTS.md, skill, spec com EARS, ADR, exemplo de código | Lint, type check, build, testes, `npm audit`, CI, agente de review, hook que bloqueia |
+| Exemplos | AGENTS.md, skill, spec com EARS, ADR (registro de uma decisão de arquitetura), exemplo de código | Lint, type check, build, testes, `npm audit`, CI, agente de review, hook que bloqueia |
 | Na história | Alice lê o rótulo do frasco | A Rainha grita "Cortem-lhe a cabeça!" |
 | Sozinho vira | Esperança: ninguém confere se foi seguido | Retrabalho: o agente erra e o sensor reprova, sem fim |
 
-Sensores ainda se dividem em dois tipos. **Computacionais** são determinísticos e baratos: lint, tipos, testes. Rodam sempre e dão sempre a mesma resposta. **Inferenciais** usam um modelo para julgar: agente de review, LLM como juiz. Pegam o que o lint não vê, mas podem errar e custam tokens. Use os computacionais em tudo e os inferenciais onde eles não alcançam.
+Sensores ainda se dividem em dois tipos. **Computacionais** são determinísticos e baratos: lint, tipos, testes. Rodam sempre e dão sempre a mesma resposta. **Inferenciais** usam um modelo para julgar: agente de review, LLM como juiz (um modelo dando nota para a saída de outro). Pegam o que o lint não vê, mas podem errar e custam tokens. Use os computacionais em tudo e os inferenciais onde eles não alcançam.
 
 O teste escrito **antes** da implementação é especial: é guia e sensor ao mesmo tempo. Antes, diz ao agente o que precisa passar. Depois, mede se passou. Por isso o TDD (escrever o teste antes do código) combina tão bem com IA.
 
-**A regra que fecha o loop:** se a IA repetiu um erro, você precisa de **um guia novo** (uma regra no AGENTS.md, para ela errar menos) **e de um sensor novo** (um teste ou uma checagem no review, para pegar quando errar mesmo assim). Pedir de novo no chat não é nenhum dos dois.
+**A regra que fecha o loop:** se a IA repetiu um erro, você precisa de **um guia novo** (uma regra no AGENTS.md, para ela errar menos) **e de um sensor novo** (um teste ou uma checagem no review, para pegar quando errar mesmo assim). Pedir de novo no chat não é nenhum dos dois: a mensagem some quando a sessão fecha, e é por isso que a cena 1 se repete.
+
+Antes de gravar a regra, faça a pergunta: **se essa linha sumir, o agente volta a errar do mesmo jeito?** Se a resposta for "não", a regra é ruído, e cada linha do AGENTS.md custa tokens em toda sessão.
+
+### Onde cada guia mora
+
+Os guias mudam em duas coisas: quando entram na janela e quanto custam em tokens.
+
+| Peça | Entra na janela | Custo | Serve para | Na agenda de mentorias |
+|---|---|---|---|---|
+| AGENTS.md | Em **toda** sessão | Fixo: cada linha conta sempre | Regras curtas que valem para o projeto inteiro | "Não edite arquivos em `tests/`." |
+| Skill | Só a `description` fica sempre. O corpo entra quando a skill dispara | Pequeno até disparar | Procedimento que se repete | Como criar um endpoint no padrão do `GET /mentores` |
+| MCP / tool | O agente chama quando precisa | Descrição da tool sempre; resultado só na chamada | Capacidade nova: ler docs, consultar sistema | Buscar a doc atual do Express |
+| Hook | O harness executa, sem o modelo decidir | Nenhum na janela | Garantia que não pode depender do modelo | Bloquear a edição de `tests/` |
+
+O Claude Code lê `CLAUDE.md`, não `AGENTS.md`. Quando o projeto usa `AGENTS.md`, o `CLAUDE.md` importa com uma linha: `@AGENTS.md`. Este repositório faz isso.
+
+### Skill em três níveis
+
+A skill funciona por **progressive disclosure** (revelação progressiva): o agente só lê o que precisa, na hora em que precisa.
+
+| Nível | O que entra na janela | Quando |
+|---|---|---|
+| 1 · `description` | Nome e descrição de cada skill | Sempre, em toda sessão |
+| 2 · `SKILL.md` | O passo a passo | Quando o pedido combina com a description |
+| 3 · arquivos de apoio | Scripts e referências | Só se o passo a passo mandar ler |
+
+Por isso a `description` decide tudo. Vaga, a skill nunca dispara. Larga demais, ela entra em pedido que não é dela. A fórmula é: **o que faz + quando usar + quando não usar**. A documentação recomenda manter o `SKILL.md` abaixo de 500 linhas e mover o resto para arquivos de apoio.
 
 <div data-cartas="carta-rainha"></div>
 
 ### Grande demais para a porta: contexto
 
-Alice bebe e encolhe, come e cresce, e nunca está do tamanho certo para a porta. A janela de contexto (o que o agente consegue ter à vista de uma vez) é assim. Tudo o que o agente lê, roda e responde fica lá dentro. Até uns 40% da janela, o agente está na **smart zone**. Depois disso, entra na **dumb zone**: esquece instruções do começo, repete erros, mistura tarefas. É o *context rot* da S2.
+Alice bebe e encolhe, come e cresce, e nunca está do tamanho certo para a porta. A janela de contexto (o que o agente consegue ter à vista de uma vez) é assim. Tudo o que o agente lê, roda e responde fica lá dentro. Até uns 40% da janela, o agente está na **smart zone**. (Esse 40% é uma observação prática da turma, não um limite publicado: a degradação é gradual e varia com o modelo.) Depois disso, entra na **dumb zone**: esquece instruções do começo, repete erros, mistura tarefas. É o *context rot* que você viu na S2: a janela cheia de histórico que não serve mais, puxando a qualidade para baixo.
 
 Subagents (agentes auxiliares que trabalham à parte) resolvem um problema específico: **isolamento de contexto**.
 
@@ -59,38 +88,64 @@ No Claude Code, um subagent é um arquivo Markdown em `.claude/agents/` com `nam
 
 Subagents, paralelismo, supervisor, *swarm* (o nome da moda para um arranjo de muitos agentes): tudo isso tem custo de coordenação. Use só quando ele se paga.
 
+O custo aparece em tokens. No sistema de pesquisa da Anthropic, agentes usaram cerca de 4 vezes mais tokens que um chat, e sistemas com vários agentes, cerca de 15 vezes. A própria Anthropic diz que isso só se paga em tarefas de muito valor.
+
 | Use | Quando | Não use quando |
 |---|---|---|
 | Agente único | A tarefa cabe numa sessão e tem partes dependentes | (é o padrão; precisa de motivo para sair dele) |
 | Subagent | A leitura é grande e a resposta é curta (pesquisa, review de diff grande) | A tarefa precisa de tudo o que você já entendeu |
-| Paralelo com worktrees | Tarefas independentes, em arquivos diferentes, com prazo | Uma tarefa depende do resultado da outra |
-| Supervisor | Muitas partes parecidas e um sensor objetivo para cada | Não existe como conferir o trabalho de cada parte |
+| Paralelo com worktrees (uma cópia do repositório por agente) | Tarefas independentes, em arquivos diferentes, com prazo | Uma tarefa depende do resultado da outra |
+| Supervisor (um agente que divide, distribui e confere o trabalho dos outros) | Muitas partes parecidas e um sensor objetivo para cada | Não existe como conferir o trabalho de cada parte |
 
-Recusar um padrão avançado sem necessidade não é falta de conhecimento. É julgamento. Ninguém no mercado sabe tudo, e "todo mundo está usando" não é argumento técnico. A pergunta é sempre: **que problema isso resolve aqui, e quanto custa?**
+Lembra da cena 3? Dizer "não" para cinco agentes num CRUD de uma tabela é uma decisão técnica, e você consegue defendê-la em review ou em entrevista. "Todo mundo está usando" não responde nada. A pergunta que responde é: **que problema isso resolve aqui, e quanto custa?**
 
 <div data-quiz="check"></div>
 
 ## Pratique
 
-### 1. Monte o harness
+### 1. O mesmo prompt, cinco vezes
 
-Classifique cada peça. Perceba quais parecem óbvias e não são.
+Suba a temperatura e rode de novo. Anote o que muda e o que você testaria no lugar da frase.
+
+<div data-lab="temperatura"></div>
+
+### 2. O ciclo do harness
+
+Avance passo a passo pela T1. Depois desligue os guias, os sensores ou os dois e veja onde o ciclo quebra.
+
+<div data-lab="ciclo-harness"></div>
+
+### 3. Monte o harness
+
+Classifique as 14 peças. Para cada uma, pergunte: ela age antes de o agente gerar ou olha o que ele já fez? Duas delas costumam enganar.
 
 <div data-lab="guias-sensores"></div>
 
-### 2. A porta e a chave
+### 4. Faxina de contexto
+
+A janela começa com tudo dentro, em 63%. Tire o que não serve à T1 até ficar abaixo de 40%. Se tirar demais, o agente inventa o que faltou.
+
+<div data-lab="faxina-contexto"></div>
+
+### 5. A porta e a chave
 
 O agente vai implementar a T1 do speedrun (`POST /agendamentos`). Primeiro, rode tudo no principal. Depois, recomece e delegue as investigações pesadas. Compare onde cada versão termina.
 
 <div data-lab="contexto"></div>
 
-### 3. Precisa mesmo?
+### 6. Dispara ou não dispara?
+
+São quatro versões da description da mesma skill, testadas contra dez pedidos. Ache a versão que acerta os dez e diga o que ela tem que as outras não têm.
+
+<div data-lab="disparo-skill"></div>
+
+### 7. Precisa mesmo?
 
 Em dupla. Para cada cenário, escolham o arranjo **antes** de revelar e escrevam o critério em uma frase. Se discordarem da recomendação, defendam: a recomendação também pode estar errada para o seu contexto.
 
 <div data-lab="precisa-mesmo"></div>
 
-### 4. Carta de Destino
+### 8. Carta de Destino
 
 Fechamento da Aula 1. Escreva o destino da feature que você vai usar no speedrun (ou da próxima feature do seu projeto). O Gato só aprova o que dá para virar teste.
 
@@ -160,7 +215,8 @@ Adicione uma regra aqui (guia) E um teste ou checagem de review (sensor).
 1. **Meça a sua janela.** Numa sessão real do seu projeto, use `/context` no Claude Code a cada 15 minutos. Em que momento você passa de 40%? O que encheu a janela?
 2. **Mesma review, dois contextos.** Peça uma revisão do mesmo diff duas vezes: uma na sessão principal (que escreveu o código) e outra num subagent de review com contexto limpo. Compare os achados. Qual foi mais crítico? Por quê?
 3. **Guia sem sensor.** Liste todas as regras do seu AGENTS.md. Para cada uma, qual sensor confere se ela foi seguida? As que não têm sensor são esperança. Escolha uma e crie o sensor.
-4. **Defenda o não.** Escreva um parágrafo para um colega que quer usar um swarm no projeto final: qual problema o swarm resolveria, quanto custaria e o que você faria no lugar.
+4. **Regra ou ruído.** Escolha um erro real do seu projeto e escreva uma regra de uma frase. Rode a mesma tarefa duas vezes, sem a regra e com ela. Se o resultado não mudou, apague a regra.
+5. **Defenda o não.** Escreva um parágrafo para um colega que quer usar um swarm no projeto final: qual problema o swarm resolveria, quanto custaria e o que você faria no lugar.
 
 </details>
 
@@ -173,6 +229,8 @@ Adicione uma regra aqui (guia) E um teste ou checagem de review (sensor).
 | Sensor (feedback) | "Teste." | Componente que age depois da geração e devolve um sinal: passou ou não, e por quê. |
 | Sensor computacional | "Ferramenta." | Sensor determinístico: lint, tipos, testes, build. |
 | Sensor inferencial | "Outra IA olhando." | Sensor que usa um modelo para julgar, como um agente de review com rubrica. |
+| Temperatura | "O quanto a IA é criativa." | Parâmetro que abre ou fecha o sorteio do próximo token. Com 0, sai o mais provável. Mais alto, o mesmo prompt dá saídas diferentes. |
+| Progressive disclosure | "Carregar tudo de uma vez." | Carregar só o que a tarefa pede: a description sempre, o passo a passo quando a skill dispara, os arquivos de apoio sob demanda. |
 | Context rot | "A IA ficou burra." | Perda de qualidade quando a janela enche de histórico irrelevante. |
 | Subagent | "Mais um agente." | Agente com janela própria que recebe só o pedido e devolve só o resumo. Resolve isolamento de contexto. |
 | Swarm | "O jeito avançado." | Nome da moda para arranjos de vários agentes. Útil em poucos casos. Em todos eles, tem custo de coordenação. |
@@ -183,3 +241,16 @@ Adicione uma regra aqui (guia) E um teste ou checagem de review (sensor).
 - [Harness: o que é, como funciona e por que virou a palavra de 2026](https://www.alura.com.br/artigos/o-que-e-harness), artigo da Alura (pré-requisito da S10).
 - [Subagents no Claude Code](https://code.claude.com/docs/en/sub-agents), documentação oficial: formato do arquivo, campos e quando o principal delega.
 - [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents), da Anthropic: por que começar pela solução mais simples e só adicionar agentes quando ela não basta.
+- [Skills no Claude Code](https://code.claude.com/docs/en/skills), documentação oficial: formato do `SKILL.md`, campos do frontmatter e o limite de 500 linhas.
+- [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills), da Anthropic: a origem do progressive disclosure.
+- [Boas práticas para escrever skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices): como escrever a `description` e validar com cenários que disparam e que não disparam.
+- [Como o Claude Code lembra do seu projeto](https://code.claude.com/docs/en/memory): `CLAUDE.md`, hierarquia de memória e o import de `AGENTS.md`.
+- [Boas práticas do Claude Code](https://code.claude.com/docs/en/best-practices): o que entra e o que fica de fora do `CLAUDE.md`.
+- [AGENTS.md](https://agents.md/): o formato aberto, um README para agentes.
+- [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents), da Anthropic: curar os tokens que entram na janela.
+- [Context Rot](https://www.trychroma.com/research/context-rot), relatório da Chroma: 18 modelos de ponta pioram conforme a entrada cresce.
+- [Lost in the Middle](https://arxiv.org/abs/2307.03172) (Liu et al.): o modelo usa pior o que está no meio de um contexto longo.
+- [Smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone), AI Coding Dictionary: a origem do nome smart zone e dumb zone.
+- [Explore the context window](https://code.claude.com/docs/en/context-window), documentação do Claude Code: o que enche a janela, do prompt de sistema ao `/compact`.
+- [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system), da Anthropic: o custo em tokens de vários agentes.
+- [Tiktokenizer](https://tiktokenizer.vercel.app): cole um texto e veja os tokens. Compare português e inglês, prosa e código.

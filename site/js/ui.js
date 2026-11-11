@@ -62,7 +62,7 @@ export function download(nome, texto, tipo = 'text/plain') {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  toast(`Baixando ${nome}`);
+  toast(`Baixando ${nome}.`);
 }
 
 export function slug(texto) {

@@ -10,15 +10,15 @@ A IA entrega em dois minutos. Carrega todas as vagas, filtra as livres, ordena e
 
 Segunda-feira, 9h, a agenda abre. Cento e cinquenta jovens tentam agendar no primeiro minuto. A listagem fica lenta, duas pessoas conseguem a mesma vaga, e um mentor recebe dois jovens no mesmo horário. Faltou escrever **quão bem o sistema precisava funcionar.**
 
-A IA erra, quase sempre, no que você **não** escreveu. E o que a gente menos escreve é o requisito não funcional. Sem ele, o agente escolhe o padrão mais simples: tudo em memória, nenhuma concorrência, nenhuma meta de tempo.
+A IA erra, quase sempre, no que você **não** escreveu. E o que a gente menos escreve é o requisito não funcional. Sem ele, o agente escolhe em silêncio o padrão mais simples: tudo em memória, nenhum cuidado com dois pedidos ao mesmo tempo, nenhuma meta de tempo. Perceba que nada disso aparece no diff como erro. Aparece segunda, 9h.
 
-> No Encontro 1 da OIP, a orientação mais mal lida pela turma era justamente um requisito de escala. Metade leu como "privacidade" ou "só teste". Ninguém tinha dado nome a isso ainda. Hoje a gente dá.
+> No Encontro 1 da OIP, a orientação mais mal lida pela turma era justamente um requisito de escala. Metade leu como "privacidade" ou "só teste". Faltava um nome para isso. Hoje ele chega: requisito não funcional.
 
 ## O conceito
 
 ### Funcional e não funcional
 
-Requisito não funcional nada mais é do que a descrição de quão bem o sistema faz o que ele faz.
+Requisito não funcional (NFR, do inglês *nonfunctional requirement*) nada mais é do que a descrição de quão bem o sistema faz o que ele faz. O "o que faz" é o requisito funcional.
 
 | | Funcional | Não funcional |
 |---|---|---|
@@ -31,23 +31,23 @@ Requisito não funcional nada mais é do que a descrição de quão bem o sistem
 
 O capítulo 2 da 2ª edição do livro de Martin Kleppmann e Chris Riccomini (*Defining Nonfunctional Requirements*) é sobre isto: como transformar "rápido", "confiável" e "escalável" em algo que dá para medir. As ideias abaixo são uma paráfrase, adaptada para a agenda de mentorias.
 
-**1. Tempo de resposta é uma distribuição, não um número.** Se você roda a mesma requisição mil vezes, recebe mil tempos diferentes. A média esconde quem esperou muito. Por isso se usa percentil: o **p50** (mediana) diz o tempo da requisição típica; o **p95** e o **p99** dizem quanto esperam as pessoas na cauda. O livro lembra que, muitas vezes, quem cai na cauda é justamente quem mais usa o sistema.
+**1. Tempo de resposta é uma distribuição.** Rode a mesma requisição mil vezes e você recebe mil tempos diferentes. A média junta tudo num número só e esconde quem esperou muito. Por isso se usa percentil: o **p50** (mediana) diz o tempo da requisição típica; o **p95** e o **p99** dizem quanto esperam as pessoas na cauda. O livro lembra que, muitas vezes, quem cai na cauda é justamente quem mais usa o sistema.
 
-**2. A latência de cauda se amplifica.** Quando uma requisição chama vários serviços e só responde depois que todos terminam, ela espera o mais lento. Com uma chamada, 1% das requisições sente o p99 do backend. Com cinco chamadas, quase 5%. Com cem, a maioria. O laboratório abaixo mostra isso ao vivo.
+**2. A latência de cauda se amplifica.** Latência de cauda são as requisições mais lentas, as que ficam no rabo da distribuição. Quando uma requisição chama vários serviços e só responde depois que todos terminam (o nome disso é *fan-out*), ela espera o mais lento. Com uma chamada, 1% das requisições sente o p99 do backend. Com cinco chamadas, quase 5%. Com cem, a maioria. O laboratório 1 mostra essa conta ao vivo.
 
 **3. "Escalável" só vale com a carga descrita.** Primeiro se descreve a carga: 300 jovens, 40 mentores, cerca de 25 vagas por mentor por mês, pico de 150 tentativas no primeiro minuto de segunda. Depois se pergunta: **se essa carga dobrar, o que a gente faz?**
 
-**4. Calcular na leitura ou na escrita é uma decisão, não um detalhe.** O livro usa a linha do tempo de uma rede social como estudo de caso: montar a timeline toda vez que alguém abre o app, ou deixá-la pronta a cada nova postagem. Na agenda é a mesma escolha: contar as vagas livres a cada `GET`, ou manter a lista atualizada a cada agendamento. Leitura barata custa escrita cara, e o contrário. Essa decisão vai num ADR (registro de decisão de arquitetura). **A IA não pode tomá-la sozinha.**
+**4. Calcular na leitura ou na escrita é decisão de arquitetura.** O livro usa a linha do tempo de uma rede social como estudo de caso: montar a timeline toda vez que alguém abre o app, ou deixá-la pronta a cada nova postagem. Na agenda é a mesma escolha: contar as vagas livres a cada `GET`, ou manter a lista atualizada a cada agendamento. Leitura barata custa escrita cara, e o contrário. Essa decisão vai num ADR (registro de decisão de arquitetura), escrito pela equipe. Se a spec não fala nada, o agente escolhe um dos lados sem avisar.
 
 **5. Falha e pane são coisas diferentes.** Uma parte do sistema falhar (*fault*) é normal. O sistema inteiro parar de atender (*failure*) é o que se quer evitar. Tolerância a falhas é seguir funcionando quando uma parte cai. Muitas panes reais começam numa mudança feita por pessoas, como uma configuração errada, e o livro defende tratar isso como problema do sistema, não de culpa individual. Pergunta para a agenda: se o envio de e-mail cair, o agendamento cai junto?
 
-**6. Manutenibilidade também é requisito.** Operabilidade (dá para rodar e observar), simplicidade (sem complexidade acidental, aquela que não vem do problema) e evolutividade (dá para mudar sem medo). Abstração desnecessária gerada pela IA é complexidade acidental.
+**6. Manutenibilidade também é requisito.** Operabilidade (dá para rodar e observar), simplicidade (sem complexidade acidental, aquela que não vem do problema) e evolutividade (dá para mudar sem medo). Quando a IA cria uma interface, uma fábrica e três camadas para um `if`, isso é complexidade acidental.
 
-**7. Metas explícitas.** Quando o requisito vira compromisso, ele tem nome: SLO (a meta interna, ex.: p95 < 300 ms em 99% dos dias) e SLA (o contrato com quem usa). A turma não precisa de SLA agora, mas precisa do hábito: **meta escrita, medida e com gate** (um bloqueio automático).
+**7. Metas explícitas.** Quando o requisito vira compromisso, ele tem nome: SLO (a meta interna, ex.: p95 < 300 ms em 99% dos dias) e SLA (o contrato com quem usa). A turma não precisa de SLA agora, mas precisa do hábito: **meta escrita, medida e com gate** (um bloqueio automático, como o check vermelho da CI que impede o merge).
 
 ### Do requisito ao sensor
 
-Um requisito não funcional só existe quando atravessa quatro etapas:
+Sensor nada mais é do que o teste ou a ferramenta que mede o requisito e responde passou ou não passou, sem ninguém opinar. Um requisito não funcional só existe quando atravessa quatro etapas:
 
 | Etapa | Pergunta | Exemplo (concorrência na última vaga) |
 |---|---|---|
@@ -66,7 +66,64 @@ Faltou o número, é **desejo**. Faltou o sensor, é **promessa**. Só com os qu
 | Manutenibilidade | Dá para entender e mudar sem medo? | Lint de complexidade, revisão de dependência nova |
 | Privacidade (LGPD) | Que dado pessoal aparece onde? | Teste que procura e-mail nos logs |
 
-Duas cartas do baralho trabalham aqui:
+### As cinco frases do EARS
+
+EARS (*Easy Approach to Requirements Syntax*) nada mais é do que cinco moldes de frase. Cada molde tem um gatilho diferente e todos terminam em "DEVE" mais uma resposta. Os exemplos vêm da agenda de mentorias.
+
+| Padrão | Molde | Exemplo da agenda |
+|---|---|---|
+| Ubíquo | O `<sistema>` DEVE `<resposta>`. | O serviço de agenda DEVE responder erros no formato `{"erro":"<mensagem>"}`. |
+| QUANDO (evento) | QUANDO `<gatilho>`, o `<sistema>` DEVE `<resposta>`. | QUANDO a vaga não estiver livre, o serviço de agenda DEVE responder 409 com `{"erro":"Vaga indisponível"}`. |
+| ENQUANTO (estado) | ENQUANTO `<condição>`, o `<sistema>` DEVE `<resposta>`. | ENQUANTO o mentor tiver até 1.000 vagas, o serviço DEVE responder `GET /mentores/:id/vagas` com p95 abaixo de 50 ms. |
+| ONDE (opcional) | ONDE `<recurso presente>`, o `<sistema>` DEVE `<resposta>`. | ONDE a consulta trouxer `data`, o serviço DEVE listar só as vagas livres daquele dia. |
+| SE...ENTÃO (indesejado) | SE `<problema>`, ENTÃO o `<sistema>` DEVE `<resposta>`. | SE o `jovemEmail` não tiver o formato `a@b.c`, ENTÃO o serviço DEVE responder 400 com `{"erro":"jovemEmail inválido"}`. |
+
+Uma frase, uma resposta. Se aparecem dois "DEVE", são dois requisitos.
+
+### Da frase EARS ao teste
+
+O EARS diz o que o sistema deve fazer. O BDD (*Behavior-Driven Development*) mostra uma situação concreta em três passos: **Dado** o estado inicial, **Quando** uma ação acontece, **Então** um resultado que dá para conferir. Cada cenário vira um teste, e o nome do teste é o nome do cenário.
+
+<svg viewBox="0 0 720 190" role="img" aria-labelledby="coelho-cadeia-t" style="width:100%;height:auto;max-width:720px">
+<title id="coelho-cadeia-t">Cadeia do requisito ao gate: frase EARS, cenário BDD, teste, gate na CI</title>
+<defs><marker id="coelho-seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink-3)"/></marker></defs>
+<g style="font-family:var(--font-body);font-size:13px">
+<rect x="4" y="10" width="150" height="56" rx="8" style="fill:var(--tinta-soft);stroke:var(--tinta)"/>
+<text x="79" y="34" text-anchor="middle" style="fill:var(--ink);font-weight:600">1. Frase EARS</text>
+<text x="79" y="52" text-anchor="middle" style="fill:var(--ink-2);font-size:11px">QUANDO...DEVE...</text>
+<rect x="190" y="10" width="150" height="56" rx="8" style="fill:var(--uva-soft);stroke:var(--uva)"/>
+<text x="265" y="34" text-anchor="middle" style="fill:var(--ink);font-weight:600">2. Cenário BDD</text>
+<text x="265" y="52" text-anchor="middle" style="fill:var(--ink-2);font-size:11px">Dado / Quando / Então</text>
+<rect x="376" y="10" width="150" height="56" rx="8" style="fill:var(--ouro-soft);stroke:var(--ouro)"/>
+<text x="451" y="34" text-anchor="middle" style="fill:var(--ink);font-weight:600">3. Teste</text>
+<text x="451" y="52" text-anchor="middle" style="fill:var(--ink-2);font-size:11px">o sensor que mede</text>
+<rect x="562" y="10" width="150" height="56" rx="8" style="fill:var(--folha-soft);stroke:var(--folha)"/>
+<text x="637" y="34" text-anchor="middle" style="fill:var(--ink);font-weight:600">4. Gate na CI</text>
+<text x="637" y="52" text-anchor="middle" style="fill:var(--ink-2);font-size:11px">bloqueia o merge</text>
+<g style="stroke:var(--ink-3);stroke-width:1.5" marker-end="url(#coelho-seta)"><line x1="156" y1="38" x2="188" y2="38" marker-end="url(#coelho-seta)"/><line x1="342" y1="38" x2="374" y2="38" marker-end="url(#coelho-seta)"/><line x1="528" y1="38" x2="560" y2="38" marker-end="url(#coelho-seta)"/></g>
+<g style="fill:var(--ink-2);font-size:11px">
+<text x="79" y="92" text-anchor="middle">QUANDO a vaga não</text><text x="79" y="107" text-anchor="middle">estiver livre, o serviço</text><text x="79" y="122" text-anchor="middle">DEVE responder 409.</text>
+<text x="265" y="92" text-anchor="middle">Dado a vaga 1 com</text><text x="265" y="107" text-anchor="middle">livre: false. Quando POST</text><text x="265" y="122" text-anchor="middle">vagaId 1. Então 409.</text>
+<text x="451" y="92" text-anchor="middle">test("vaga já reservada</text><text x="451" y="107" text-anchor="middle">não pode ser agendada</text><text x="451" y="122" text-anchor="middle">de novo")</text>
+<text x="637" y="92" text-anchor="middle">npm test na CI.</text><text x="637" y="107" text-anchor="middle">Vermelho: não entra</text><text x="637" y="122" text-anchor="middle">na main.</text>
+</g>
+<text x="360" y="164" text-anchor="middle" style="fill:var(--ink-3);font-size:11px">Se um elo some, o requisito vira desejo (sem número) ou promessa (sem sensor).</text>
+</g>
+</svg>
+
+Um cenário com defeito engana o teste. "Então o sistema funciona corretamente" não diz qual valor conferir. Dois "Quando" no mesmo cenário misturam duas ações. O laboratório 4 aponta esses dois defeitos.
+
+### Task fraca e task forte
+
+O sensor também decide como você pede a task ao agente. A pergunta é: existe um comando que responde sim ou não, sem o agente por perto?
+
+| | Task fraca | Task forte |
+|---|---|---|
+| Pedido | "Melhorar a listagem de vagas." | `GET /mentores/:id/vagas` devolve só vagas livres, por `inicio` crescente; com `data`, só as daquele dia; mentor inexistente devolve 404 com `{"erro":"Mentor não encontrado"}`. |
+| Como confirmar | Alguém lê e opina. | `npm test -- vagas.test.js`, com 4 casos fixos. |
+| O que a IA faz | Muda o que quiser e diz que melhorou. | Roda o teste e só para quando passa. |
+
+Duas cartas do baralho servem para transformar task fraca em task forte:
 
 <div data-cartas="contraprova,par"></div>
 
@@ -89,6 +146,18 @@ Projete este laboratório e responda em voz alta:
 Em grupo. Cada grupo recebe uma categoria (desempenho, confiabilidade, escalabilidade, manutenibilidade ou privacidade) e escreve **um** requisito para a agenda de mentorias, com número e sensor. Depois cada grupo lê o seu, e a turma aplica a carta ♣ Contraprova: *"que entrada provaria que esse requisito foi quebrado?"*
 
 <div data-lab="construtor-nfr"></div>
+
+### 3. Validador EARS
+
+Reconheça o padrão de seis frases da agenda e depois escreva a sua. O laboratório separa gatilho, sistema e resposta, e avisa quando falta o DEVE, a vírgula, o número ou quando a frase tem duas respostas.
+
+<div data-lab="ears-validador"></div>
+
+### 4. De cenário BDD a teste
+
+Abra um dos três cenários bons e veja o teste gerado ao lado: o nome do cenário vira o nome do teste. Depois abra os dois com defeito, conserte o texto e veja o aviso sumir.
+
+<div data-lab="bdd-para-teste"></div>
 
 ## Leve com você
 
@@ -188,3 +257,6 @@ test('NFR-2: GET /mentores/1/vagas responde com p95 < 50 ms', async () => {
 - [The Tail at Scale](https://research.google/pubs/the-tail-at-scale/), de Jeffrey Dean e Luiz André Barroso (2013). O artigo clássico sobre amplificação da latência de cauda.
 - [EARS: Easy Approach to Requirements Syntax](https://alistairmavin.com/ears/), de Alistair Mavin. Os cinco padrões de frase que a turma usa desde a S6.
 - [Service Level Objectives](https://sre.google/sre-book/service-level-objectives/), capítulo do livro de SRE do Google.
+- [Introducing BDD](https://dannorth.net/blog/introducing-bdd/), de Dan North (2006). A origem do formato Dado, Quando, Então.
+- [Gherkin Reference](https://cucumber.io/docs/gherkin/reference/), do Cucumber. A sintaxe dos cenários.
+- [Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), da Anthropic. Por que cada tarefa precisa de um critério binário de pronto.

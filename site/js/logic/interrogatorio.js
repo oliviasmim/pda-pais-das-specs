@@ -56,9 +56,9 @@ export const LINHAS = [
 ];
 
 export const CLASSES = {
-  pedido: { nome: 'Pedido', descricao: 'Está no pedido. Alguém pediu isso.' },
+  pedido: { nome: 'Pedido', descricao: 'Está escrito no pedido.' },
   assumido: { nome: 'Assumido', descricao: 'O pedido deixou em aberto e a IA escolheu sozinha.' },
-  inventado: { nome: 'Inventado', descricao: 'Ninguém pediu e não era necessário. A IA criou.' },
+  inventado: { nome: 'Inventado', descricao: 'Ninguém pediu e o endpoint funciona sem isso.' },
 };
 
 export const ACHADOS = [
@@ -68,7 +68,7 @@ export const ACHADOS = [
     classe: 'pedido',
     aceita: [],
     titulo: 'A rota POST /agendamentos',
-    explicacao: 'O pedido diz "um endpoint para agendar". A rota é exatamente isso. O caminho e o método foram escolhidos pela IA, mas são o único ponto em que pedido e código concordam sem esforço.',
+    explicacao: 'O pedido diz "um endpoint para agendar", e a rota é isso. A IA escolheu o caminho e o método, mas aqui pedido e código batem sem discussão. O problema desta rota está no status, na linha 44.',
     spec: 'T1: POST /agendamentos.',
     carta: 'rastro',
     contraprova: {
@@ -83,7 +83,7 @@ export const ACHADOS = [
     classe: 'pedido',
     aceita: [],
     titulo: 'Salvar o agendamento como confirmado',
-    explicacao: 'Agendar é registrar a reserva. Isso foi pedido. Mas repare no que falta: a vaga nunca é marcada como ocupada. Uma linha pedida pode estar incompleta.',
+    explicacao: 'Agendar é registrar a reserva, e isso foi pedido. Agora perceba o que falta: a vaga nunca é marcada como ocupada. Trecho pedido também pode chegar pela metade.',
     spec: 'T1: sucesso → agendamento com status "confirmado" e a vaga passa a livre: false.',
     carta: 'par',
     contraprova: {
@@ -98,7 +98,7 @@ export const ACHADOS = [
     classe: 'assumido',
     aceita: [],
     titulo: 'De onde vêm as vagas',
-    explicacao: 'O pedido não diz onde estão os dados. A IA escolheu um módulo repo. Com a spec ao lado, essa linha deixa de ser suposição: o ADR-001 define a fonte. É o efeito que você quer da spec.',
+    explicacao: 'O pedido não diz onde estão os dados, então a IA escolheu um módulo repo. Ligue a spec: o ADR-001 define essa fonte, e a suposição passa a ter endereço.',
     spec: 'ADR-001: repositório em memória em src/repo.js.',
     carta: 'rastro',
     contraprova: {
@@ -113,7 +113,7 @@ export const ACHADOS = [
     classe: 'assumido',
     aceita: [],
     titulo: 'Buscar a vaga e seguir em frente',
-    explicacao: 'A IA assumiu que toda vaga buscada existe e está livre. Não há nenhum "e se não existir?" nem "e se já tiver dono?". Resultado: duas pessoas agendam a mesma vaga.',
+    explicacao: 'A IA assumiu que toda vaga buscada existe e está livre. Não tem nenhum "e se não existir?" nem "e se já tiver dono?". Na prática, duas pessoas agendam a mesma vaga.',
     spec: 'T1: vaga não existe → 404; vaga não está livre → 409. NFR-1: duas requisições para a mesma vaga, exatamente uma vence.',
     carta: 'par',
     contraprova: {
@@ -128,7 +128,7 @@ export const ACHADOS = [
     classe: 'assumido',
     aceita: [],
     titulo: 'Ler o corpo sem validar',
-    explicacao: 'A IA assumiu que o corpo sempre chega certo. Não há um único if sobre vagaId ou jovemEmail. "Tratar a entrada" não foi pedido porque o pedido não falou de entrada nenhuma.',
+    explicacao: 'A IA assumiu que o corpo sempre chega certo. Não tem um único if sobre vagaId ou jovemEmail. O pedido não falou de entrada, então a IA não validou nada.',
     spec: 'T1: 400 na ordem: vagaId ausente, jovemEmail ausente, jovemEmail sem formato a@b.c.',
     carta: 'contrato',
     contraprova: {
@@ -143,7 +143,7 @@ export const ACHADOS = [
     classe: 'assumido',
     aceita: [],
     titulo: 'Status 200 no sucesso',
-    explicacao: 'O pedido não disse o status. A IA escolheu o mais comum. Para criação de recurso, o contrato combinado é outro.',
+    explicacao: 'O pedido não disse o status, e a IA escolheu o mais comum. A spec combina 201, o status de "criei um recurso novo".',
     spec: 'T1: sucesso → 201.',
     carta: 'contrato',
     contraprova: {
@@ -158,7 +158,7 @@ export const ACHADOS = [
     classe: 'assumido',
     aceita: [],
     titulo: 'Todo erro vira 500 "Erro interno"',
-    explicacao: 'A IA assumiu que "tratar o erro" é capturar tudo. Erro de quem chamou (400, 404, 409) vira erro do servidor (500). Quem usa a API não sabe o que corrigir.',
+    explicacao: 'A IA assumiu que tratar erro é capturar tudo. Erro de quem chamou (400, 404, 409) vira erro do servidor (500), e quem usa a API fica sem saber o que corrigir.',
     spec: 'Erros sempre {"erro": "..."} com o status da tabela: 400, 404 ou 409.',
     carta: 'contrato',
     contraprova: {
@@ -173,7 +173,7 @@ export const ACHADOS = [
     classe: 'inventado',
     aceita: [],
     titulo: 'Limite de 3 mentorias por mês',
-    explicacao: 'Regra de negócio que ninguém pediu. Parece razoável, e é por isso que passa batido. Sistemas de agenda costumam ter limite, então a IA colocou um.',
+    explicacao: 'Regra de negócio que ninguém pediu. Passa batido porque parece razoável: muita agenda tem limite, então a IA pôs um.',
     spec: 'Fora do escopo: limite de agendamentos por jovem.',
     carta: 'rastro',
     contraprova: {
@@ -188,7 +188,7 @@ export const ACHADOS = [
     classe: 'inventado',
     aceita: [],
     titulo: 'Mentoria só em dia útil',
-    explicacao: 'Outra regra inventada. Mentores voluntários muitas vezes só podem no sábado. A IA decidiu por eles.',
+    explicacao: 'Outra regra inventada. Mentor voluntário pode ter só o sábado livre, e a IA decidiu por ele sem perguntar.',
     spec: 'Fora do escopo: regra de dia da semana.',
     carta: 'contraprova',
     contraprova: {
@@ -203,7 +203,7 @@ export const ACHADOS = [
     classe: 'inventado',
     aceita: [],
     titulo: 'Enviar e-mail de confirmação',
-    explicacao: 'Efeito colateral inventado. E pior: o e-mail é enviado depois de salvar. Se o serviço de e-mail cair, a reserva fica salva e a resposta é 500. A pessoa tenta de novo e encontra a própria vaga ocupada.',
+    explicacao: 'Efeito colateral inventado, e na ordem errada: o e-mail sai depois de salvar. Se o serviço de e-mail cair, a reserva fica salva e a resposta é 500. A pessoa tenta de novo e encontra a própria vaga ocupada.',
     spec: 'Fora do escopo: envio de e-mail. Se parecer necessário, pergunte.',
     carta: 'rastro',
     contraprova: {
@@ -218,7 +218,7 @@ export const ACHADOS = [
     classe: 'inventado',
     aceita: ['assumido'],
     titulo: 'Dependência nova: moment',
-    explicacao: 'Uma biblioteca inteira, em modo manutenção, para servir uma regra que ninguém pediu. Se a regra sai, a dependência sai junto. Escolher biblioteca seria "assumido"; trazer uma só para a regra inventada é invenção.',
+    explicacao: 'Uma biblioteca inteira, que o próprio projeto declarou em modo de manutenção, para servir uma regra que ninguém pediu. Se a regra sai, a dependência sai junto. Escolher uma biblioteca para algo pedido seria assumido. Trazer uma só para a regra inventada é invenção.',
     spec: 'Nenhuma dependência prevista. Datas no formato YYYY-MM-DDTHH:mm.',
     carta: 'navalha',
     contraprova: {
@@ -233,7 +233,7 @@ export const ACHADOS = [
     classe: 'inventado',
     aceita: ['assumido'],
     titulo: 'AgendamentoService + AgendamentoServiceFactory',
-    explicacao: 'Uma classe e uma factory para criar uma única instância. Nenhum teste exige isso. O padrão a seguir (GET /mentores) é uma função. Abstraction bloat: complexidade acidental.',
+    explicacao: 'Uma classe e uma factory para criar um único objeto. Nenhum teste exige isso, e o padrão da spec (GET /mentores) é uma função. É o abstraction bloat da lição: camada que o problema não pediu.',
     spec: 'Padrão a seguir: GET /mentores, uma função simples.',
     carta: 'navalha',
     contraprova: {
@@ -248,7 +248,7 @@ export const ACHADOS = [
     classe: 'inventado',
     aceita: [],
     titulo: 'console.log com o e-mail do jovem',
-    explicacao: 'Log com dado pessoal. Ninguém pediu log, e e-mail é dado pessoal pela LGPD. Logs costumam ir para ferramentas de terceiros e ficar lá por meses.',
+    explicacao: 'Ninguém pediu log, e este grava o e-mail do jovem, que é dado pessoal pela LGPD. Log costuma ir para ferramenta de terceiros e ficar guardado por meses.',
     spec: 'Nada sobre log. E-mail é dado pessoal.',
     carta: 'carta-rainha',
     contraprova: {
@@ -277,7 +277,7 @@ export const SPEC_T1 = {
   ],
 };
 
-export const PADRAO = 'A IA não errou ao acaso. Ela preencheu cada lacuna do pedido com a suposição mais plausível que conhecia: um limite comum em agendas, um e-mail de confirmação, um padrão de projeto popular, o status mais usado. Plausível não é pedido. A defesa é dupla: escrever o destino antes (spec) e, na revisão, perguntar a cada linha "onde está escrito isso?".';
+export const PADRAO = 'Dos 13 trechos, só 2 vieram do pedido. Os outros 11 são a IA preenchendo lacunas com o que é mais comum em agendas: um limite por mês, um e-mail de confirmação, uma factory, o status 200. Tudo plausível, nada pedido. A defesa tem duas pontas: escrever a spec antes de gerar e, na revisão, perguntar a cada linha "onde está escrito isso?".';
 
 export function achadoDaLinha(numero) {
   return ACHADOS.find((a) => a.linhas.includes(numero)) || null;

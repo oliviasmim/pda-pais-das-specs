@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "Em qual cenário o paralelo SE PAGA?",
+      "pergunta": "Em qual destes cenários vale pagar o custo de rodar agentes em paralelo?",
       "opcoes": [
-        "Duas tasks independentes de 4 horas cada, em arquivos separados, cada uma com teste de aceite próprio e integração prevista de 10 minutos.",
-        "Três tasks em cadeia (extrair a validação, usar a validação no cancelamento, ajustar os testes), de 1 hora cada.",
-        "Uma task de 6 horas que precisa enxergar o projeto inteiro para tomar cada decisão.",
-        "Duas tasks independentes de 20 minutos, com setup de worktree e integração prevista de 2 horas."
+        "Três tasks em cadeia (extrair a validação, usar a validação nova no cancelamento, ajustar os testes), com uma hora estimada para cada.",
+        "Duas tasks de 4 horas, independentes, em arquivos separados, cada uma com teste de aceite próprio e 10 minutos de integração prevista.",
+        "Uma task única de 6 horas que precisa enxergar o projeto inteiro de uma vez para tomar cada decisão do caminho.",
+        "Duas tasks independentes de 20 minutos cada, com setup de worktree e integração juntos custando cerca de 2 horas."
       ],
-      "correta": 0,
-      "explicacao": "O paralelo se paga quando a task é grande, as partes não se falam e a integração é curta. Na cadeia não há o que rodar junto. Na task indivisível não há o que dividir. Na última, setup e integração custam seis vezes o trabalho."
+      "correta": 1,
+      "explicacao": "O paralelo se paga quando a task é grande, as partes não dependem umas das outras e a integração é curta. Na cadeia, não há o que rodar junto. Na task que precisa ver tudo, não há o que dividir. Na última, subir worktrees e integrar custa seis vezes o trabalho."
     },
     {
       "etapa": "pre",
-      "pergunta": "Três tasks passam no teste da Rainha nas três primeiras perguntas: são independentes, mexem em arquivos diferentes e cada uma tem teste de aceite. Mas a integração prevista são dois dias de costura. Veredito?",
+      "pergunta": "Três tasks passam no teste da Rainha nas três primeiras perguntas: são independentes, mexem em arquivos diferentes e têm teste de aceite. Mas a integração prevista são dois dias de costura. Veredito?",
       "opcoes": [
-        "Paralelo: aprovado por 3 a 1 nas quatro perguntas.",
-        "Supervisor: um agente dedicado à integração resolve o quarto ponto.",
-        "Não paralelo: cada pergunta reprova sozinha. Integração longa engole o ganho das três primeiras, e três agentes trabalhando geram três vezes o material para costurar.",
-        "Depende do número de agentes ociosos no time: se estão parados, o custo extra é zero."
+        "Paralelo, com ressalva: passou em três das quatro perguntas, e a maioria decide.",
+        "Supervisor: um agente dedicado só à integração cuida da quarta pergunta sem atrasar as tasks.",
+        "Depende de ter agentes parados no time: se já estão ociosos, subir mais um sai de graça.",
+        "Não paralelo: um \"não\" já reprova, e dois dias de costura engolem o ganho de rodar junto."
       ],
-      "correta": 2,
-      "explicacao": "O teste é de portão, não de média: um \"não\" basta. E integração de dois dias não é detalhe de execução, é o preço principal da decisão. As mesmas três tasks em sequência, com a main sempre verde, custam menos."
+      "correta": 3,
+      "explicacao": "Cada pergunta do teste é um portão: basta um \"não\" para reprovar. Dois dias de integração são o maior custo da decisão, maior que as próprias tasks. As mesmas três tasks em sequência, com a main sempre verde, saem mais baratas."
     },
     {
       "etapa": "check",
       "pergunta": "Um colega propõe rodar pesquisa, plano e implementação da mesma feature em três subagents EM PARALELO, \"para ganhar tempo\". O que responder?",
       "opcoes": [
-        "Boa ideia, desde que cada um tenha seu worktree: o isolamento elimina a dependência entre as etapas.",
-        "Funciona se um supervisor ficar de prontidão para reexecutar qualquer etapa que travar.",
-        "Não funciona porque subagent não tem permissão de ler arquivos do projeto.",
-        "Não ganha tempo: a saída da pesquisa é a entrada do plano, e a do plano é a entrada da implementação. Em cadeia, o paralelo vira sequencial com pedágio: três handoffs de presente."
+        "Não ganha tempo: a saída da pesquisa é a entrada do plano, e a do plano é a da implementação. Em cadeia, o paralelo vira sequencial com pedágio.",
+        "Boa ideia, desde que cada subagent rode no seu worktree: a pasta separada elimina a dependência entre as etapas.",
+        "Pode funcionar, se um supervisor ficar de prontidão para refazer qualquer etapa que travar por falta de contexto.",
+        "Não funciona: por segurança, subagents não podem ler os arquivos do projeto principal."
       ],
-      "correta": 3,
-      "explicacao": "Se a etapa 2 precisa do resultado da 1, os três subagents nunca rodam ao mesmo tempo de verdade: dois ficam esperando ou chutando. Se o motivo da divisão é contexto limpo por etapa, o nome do arranjo é sequencial, com handoffs explícitos."
+      "correta": 0,
+      "explicacao": "O plano precisa do resultado da pesquisa, e a implementação precisa do plano. Então os três subagents nunca rodam juntos de verdade: dois ficam esperando ou chutando. Se o motivo de dividir é ter contexto limpo em cada etapa, o arranjo certo é o sequencial, com um resumo claro passando de uma etapa para a outra."
     },
     {
       "etapa": "check",
-      "pergunta": "Quatro revisores especializados rodaram em paralelo num PR grande e voltaram com 12 achados: 5 duplicados e 2 contraditórios (um pede 400, outro pede 404, para a mesma linha). O que faltou no arranjo?",
+      "pergunta": "Quatro revisores especializados rodaram em paralelo num PR grande e voltaram com 12 achados: 5 duplicados e 2 contraditórios (um pede 400, outro pede 404, na mesma linha). O que faltou?",
       "opcoes": [
-        "Mais dois revisores, para os contraditórios saírem no voto da maioria.",
-        "Nada: desempatar contradição entre revisores é trabalho de quem escreveu o código.",
-        "Um supervisor que consolide: remove duplicados e desempata com um critério só (a spec), em vez de devolver 12 sinais brutos para cima do autor.",
-        "Rubricas mais longas e detalhadas, até os quatro convergirem sozinhos para as mesmas respostas."
+        "Mais dois revisores de outras especialidades, para decidir as contradições no voto.",
+        "Nada: desempatar revisores é trabalho de quem escreveu o código.",
+        "Rubricas mais detalhadas para cada revisor, até os quatro concordarem sozinhos em todo PR.",
+        "Um supervisor: tirar os duplicados e desempatar com um critério só (a spec), em vez de devolver 12 achados soltos."
       ],
-      "correta": 2,
-      "explicacao": "Paralelo entrega sinais; alguém precisa transformar sinais em veredito. Esse alguém, sem supervisor, vira o autor do PR ou você. Rubrica tira parte da variação, mas desempate com critério comum é trabalho de consolidação."
+      "correta": 3,
+      "explicacao": "O paralelo entrega achados soltos. Alguém precisa transformar isso em um veredito. Sem supervisor, esse alguém é o autor do PR, ou você. Rubrica reduz a diferença entre revisores, mas quem desempata é a consolidação, com a spec como critério."
     },
     {
       "etapa": "pos",
-      "pergunta": "Um vídeo mostra um \"swarm de 8 agentes\" revisando um PR: quatro leem partes do diff em paralelo e um \"agente líder\" junta os relatórios num veredito. O que existe por baixo do nome da moda?",
+      "pergunta": "Um vídeo mostra um \"swarm de 8 agentes\" revisando um PR: quatro leem partes do diff em paralelo e um \"agente líder\" junta os relatórios num veredito. O que há por baixo do nome?",
       "opcoes": [
-        "Um padrão de orquestração novo, que só os modelos desta geração suportam.",
-        "Oito MCPs de revisão chamando ferramentas de análise estática ao mesmo tempo.",
-        "Paralelo com supervisor, com mais cartas na mesa. \"Swarm\" não descreve o desenho; as quatro perguntas da Rainha (independência, arquivos, pronto próprio, integração) continuam sendo as que importam.",
-        "Um único modelo que internamente oito personas discutem entre si."
+        "Um padrão de orquestração novo, que só os modelos da última geração conseguem rodar.",
+        "Paralelo com supervisor, só que com mais cartas. As quatro perguntas da Rainha continuam decidindo se vale.",
+        "Oito MCPs de revisão chamando ferramentas de análise estática ao mesmo tempo no mesmo PR.",
+        "Um único modelo grande em que oito personas de revisor discutem entre si até chegar a um consenso."
       ],
-      "correta": 2,
-      "explicacao": "Quando alguém disser \"vamos fazer um swarm\", a pergunta certa é: qual dos quatro padrões, com quantos agentes e por que um agente único não basta? O rótulo é marketing; o desenho é engenharia."
+      "correta": 1,
+      "explicacao": "Tira o nome e olha o desenho: quatro leitores ao mesmo tempo (paralelo) e um que junta os relatórios (supervisor). Quando alguém disser \"vamos fazer um swarm\", pergunte qual dos quatro padrões, com quantos agentes e por que um agente único não basta."
     },
     {
       "etapa": "pos",
-      "pergunta": "O time paralelizou 4 tasks do speedrun e entregou 30% mais devagar que o colega com um agente só. O líder pergunta se a tentativa ao menos valeu a experiência. Qual comparação fecha essa conta?",
+      "pergunta": "O time paralelizou 4 tasks do speedrun e entregou 30% mais devagar que o colega com um agente só. O líder pergunta se a tentativa valeu ao menos como aprendizado. Qual comparação fecha a conta?",
       "opcoes": [
-        "Tokens totais do paralelo contra tokens totais do agente único.",
-        "Número de conflitos de merge resolvidos por hora em cada arranjo.",
-        "Tempo de parede e custo para entregar as MESMAS 4 tasks com os MESMOS testes verdes. Se um agente passa nos mesmos testes no mesmo tempo, o arranjo maior era abstraction bloat de agente.",
-        "Percentual de tempo que cada agente ficou ocioso esperando o próximo."
+        "Tempo de relógio e custo para entregar as mesmas 4 tasks com os mesmos testes verdes. Se um agente entrega igual, o resto era bloat.",
+        "Tokens gastos pelo paralelo comparados aos tokens que o agente único teria gasto.",
+        "Conflitos de merge resolvidos por hora em cada um dos dois arranjos.",
+        "Percentual de tempo em que cada agente do paralelo ficou parado esperando os outros."
       ],
-      "correta": 2,
-      "explicacao": "É a carta Navalha aplicada à arquitetura de agentes: o arranjo mais simples que passa nos mesmos testes vence. Métrica parcial (tokens, conflitos, ociosidade) deixa você ganhar o argumento e perder a decisão."
+      "correta": 0,
+      "explicacao": "É a carta Navalha aplicada aos agentes: vence o arranjo mais simples que passa nos mesmos testes. Olhando só tokens, só conflitos ou só tempo parado, você ganha a discussão e erra a decisão."
     }
   ]
 }

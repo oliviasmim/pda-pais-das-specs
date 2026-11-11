@@ -139,12 +139,12 @@ function viewInicio() {
       h(
         'p',
         { class: 'heroi__lead' },
-        'Subagents, worktrees, CI e review aceleram o caminho. Nenhum deles escolhe o destino. Esta semana você treina dizer, antes do código, o que o sistema faz, quão bem precisa fazer e como vamos saber que fez.',
+        'Subagent, worktree, CI e review deixam a IA mais rápida. Para onde ela vai, quem escreve é você, na spec. Esta semana a gente treina três respostas antes de abrir o editor: o que o sistema faz, quão bem precisa fazer (com número) e qual teste mostra que fez.',
       ),
       h(
         'div',
         { class: 'row', style: { marginTop: '1.5rem' } },
-        h('a', { class: 'btn btn--primary', href: `#/licao/${licoes[0].id}` }, totalFeitas ? 'Continuar' : 'Começar pela Aula 1', ' →'),
+        h('a', { class: 'btn btn--primary', href: `#/licao/${licoes[0].id}` }, totalFeitas ? 'Voltar para a lição 1' : 'Começar pela lição 1', ' →'),
         h('a', { class: 'btn', href: '#/baralho' }, '♠ Baralho do Gato'),
         totalFeitas ? h('span', { class: 'chip chip--ok' }, `${totalFeitas} de ${licoes.length} lições feitas`) : null,
       ),
@@ -174,7 +174,7 @@ function viewInicio() {
   const blocoAulas = h(
     'section',
     { class: 'secao' },
-    h('div', { class: 'secao__cab' }, h('h2', {}, 'As duas aulas da semana'), h('span', { class: 'muted' }, 'Quem digita é você. A facilitadora faz perguntas do baralho.')),
+    h('div', { class: 'secao__cab' }, h('h2', {}, 'As duas aulas da semana'), h('span', { class: 'muted' }, 'Quem digita é você. A facilitadora circula e faz as perguntas do baralho.')),
     h(
       'div',
       { class: 'aulas' },
@@ -209,7 +209,7 @@ function viewInicio() {
                     'a',
                     { href: '#/speedrun' },
                     h('span', { class: 'num' }, '⏱'),
-                    h('span', {}, h('span', { class: 'titulo-licao' }, 'Speedrun cronometrado'), h('span', { class: 'sub-licao' }, '3 tasks em paralelo com worktrees, 40 minutos, placar')),
+                    h('span', {}, h('span', { class: 'titulo-licao' }, 'Speedrun cronometrado'), h('span', { class: 'sub-licao' }, '3 tasks em paralelo, uma worktree para cada, 40 minutos no relógio')),
                     h('span', { class: 'faint', style: { fontSize: '0.8rem' } }, '40 min'),
                   ),
                 )
@@ -224,7 +224,7 @@ function viewInicio() {
   const mapa = h(
     'section',
     { class: 'secao' },
-    h('div', { class: 'secao__cab' }, h('h2', {}, 'A jornada até aqui'), h('a', { href: '#/trilha' }, 'Ver a trilha completa →')),
+    h('div', { class: 'secao__cab' }, h('h2', {}, 'As 14 semanas e o que a turma pediu para rever'), h('a', { href: '#/trilha' }, 'Abrir a trilha →')),
     h(
       'div',
       { class: 'mapa-mini', role: 'list' },
@@ -250,10 +250,10 @@ function viewInicio() {
       'div',
       { class: 'atalhos' },
       [
-        { href: '#/baralho', naipe: '♠', t: 'Baralho do Gato', d: 'As 6 perguntas que você precisa responder sem travar. Dá para imprimir.' },
-        { href: '#/speedrun', naipe: '⏱', t: 'Speedrun', d: 'Cronômetro, placar e os comandos do speedrun da Aula 2.' },
-        { href: '#/trilha', naipe: '🗺', t: 'Trilha', d: 'As 14 semanas como uma viagem. Onde cada conceito nasceu.' },
-        { href: '#/glossario', naipe: '📖', t: 'Glossário', d: 'O que as pessoas dizem e o que o termo significa de verdade.' },
+        { href: '#/baralho', naipe: '♠', t: 'Baralho do Gato', d: 'As seis perguntas da facilitadora, com a resposta que trava e a que avança. Dá para imprimir.' },
+        { href: '#/speedrun', naipe: '⏱', t: 'Speedrun', d: 'Cronômetro de 40 minutos, placar dos times e os comandos prontos para copiar.' },
+        { href: '#/trilha', naipe: '🗺', t: 'Trilha', d: 'Em que semana cada conceito apareceu e qual lição desta semana revisa ele.' },
+        { href: '#/glossario', naipe: '📖', t: 'Glossário', d: 'Cada termo com o que se ouve por aí e o que ele é na prática.' },
       ].map((a) => h('a', { class: 'card atalho', href: a.href }, h('span', { class: 'naipe', 'aria-hidden': 'true' }, a.naipe), h('h3', {}, a.t), h('p', {}, a.d))),
     ),
   );
@@ -313,7 +313,7 @@ function viewBaralho(params) {
       h(
         'p',
         { class: 'heroi__lead' },
-        'Seis perguntas. Se você responde todas com uma linha, um número ou uma resposta exata, você sabe o que quer da IA. Se responde com "testaria", "trataria" ou "acho que", ainda está caindo na toca.',
+        'Seis perguntas que a facilitadora faz durante a prática. Se você responde cada uma com uma linha do diff, um número ou o status e a mensagem exatos, você sabe o que quer da IA. Se a resposta tem "testaria", "trataria" ou "acho que", ainda está caindo na toca.',
       ),
       h(
         'div',
@@ -356,7 +356,7 @@ function viewTrilha(params) {
       h(
         'p',
         { class: 'heroi__lead' },
-        'Cada semana é um lugar da viagem. A cor do marcador mostra o que a turma mais pediu para revisar (dúvidas no chat e na voz, cruzadas com a matriz de prioridade de revisão).',
+        'Cada semana ganhou um lugar do livro. A cor do marcador mostra o que a turma mais pediu para rever: juntamos as dúvidas do chat e as feitas em voz na aula, e cruzamos com a matriz de prioridade de revisão.',
       ),
       h(
         'ol',
@@ -392,7 +392,7 @@ function licoesQueRevisam(n) {
   return h(
     'p',
     { class: 'faint', style: { marginTop: '0.6rem', fontSize: '0.85rem' } },
-    'Revisado em: ',
+    'Revisto em: ',
     ls.map((l, i) => [i ? ', ' : '', h('a', { href: `#/licao/${l.id}` }, l.titulo)]),
   );
 }
@@ -401,7 +401,7 @@ async function viewGlossario() {
   definirTitulo('Glossário');
   const { termos } = await import('../content/glossario.js');
   const lista = h('div', { class: 'tabela-wrap' });
-  const campo = h('input', { class: 'busca', type: 'search', placeholder: 'Buscar termo…', 'aria-label': 'Buscar termo no glossário' });
+  const campo = h('input', { class: 'busca', type: 'search', placeholder: 'Buscar: worktree, p95, gate…', 'aria-label': 'Buscar termo no glossário' });
 
   function desenhar(filtro = '') {
     const f = slug(filtro);
@@ -410,7 +410,7 @@ async function viewGlossario() {
       h(
         'table',
         { class: 'tabela' },
-        h('thead', {}, h('tr', {}, h('th', {}, 'Termo'), h('th', {}, 'O que dizem'), h('th', {}, 'O que realmente significa'), h('th', {}, 'Onde'))),
+        h('thead', {}, h('tr', {}, h('th', {}, 'Termo'), h('th', {}, 'O que se ouve por aí'), h('th', {}, 'O que é na prática'), h('th', {}, 'Onde ver'))),
         h(
           'tbody',
           {},
@@ -425,7 +425,7 @@ async function viewGlossario() {
                   h('td', {}, t.licao ? h('a', { href: `#/licao/${t.licao}` }, licaoPorId(t.licao)?.titulo || t.licao) : h('span', { class: 'faint' }, `S${t.semana}`)),
                 ),
               )
-            : h('tr', {}, h('td', { colspan: 4, class: 'muted' }, 'Nenhum termo encontrado.')),
+            : h('tr', {}, h('td', { colspan: 4, class: 'muted' }, 'Nenhum termo com essa palavra. Tente o nome em inglês ou em português.')),
         ),
       ),
     );
@@ -437,9 +437,9 @@ async function viewGlossario() {
     h(
       'section',
       { class: 'secao', style: { marginTop: '0.5rem' } },
-      h('div', { class: 'sobretitulo' }, 'Linguagem ubíqua da turma'),
+      h('div', { class: 'sobretitulo' }, 'Linguagem ubíqua: o vocabulário que a turma combinou'),
       h('h1', {}, 'Glossário'),
-      h('p', { class: 'heroi__lead' }, 'Se você não consegue dizer o que um termo significa sem usar o próprio termo, ainda não é seu.'),
+      h('p', { class: 'heroi__lead' }, 'Teste rápido: explique o termo sem usar a própria palavra. Se travar, leia a terceira coluna e abra a lição da quarta.'),
       h('div', { style: { margin: '1.5rem 0' } }, campo),
       lista,
     ),
@@ -457,7 +457,7 @@ async function viewSpeedrun() {
     if (typeof fim === 'function') limpezas.push(fim);
   } catch (erro) {
     console.error(erro);
-    main.replaceChildren(h('p', { class: 'carregando' }, 'O speedrun não carregou. Recarregue a página.'));
+    main.replaceChildren(h('p', { class: 'carregando' }, 'O speedrun não carregou. Recarregue a página. Se continuar, avise a facilitadora.'));
   }
 }
 
@@ -561,13 +561,13 @@ async function viewLicao(id) {
     ),
   );
 
-  const btnConcluir = h('button', { type: 'button', class: licaoFeita(id) ? 'btn' : 'btn btn--primary' }, licaoFeita(id) ? 'Marcar como não feita' : 'Concluí esta lição');
+  const btnConcluir = h('button', { type: 'button', class: licaoFeita(id) ? 'btn' : 'btn btn--primary' }, licaoFeita(id) ? 'Desmarcar lição' : 'Marcar lição como feita');
   btnConcluir.addEventListener('click', () => {
     const feita = !licaoFeita(id);
     marcarLicao(id, feita);
-    btnConcluir.textContent = feita ? 'Marcar como não feita' : 'Concluí esta lição';
+    btnConcluir.textContent = feita ? 'Desmarcar lição' : 'Marcar lição como feita';
     btnConcluir.className = feita ? 'btn' : 'btn btn--primary';
-    toast(feita ? 'Lição marcada como feita.' : 'Lição desmarcada.');
+    toast(feita ? `Lição ${licao.numero} feita. O ✓ aparece na página inicial.` : `Lição ${licao.numero} desmarcada.`);
   });
 
   const conteudo = h(
@@ -575,7 +575,7 @@ async function viewLicao(id) {
     {},
     cab,
     prosa,
-    h('div', { class: 'concluir' }, btnConcluir, h('span', { class: 'muted' }, 'Seu progresso fica salvo só neste navegador.')),
+    h('div', { class: 'concluir' }, btnConcluir, h('span', { class: 'muted' }, 'O progresso fica salvo só neste navegador. Em outro computador, começa do zero.')),
     h(
       'nav',
       { class: 'navegacao', 'aria-label': 'Lições vizinhas' },
@@ -613,7 +613,7 @@ function viewNaoAchei() {
       'section',
       { class: 'secao', style: { textAlign: 'center' } },
       h('h1', {}, 'Qualquer caminho serve?'),
-      h('p', { class: 'heroi__lead', style: { margin: '0 auto 1.5rem' } }, 'Esta página não existe. Talvez seja hora de decidir para onde você quer ir.'),
+      h('p', { class: 'heroi__lead', style: { margin: '0 auto 1.5rem' } }, 'Este endereço não existe no site. Confira o link ou volte para o início.'),
       h('a', { class: 'btn btn--primary', href: '#/' }, 'Voltar ao início'),
     ),
   );
@@ -637,7 +637,7 @@ async function rotear() {
     else viewNaoAchei();
   } catch (erro) {
     console.error(erro);
-    main.replaceChildren(h('p', { class: 'carregando' }, 'Algo quebrou ao abrir esta página. Recarregue.'));
+    main.replaceChildren(h('p', { class: 'carregando' }, 'Esta página deu erro ao abrir. Recarregue. Se continuar, avise a facilitadora.'));
   }
   if (!params.get('carta') && !params.get('semana') && partes[0] !== 'licao') window.scrollTo(0, 0);
 }

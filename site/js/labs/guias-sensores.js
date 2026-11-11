@@ -130,7 +130,7 @@ export function mount(el, ctx) {
     if (p.respondidos === p.total) {
       fim.append(
         h('div', { class: 'callout gs-fim__box' },
-          h('p', {}, h('strong', {}, `${p.certos} de ${p.total}.`), ' Repare: quase tudo que a turma escreve (AGENTS.md, skill, spec) é guia. Guia sem sensor é esperança. O teste escrito antes é a ponte: guia o agente e depois mede o resultado.'),
+          h('p', {}, h('strong', {}, `${p.certos} de ${p.total}.`), ' Perceba: quase tudo que a gente escreve (AGENTS.md, skill, spec) é guia, e guia sem sensor é esperança. O teste escrito antes é a ponte: guia o agente e depois mede o resultado.'),
           h('p', { class: 'muted' }, 'Agente = LLM + Harness. Harness = guias + sensores. Se a IA repetiu um erro, você precisa de um guia novo (regra) e de um sensor novo (checagem).'),
         ),
       );

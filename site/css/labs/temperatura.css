@@ -1,0 +1,101 @@
+.lab-temperatura .tp-prompt {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--tinta);
+  border-radius: var(--r-sm);
+  font-size: 0.88rem;
+}
+
+.lab-temperatura .tp-cursor {
+  color: var(--tinta);
+  margin-left: 0.15rem;
+}
+
+.lab-temperatura .tp-controle {
+  gap: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.lab-temperatura .tp-controle input[type='range'] {
+  flex: 1 1 10rem;
+  min-width: 8rem;
+  accent-color: var(--tinta);
+}
+
+.lab-temperatura .tp-grade h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.lab-temperatura .tp-barras,
+.lab-temperatura .tp-saidas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.lab-temperatura .tp-barra {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr 2.6rem;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.82rem;
+}
+
+.lab-temperatura .tp-barra__trilho {
+  height: 0.8rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.lab-temperatura .tp-barra__cheia {
+  display: block;
+  height: 100%;
+  background: var(--tinta);
+  transition: width 0.25s;
+}
+
+.lab-temperatura .tp-barra__pct {
+  text-align: right;
+  color: var(--ink-2);
+}
+
+.lab-temperatura .tp-saidas {
+  list-style-position: inside;
+  list-style: decimal inside;
+}
+
+.lab-temperatura .tp-saidas li {
+  padding: 0.3rem 0.5rem;
+  background: var(--paper-2);
+  border-radius: var(--r-sm);
+  font-size: 0.88rem;
+}
+
+.lab-temperatura .tp-saidas li.is-estranha {
+  background: var(--copas-soft);
+  color: var(--copas);
+}
+
+.lab-temperatura .tp-leitura {
+  margin: 1rem 0 0.4rem;
+  font-weight: 500;
+}
+
+.lab-temperatura .tp-aviso {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-temperatura .tp-barra__cheia {
+    transition: none;
+  }
+}

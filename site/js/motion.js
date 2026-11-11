@@ -141,10 +141,9 @@ export function montarMotion(el, ctx, def, opcoes = {}) {
       role: 'group',
       'aria-label': `${def.titulo}. Espaço roda ou pausa. Seta para a direita avança um passo. Seta para a esquerda volta. A abre a caixa.`,
     },
+    quebradas,
     svg,
     dentro,
-    quebradas,
-    h('span', { class: 'm-teclas', 'aria-hidden': 'true' }, 'clique numa peça · espaço roda · → avança · A abre'),
   );
 
   const etapa = h('div', { class: 'm-etapa' });
@@ -410,10 +409,16 @@ export function montarMotion(el, ctx, def, opcoes = {}) {
     if (dd) {
       dentro.dataset.visivel = '1';
       dentro.dataset.tom = dd.tom || est.atual.marca || '';
-      dentro.replaceChildren(h('span', { class: 'm-dentro__tit' }, `Dentro: ${dd.titulo}`), ...dd.linhas.map((l) => h('code', {}, l)));
+      const MAX = 5;
+      const extra = dd.linhas.length - MAX;
+      dentro.replaceChildren(
+        h('span', { class: 'm-dentro__tit' }, `Dentro: ${dd.titulo}`),
+        ...dd.linhas.slice(0, extra > 0 ? MAX - 1 : MAX).map((l) => h('code', {}, l)),
+        ...(extra > 0 ? [h('button', { type: 'button', class: 'm-dentro__mais', onclick: () => trocarAba('rodada') }, `… e mais ${extra + 1} na aba Rodada`)] : []),
+      );
     } else {
       dentro.dataset.visivel = '0';
-      dentro.replaceChildren();
+      dentro.replaceChildren(h('span', { class: 'm-dentro__tit' }, 'Dentro: nada passou por aqui ainda'));
     }
 
     // peças quebradas
@@ -428,6 +433,7 @@ export function montarMotion(el, ctx, def, opcoes = {}) {
     etapa.replaceChildren(
       h('span', { class: 'm-rot' }, 'Etapa'),
       h('strong', {}, st.i < 0 ? 'Pronta · aperte Rodar' : `${st.i + 1}/${n} · ${est.atual.titulo}`),
+      h('span', { class: 'm-teclas', 'aria-hidden': 'true' }, 'clique numa peça · espaço roda · → avança · A abre'),
     );
     metricas.replaceChildren(
       ...def.metricas.map((m) => {

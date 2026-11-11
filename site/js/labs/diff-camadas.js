@@ -45,7 +45,7 @@ export function mount(el, ctx) {
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag', text: 'Laboratório' }),
       h('h3', { text: 'Leitura em camadas de um diff grande' }),
-      h('p', { class: 'muted', text: `Um agente implementou T1 e T3 e abriu um PR com ${totalLinhas()} linhas em ${ARQUIVOS.length} arquivos. Leia uma camada por vez. Quanto mais cedo você marcar um sinal de alerta, mais pontos.` }),
+      h('p', { class: 'muted', text: `Um agente implementou T1 e T3 e abriu um PR com ${totalLinhas()} linhas em ${ARQUIVOS.length} arquivos. Leia uma camada por vez e marque só o sinal que você já consegue ver nela. Achar na camada 1 vale ${pontosPorCamada(1)} pontos, na camada 4 vale ${pontosPorCamada(4)}. Marcar sem evidência tira 1.` }),
     ),
     h('div', { class: 'lab__body' }, passos, h('div', { class: 'dc-grade' }, conteudo, lateral), final),
   );
@@ -180,14 +180,14 @@ export function mount(el, ctx) {
         }),
         ...conferida.falsos.map((id) => {
           const a = ALERTAS.find((x) => x.id === id);
-          return h('li', { class: 'dc-fb dc-fb--nao' }, h('strong', { text: `−1 ${a.nome}` }), h('span', { text: 'Ainda não dá para ver isso nesta camada. Suspeita sem evidência é palpite.' }));
+          return h('li', { class: 'dc-fb dc-fb--nao' }, h('strong', { text: `−1 ${a.nome}` }), h('span', { text: 'Nada nesta camada mostra isso ainda. Sem uma linha para apontar, é palpite.' }));
         }),
       ];
-      if (!linhas.length) linhas.push(h('li', { class: 'dc-fb' }, h('span', { text: 'Nada marcado nesta camada.' })));
+      if (!linhas.length) linhas.push(h('li', { class: 'dc-fb' }, h('span', { text: 'Você não marcou nada nesta camada.' })));
       const escaparam = ALERTAS.filter((a) => a.camadas.includes(n) && !estado.achados[a.id]);
       feedback.append(h('ul', { class: 'dc-fbs' }, ...linhas));
       if (escaparam.length) {
-        feedback.append(h('p', { class: 'dc-escapou' }, `${escaparam.length} sinal${escaparam.length > 1 ? 'is' : ''} já ${escaparam.length > 1 ? 'eram visíveis' : 'era visível'} aqui e passou. Ainda dá para pegar nas próximas camadas.`));
+        feedback.append(h('p', { class: 'dc-escapou' }, `${escaparam.length} sinal${escaparam.length > 1 ? 'is' : ''} já ${escaparam.length > 1 ? 'apareciam' : 'aparecia'} aqui e ${escaparam.length > 1 ? 'passaram' : 'passou'}. Ainda dá para pegar nas próximas camadas, valendo menos.`));
       }
       if (n < 4) {
         feedback.append(h('button', { type: 'button', class: 'btn btn--primary btn--sm', onclick: () => irPara(n + 1) }, `Ir para a camada ${n + 1} →`));
@@ -243,16 +243,16 @@ export function mount(el, ctx) {
       ),
       r.perdidos.length
         ? h('div', { class: 'dc-perdidos' },
-          h('p', { class: 'dc-rotulo', text: 'O que passou' }),
+          h('p', { class: 'dc-rotulo', text: 'O que passou batido' }),
           h('ul', {}, ...r.perdidos.map((id) => {
             const a = ALERTAS.find((x) => x.id === id);
             const c = Math.min(...a.camadas);
             return h('li', {}, h('strong', { text: `${naipe(a.carta)} ${a.nome} (${a.apelido})` }), ` · visível desde a camada ${c}. ${a.evidencias[c]} ${a.explicacao}`);
           })),
         )
-        : h('p', { class: 'dc-perfeito', text: 'Nenhum sinal passou. Agora escreva a Carta à Rainha para que o próximo agente não repita isso.' }),
+        : h('p', { class: 'dc-perfeito', text: `Você pegou os ${ALERTAS.length} sinais. Leve o mais grave para a Carta à Rainha, no fim da lição, para o próximo agente não repetir.` }),
       h('div', { class: 'dc-licao' },
-        h('p', {}, h('strong', { text: 'O que a leitura em camadas ensina: ' }), 'a camada 1 (lista de arquivos) já mostra o teste de aceite alterado e a dependência nova. A camada 2 mostra a regra inventada e a ausência do 409. Quem começa pelo corpo gasta 20 minutos para achar o que estava visível em 1.'),
+        h('p', {}, h('strong', { text: 'Perceba: ' }), 'a camada 1 (só a lista de arquivos) já mostra o teste de aceite alterado e a dependência nova. A camada 2 mostra a regra inventada e o 409 que sumiu. Quem começa pelo corpo gasta 20 minutos para achar o que estava na tela no primeiro minuto.'),
       ),
       h('div', { class: 'row' },
         h('button', {

@@ -1,0 +1,157 @@
+.lab-faxina-contexto .fx-cab {
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.lab-faxina-contexto .fx-cab h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.lab-faxina-contexto .fx-num {
+  margin-left: auto;
+  font-size: 0.82rem;
+}
+
+.lab-faxina-contexto .fx-trilho {
+  position: relative;
+  height: 1.9rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  margin-bottom: 1.4rem;
+}
+
+.lab-faxina-contexto .fx-barra {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+}
+
+.lab-faxina-contexto .fx-seg {
+  display: block;
+  height: 100%;
+  transition: width 0.25s;
+}
+
+.lab-faxina-contexto .fx-seg--base {
+  background: var(--ink-3);
+}
+
+.lab-faxina-contexto .fx-seg--essencial {
+  background: var(--folha);
+}
+
+.lab-faxina-contexto .fx-seg--util {
+  background: var(--tinta);
+}
+
+.lab-faxina-contexto .fx-seg--ruido {
+  background: var(--copas);
+}
+
+.lab-faxina-contexto .fx-limite {
+  position: absolute;
+  top: -0.4rem;
+  bottom: -0.4rem;
+  border-left: 2px dashed var(--copas);
+}
+
+.lab-faxina-contexto .fx-limite span {
+  position: absolute;
+  bottom: -1.15rem;
+  left: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--copas);
+}
+
+.lab-faxina-contexto .fx-acoes {
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.lab-faxina-contexto .fx-fichas {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+}
+
+.lab-faxina-contexto .fx-ficha {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.6rem 0.7rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--ink-3);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  opacity: 0.55;
+}
+
+.lab-faxina-contexto .fx-ficha.is-dentro {
+  opacity: 1;
+  box-shadow: var(--shadow);
+}
+
+.lab-faxina-contexto .fx-ficha:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.lab-faxina-contexto .fx-ficha--essencial {
+  border-left-color: var(--folha);
+}
+
+.lab-faxina-contexto .fx-ficha--util {
+  border-left-color: var(--tinta);
+}
+
+.lab-faxina-contexto .fx-ficha--ruido {
+  border-left-color: var(--copas);
+}
+
+.lab-faxina-contexto .fx-ficha__nome {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.lab-faxina-contexto .fx-ficha__meta {
+  font-size: 0.72rem;
+  color: var(--ink-2);
+}
+
+.lab-faxina-contexto .fx-ficha__estado {
+  font-size: 0.72rem;
+  color: var(--ink-3);
+}
+
+.lab-faxina-contexto .fx-veredito p {
+  margin: 0;
+}
+
+.lab-faxina-contexto .fx-falta {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-faxina-contexto .fx-seg {
+    transition: none;
+  }
+}

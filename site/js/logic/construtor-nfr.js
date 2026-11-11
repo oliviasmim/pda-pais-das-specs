@@ -118,7 +118,7 @@ export function avaliar(nfr = {}) {
   }
   const vagas = palavrasVagas(textoTodo);
   if (vagas.length && !temNumero(nfr.resposta || '')) {
-    avisos.push({ tipo: 'vago', campo: 'resposta', msg: `"${vagas[0]}" não é critério. Troque por um número.` });
+    avisos.push({ tipo: 'vago', campo: 'resposta', msg: `"${vagas[0]}" para quem, medido como? Troque por um número que um teste confira, como "p95 abaixo de 300 ms".` });
   }
   if (!(nfr.sensor || '').trim()) {
     avisos.push({ tipo: 'promessa', campo: 'sensor', msg: 'Requisito sem sensor é promessa. Diga qual teste ou ferramenta vai medir isso.' });

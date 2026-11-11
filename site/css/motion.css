@@ -317,9 +317,7 @@ li[data-marca='ok'] .m-chip__n {
 }
 
 .m-teclas {
-  position: absolute;
-  right: 0.6rem;
-  top: 0.5rem;
+  margin-left: auto;
   font: 0.68rem var(--font-mono);
   color: var(--ink-3);
   letter-spacing: 0.04em;
@@ -579,22 +577,31 @@ li[data-marca='ok'] .m-chip__n {
 /* dentro e quebradas */
 
 .m-dentro {
-  position: absolute;
-  left: 0.6rem;
-  bottom: 0.6rem;
-  max-width: min(30rem, calc(100% - 1.2rem));
   display: grid;
   gap: 0.15rem;
+  margin: 0 0.6rem 0.6rem;
   padding: 0.55rem 0.7rem;
-  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  background: var(--paper);
   border: 1px dashed var(--ouro);
   border-radius: var(--r-sm);
   font-size: 0.78rem;
+  min-height: 3.6rem;
   transition: opacity var(--m-dur);
 }
 
+.m-dentro__mais {
+  justify-self: start;
+  font: 0.72rem var(--font-mono);
+  color: var(--tinta);
+  background: none;
+  border: 0;
+  padding: 0.1rem 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .m-dentro[data-visivel='0'] {
-  opacity: 0;
+  opacity: 0.35;
 }
 
 .m-dentro[data-tom='falha'] {
@@ -629,13 +636,14 @@ li[data-marca='ok'] .m-chip__n {
 }
 
 .m-quebradas {
-  position: absolute;
-  left: 0.6rem;
-  top: 0.5rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;
-  max-width: 70%;
+  padding: 0.5rem 0.6rem 0;
+}
+
+.m-quebradas:empty {
+  display: none;
 }
 
 /* ---------- etapa e métricas ---------- */
@@ -978,16 +986,6 @@ li[data-marca='ok'] .m-chip__n {
   }
   .m-teclas {
     display: none;
-  }
-  .m-dentro {
-    position: static;
-    margin: 0.5rem;
-    max-width: none;
-  }
-  .m-quebradas {
-    position: static;
-    max-width: none;
-    padding: 0.5rem 0.5rem 0;
   }
 }
 

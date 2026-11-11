@@ -1,0 +1,26 @@
+.lab-vermelho-verde .vv-ciclo { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .lab-vermelho-verde .vv-ciclo { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.lab-vermelho-verde .vv-passo { display: grid; gap: 0.2rem; padding: 0.6rem 0.75rem; border: 1px solid var(--line); border-top-width: 4px; border-radius: var(--r); background: var(--paper); font-size: 0.84rem; }
+.lab-vermelho-verde .vv-passo--copas { border-top-color: var(--copas); }
+.lab-vermelho-verde .vv-passo--folha { border-top-color: var(--folha); }
+.lab-vermelho-verde .vv-passo--tinta { border-top-color: var(--tinta); }
+
+.lab-vermelho-verde .vv-logs { display: grid; gap: 0.8rem; grid-template-columns: 1fr; }
+@media (min-width: 960px) { .lab-vermelho-verde .vv-logs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.lab-vermelho-verde .vv-log { display: grid; gap: 0.6rem; align-content: start; padding: 0.8rem 0.9rem; border: 1px solid var(--line); border-radius: var(--r); background: var(--paper); min-width: 0; }
+.lab-vermelho-verde .vv-log--certo { border-color: var(--folha); }
+.lab-vermelho-verde .vv-log--errado { border-color: var(--copas); }
+.lab-vermelho-verde .vv-log header { display: flex; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; align-items: baseline; }
+.lab-vermelho-verde .vv-log header code { font-size: 0.72rem; }
+
+.lab-vermelho-verde .vv-commits { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+.lab-vermelho-verde .vv-commit { display: grid; gap: 0.15rem 0.5rem; grid-template-columns: auto 1fr; padding: 0.45rem 0.55rem; background: var(--paper-2); border-radius: var(--r-sm); font-size: 0.82rem; }
+.lab-vermelho-verde .vv-commit__arq { grid-column: 2; font-size: 0.72rem; overflow-wrap: anywhere; }
+.lab-vermelho-verde .vv-commit .chip { grid-column: 2; justify-self: start; }
+
+.lab-vermelho-verde .vv-escolha { margin: 0; padding: 0.5rem 0.7rem; border: 1px solid var(--line); border-radius: var(--r); display: grid; gap: 0.3rem; min-width: 0; }
+.lab-vermelho-verde .vv-escolha legend { padding: 0 0.3rem; font-size: 0.85rem; font-weight: 600; }
+.lab-vermelho-verde .vv-radio { display: flex; gap: 0.5rem; align-items: start; font-size: 0.84rem; cursor: pointer; }
+.lab-vermelho-verde .vv-fb { margin: 0; font-size: 0.85rem; font-weight: 600; }
+.lab-vermelho-verde .vv-resumo { margin: 0; font-size: 0.9rem; color: var(--ink-2); }

@@ -1,0 +1,45 @@
+.lab-protecao-main .pm-grade { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+@media (min-width: 860px) {
+  .lab-protecao-main .pm-grade { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr); }
+}
+.lab-protecao-main .pm-col { min-width: 0; display: grid; gap: 0.7rem; align-content: start; }
+.lab-protecao-main .pm-opcoes { display: grid; gap: 0.45rem; }
+.lab-protecao-main .pm-h { margin: 0.3rem 0 0; font-family: var(--font-display); font-weight: 600; }
+
+.lab-protecao-main .pm-opcao {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem;
+  align-items: start;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--paper);
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+.lab-protecao-main .pm-opcao--workflow { border-left: 3px solid var(--tinta); }
+.lab-protecao-main .pm-opcao--github { border-left: 3px solid var(--uva); }
+.lab-protecao-main .pm-opcao input { margin-top: 0.2rem; }
+.lab-protecao-main .pm-opcao:focus-within { box-shadow: var(--focus); }
+
+.lab-protecao-main .pm-painel { display: grid; gap: 0.6rem; }
+.lab-protecao-main .pm-pr {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--paper);
+}
+.lab-protecao-main .pm-pr--entrou { border-color: var(--copas); background: var(--copas-soft); }
+.lab-protecao-main .pm-pr header p { margin: 0.15rem 0 0; font-size: 0.82rem; }
+.lab-protecao-main .pm-pr__estado { display: flex; gap: 0.6rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.lab-protecao-main .pm-pr__motivo { margin: 0; font-size: 0.82rem; color: var(--ink-2); }
+.lab-protecao-main .pm-pr__alerta { margin: 0; font-size: 0.82rem; font-weight: 600; color: var(--copas); }
+.lab-protecao-main .pm-pr button[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+.lab-protecao-main .pm-placar { margin: 0; padding: 0.7rem 0.9rem; border-radius: var(--r); border: 1px solid var(--line); font-size: 0.9rem; }
+.lab-protecao-main .pm-placar--ok { background: var(--folha-soft); border-color: var(--folha); }
+.lab-protecao-main .pm-placar--ruim { background: var(--paper-2); }
+.lab-protecao-main .pm-falta { margin: 0.5rem 0 0; padding-left: 1.2rem; font-size: 0.84rem; color: var(--ink-2); }

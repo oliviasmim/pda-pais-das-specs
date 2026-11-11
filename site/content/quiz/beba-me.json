@@ -3,75 +3,75 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "Duas equipes pararam de ver a IA inventar regra de negócio. A equipe A trocou para um modelo mais novo. A equipe B pôs a regra no AGENTS.md e um teste que falha quando a regra inventada reaparece. Qual diferença importa entre as duas soluções?",
+      "pergunta": "Duas equipes pararam de ver a IA inventar regra de negócio. A equipe A trocou para um modelo mais novo. A equipe B pôs a regra no AGENTS.md e um teste que falha quando a regra reaparece. Qual diferença importa?",
       "opcoes": [
-        "Nenhuma: contexto é contexto, as duas mudam o comportamento do agente do mesmo jeito.",
-        "A é melhor: modelo mais novo também escreve testes melhores, então cobre os dois lados.",
-        "B é melhor porque, uma vez escrito, o guia dispensa o sensor: o AGENTS.md já garante.",
-        "A age no LLM, que você não controla e que muda sem aviso. B age no harness, que você escreve, versiona e testa. Só a segunda é engenharia sua."
+        "Nenhuma diferença real: contexto é contexto, e na prática as duas mudanças mexem no comportamento do agente pelo mesmo caminho.",
+        "A da equipe A é melhor: modelo mais novo também escreve testes melhores, então acaba cobrindo o lado do guia e o do sensor com uma jogada só.",
+        "A da equipe B é melhor porque, uma vez escrita a regra, o guia dispensa o sensor: a partir desse dia, o AGENTS.md garante tudo sozinho.",
+        "A mexe no modelo, que você não controla e que muda sem aviso. B mexe no harness, que você escreve, versiona e testa, e que continua lá na próxima troca de modelo."
       ],
       "correta": 3,
-      "explicacao": "Quando o agente erra, a pergunta útil raramente é \"qual modelo?\" e quase sempre \"que peça do harness faltou?\". E guia sozinha é esperança: por isso a equipe B juntou regra E teste."
+      "explicacao": "A equipe B respondeu \"que peça do harness faltou?\" e pôs as duas: a regra no AGENTS.md (guia) e o teste que falha (sensor). Se o próximo modelo voltar a inventar a regra, o teste fica vermelho. A equipe A não tem como saber."
     },
     {
       "etapa": "pre",
       "pergunta": "No mapa guia-e-sensor, onde entra o teste de aceite escrito ANTES do código?",
       "opcoes": [
-        "Só guia: enquanto o código não existe, ele não mede nada.",
-        "Só sensor: depois de pronto, é ele quem aprova ou reprova a entrega.",
-        "Os dois ao mesmo tempo: antes, diz ao agente exatamente o que precisa passar; depois, mede se passou. Por isso TDD combina tão bem com agente.",
-        "Nenhum dos dois: TDD é metodologia de trabalho, não peça do harness."
+        "Só guia: enquanto o código alvo ainda não existe, o teste não tem nada contra o que medir, então não pode acusar erro nenhum.",
+        "Só sensor: antes da implementação ele não roda contra nada; é só depois de pronto que ele aprova ou reprova a entrega da feature.",
+        "Os dois: antes, diz ao agente exatamente o que precisa passar; depois, mede se passou. Por isso TDD combina tão bem com agente.",
+        "Nenhum: TDD é metodologia de trabalho da equipe, um acordo entre pessoas, e não peça do harness que o agente executa."
       ],
       "correta": 2,
-      "explicacao": "O teste escrito antes é o único componente que mora dos dois lados do tempo. Como guia, ele fecha a lacuna \"o que é pronto\". Como sensor, dá o veredito antes de qualquer sentença do agente."
+      "explicacao": "Antes do código, o teste vermelho diz ao agente o que é pronto: status, corpo, mensagem. Depois, o mesmo arquivo roda e reprova o que não cumpre. É a única peça do harness que trabalha nos dois momentos."
     },
     {
       "etapa": "check",
-      "pergunta": "Sessão aberta há três horas, janela passando dos 70%, cheia de logs e tentativas. O agente repete um erro que tinha corrigido há uma hora. Qual a melhor reação, e por quê?",
+      "pergunta": "Sessão aberta há três horas, janela passando dos 70%, cheia de logs e tentativas. O agente repete um erro que tinha corrigido há uma hora. Qual a melhor reação?",
       "opcoes": [
-        "Instruir o agente a ignorar os logs antigos e focar na task: resolve sem perder o contexto acumulado.",
-        "Apagar os arquivos de log do disco para o modelo ler menos nas próximas chamadas.",
-        "Colar a correção de novo no chat: na terceira vez ele memoriza a regra.",
-        "Abrir sessão nova levando só a spec e a task. O problema não é falta de regra, é janela lotada (a dumb zone): colar mais texto em cima de texto só agrava a causa."
+        "Instruir o agente a ignorar os logs antigos e focar só na task atual: resolve sem perder nada do contexto valioso que ele já acumulou na sessão.",
+        "Apagar os arquivos de log do disco da máquina, assim o modelo passa a ler menos texto nas próximas chamadas da sessão.",
+        "Colar a correção de novo no chat, desta vez com bastante ênfase, porque é pela repetição que o modelo fixa a instrução.",
+        "Abrir uma sessão nova levando só a spec e a task: o problema é a janela lotada (a dumb zone), e mais texto por cima agrava a causa."
       ],
       "correta": 3,
-      "explicacao": "Passou dos ~40% da janela, o agente esquece instruções do começo e mistura tarefas. Reforço no chat vira mais um texto disputando atenção dentro da mesma janela. Sessão nova com contexto mínimo devolve a smart zone. Log no disco não entra na janela sozinho; apagar arquivo não ensina nada."
+      "explicacao": "Passou dos ~40% da janela, o agente esquece o que leu no começo (a spec) e repete erro. Colar a correção de novo só põe mais texto na mesma janela lotada. Sessão nova com a spec e a task volta para a smart zone. E apagar o log do disco não muda nada: o que já foi lido está na janela, não no disco."
     },
     {
       "etapa": "check",
       "pergunta": "A CI já tem lint, type check, build, testes e npm audit. Onde um revisor que usa LLM (o sensor inferencial) agrega?",
       "opcoes": [
-        "No que os cinco não veem: regra não pedida, caso de falha que sumiu, teste que só testa o mock. Aceitando o preço: custa tokens, pode errar, e entra depois dos cinco, nunca no lugar.",
-        "Em tudo: com contexto bom, ele enxerga o que as regras enxergam e mais.",
-        "Só em estilo e nome de variável, que é o tipo de julgamento que sobra para um modelo.",
-        "Em nada: sensor que pode errar não é sensor; os cinco já são suficientes."
+        "Em tudo: com contexto bem escrito, ele enxerga tudo o que as regras fixas enxergam e ainda aquilo que regra nenhuma escrita vai alcançar.",
+        "Só em estilo e nos nomes de variável, que é o único tipo de julgamento que sobra depois de os cinco terem rodado.",
+        "No que os cinco não veem: regra não pedida, caso de falha que sumiu, teste que só testa o mock. Custa tokens, pode errar, entra depois.",
+        "Em nada: sensor que pode errar não é sensor, e os cinco computacionais juntos já cobrem qualquer PR que chegar."
       ],
-      "correta": 0,
-      "explicacao": "Os computacionais são determinísticos e baratos, mas cegos para intenção: o código certinho pode implementar a coisa errada. O inferencial cobre esse buraco, com custo e variância. Complementa; não substitui o que já é barato e confiável."
+      "correta": 2,
+      "explicacao": "Lint, tipos e testes dão sempre a mesma resposta e custam pouco, mas só conferem o que alguém escreveu como regra. Um handler limpo que inventa uma regra de negócio passa nos cinco. O revisor com LLM pega esse caso, gasta tokens e às vezes erra, por isso entra depois dos cinco, sem substituir nenhum."
     },
     {
       "etapa": "pos",
       "pergunta": "Qual Carta de Destino vira teste sem precisar de nenhuma pergunta a mais?",
       "opcoes": [
-        "Feature: cancelar mentoria. Funciona: cancelar um agendamento confirmado. Falha: cancelar de novo precisa ser impedido. NFR: rápido no pico. Sensor: rodar os testes.",
-        "Feature: cancelar mentoria. Funciona: DELETE /agendamentos/1 devolve 200 {\"id\":1,\"status\":\"cancelado\"} e a vaga 5 volta a livre. Falha: repetir o DELETE devolve 409 {\"erro\":\"Agendamento já cancelado\"}. Sensor: testes de aceite na CI.",
-        "Feature: cancelar mentoria. Funciona: DELETE /agendamentos/1 devolve 200. Falha: cancelar agendamento inexistente devolve 409 {\"erro\":\"Agendamento já cancelado\"}. Sensor: CI.",
-        "Feature: cancelar agendamento pela API. Funciona: 200 com status cancelado. Falha: 404. NFR: aguentar 200 requisições por minuto. Sensor: teste de carga."
+        "Feature: cancelar mentoria. Funciona: cancelar um agendamento confirmado. Falha: cancelar de novo precisa ser impedido pelo sistema. NFR: rápido. Sensor: testes.",
+        "Feature: cancelar mentoria. Funciona: DELETE /agendamentos/1 devolve 200 com o corpo do agendamento. Falha: agendamento inexistente devolve 409 {\"erro\":\"Agendamento já cancelado\"}. Sensor: CI em todo push.",
+        "Feature: cancelar agendamento pela API. Funciona: 200 com o status cancelado no corpo. Falha: 404. NFR: aguentar 200 requisições por minuto. Sensor: carga.",
+        "Feature: cancelar mentoria. Funciona: DELETE /agendamentos/1 → 200 {\"status\":\"cancelado\"} e a vaga livre. Falha: repetir → 409 {\"erro\":\"Agendamento já cancelado\"}. Sensor: aceite na CI."
       ],
-      "correta": 1,
-      "explicacao": "A segunda tem entrada, status, corpo exato e o efeito colateral (a vaga liberada). A terceira troca o contrato de erro: agendamento inexistente é 404 {\"erro\":\"Agendamento não encontrado\"}, e 409 \"já cancelado\" é de quem cancela duas vezes. A última mistura NFR de desempenho com métrica de vazão sem meta."
+      "correta": 3,
+      "explicacao": "Com a última, dá para escrever o teste agora: entrada, status, corpo exato e o efeito na vaga. A primeira tem \"rápido\" e \"impedido\", que não viram assert. A segunda troca o contrato: agendamento inexistente é 404 {\"erro\":\"Agendamento não encontrado\"}, e o 409 é de quem cancela duas vezes. A terceira deixa o 404 sem mensagem e mede vazão com um teste de carga que não diz onde roda."
     },
     {
       "etapa": "pos",
       "pergunta": "O subagent de investigação leu 20 mil tokens de log e devolveu 300 palavras com a causa raiz. A conta total de tokens foi MAIOR do que seria sem ele. Quando essa troca vale a pena?",
       "opcoes": [
-        "Nunca: o ponto de dividir trabalho em agentes é gastar menos tokens no total.",
-        "Quando o subagent roda num modelo mais barato: aí o total sempre cai.",
-        "Quando você vai precisar do log inteiro na janela principal de qualquer jeito.",
-        "Quando o bem escasso não é token, é espaço limpo na janela principal: você paga os tokens do subagent para manter o principal na smart zone, decidindo bem."
+        "Nunca: o objetivo de dividir o trabalho entre agentes é justamente gastar menos tokens na conta total do projeto.",
+        "Quando o subagent roda num modelo mais barato, porque aí o custo total em tokens da sessão cai sempre, seja qual for o tamanho do log analisado.",
+        "Quando o que falta não é token, é janela limpa no principal: você paga os tokens do subagent para o principal seguir na smart zone.",
+        "Quando, de qualquer jeito, você ia precisar ler o log inteiro com os próprios olhos dentro da janela principal."
       ],
-      "correta": 3,
-      "explicacao": "Subagent não economiza token: ele compra isolamento de contexto. Os 20 mil tokens de log ficam na janela dele e somem; o principal recebe a conclusão e continua afiado. Se a sua janela principal está vazia e a tarefa cabe nela, o subagent é luxo."
+      "correta": 2,
+      "explicacao": "Subagent não economiza token: ele compra janela limpa. Os 20 mil tokens de log ficam na janela dele e somem, e o principal recebe só as 300 palavras. Se a janela principal está folgada e a tarefa cabe nela, o subagent só aumenta a conta."
     }
   ]
 }
