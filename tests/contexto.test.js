@@ -2,9 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { simular, comparar, zona, ACOES, JANELA, BASE_PRINCIPAL } from '../site/js/logic/contexto.js';
 
-test('zonas: smart até 40%, dumb depois, cheia a partir de 90%', () => {
-  assert.equal(zona(0.4), 'smart');
-  assert.equal(zona(0.41), 'dumb');
+test('zonas: smart até 60%, dumb depois, cheia a partir de 90%', () => {
+  assert.equal(zona(0.6), 'smart');
+  assert.equal(zona(0.61), 'dumb');
   assert.equal(zona(0.95), 'cheia');
 });
 
@@ -19,7 +19,7 @@ test('sem delegar, o principal acumula todos os tokens', () => {
 
 test('delegando investigação, o principal fica na smart zone', () => {
   const r = simular({ delegar: true });
-  assert.ok(r.fracaoFinal <= 0.4, `fração ${r.fracaoFinal}`);
+  assert.ok(r.fracaoFinal <= 0.6, `fração ${r.fracaoFinal}`);
   assert.equal(r.zonaFinal, 'smart');
   assert.ok(r.passos.some((p) => p.delegada));
   assert.ok(r.passos.filter((p) => p.acao.tipo === 'implementar').every((p) => !p.delegada));

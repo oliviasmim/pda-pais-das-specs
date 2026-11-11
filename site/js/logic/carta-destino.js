@@ -31,7 +31,7 @@ export function validarCarta(carta = VAZIA) {
   else {
     const vaga = contemPalavra(c.ok.resposta, VAGAS_RESPOSTA);
     if (!temStatus(c.ok.resposta)) {
-      erros.push({ campo: 'ok.resposta', msg: vaga ? `Teste do Gato: "${vaga}" não é resposta. Escreva o status e o corpo.` : 'Inclua o status HTTP (ex.: 201) e o corpo esperado.' });
+      erros.push({ campo: 'ok.resposta', msg: vaga ? `"${vaga}" não é resposta. Escreva o status e o corpo.` : 'Inclua o status HTTP (ex.: 201) e o corpo esperado.' });
     }
   }
 
@@ -40,7 +40,7 @@ export function validarCarta(carta = VAZIA) {
   const msg = norm(c.falha.mensagem);
   if (!msg) erros.push({ campo: 'falha.mensagem', msg: 'Qual mensagem exata a pessoa recebe?' });
   else if (VAGAS_ERRO.includes(msg) || msg.startsWith('tratar')) {
-    erros.push({ campo: 'falha.mensagem', msg: 'Teste do Gato: "tratar o erro" não é contrato. Qual erro, qual mensagem?' });
+    erros.push({ campo: 'falha.mensagem', msg: '"Tratar o erro" não é contrato. Qual erro, qual mensagem?' });
   }
 
   if (!norm(c.nfr.texto)) erros.push({ campo: 'nfr.texto', msg: 'Escreva um requisito não funcional (como o sistema deve se comportar: tempo, carga, concorrência).' });

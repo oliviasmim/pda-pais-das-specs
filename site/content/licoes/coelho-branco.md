@@ -1,7 +1,3 @@
-> "Ai, ai! Vou chegar atrasado!", disse o Coelho Branco, tirando um relógio do bolso do colete.
->
-> Lewis Carroll, *Alice no País das Maravilhas*, cap. 1 (tradução livre).
-
 ## O problema
 
 Alguém pede ao agente: *"Crie um endpoint que lista as vagas livres de um mentor."*
@@ -11,8 +7,6 @@ A IA entrega em dois minutos. Carrega todas as vagas, filtra as livres, ordena e
 Segunda-feira, 9h, a agenda abre. Cento e cinquenta jovens tentam agendar no primeiro minuto. A listagem fica lenta, duas pessoas conseguem a mesma vaga, e um mentor recebe dois jovens no mesmo horário. Faltou escrever **quão bem o sistema precisava funcionar.**
 
 A IA erra, quase sempre, no que você **não** escreveu. E o que a gente menos escreve é o requisito não funcional. Sem ele, o agente escolhe em silêncio o padrão mais simples: tudo em memória, nenhum cuidado com dois pedidos ao mesmo tempo, nenhuma meta de tempo. Perceba que nada disso aparece no diff como erro. Aparece segunda, 9h.
-
-> No Encontro 1 da OIP, a orientação mais mal lida pela turma era justamente um requisito de escala. Metade leu como "privacidade" ou "só teste". Faltava um nome para isso. Hoje ele chega: requisito não funcional.
 
 ## O conceito
 
@@ -43,7 +37,7 @@ O capítulo 2 da 2ª edição do livro de Martin Kleppmann e Chris Riccomini (*D
 
 **6. Manutenibilidade também é requisito.** Operabilidade (dá para rodar e observar), simplicidade (sem complexidade acidental, aquela que não vem do problema) e evolutividade (dá para mudar sem medo). Quando a IA cria uma interface, uma fábrica e três camadas para um `if`, isso é complexidade acidental.
 
-**7. Metas explícitas.** Quando o requisito vira compromisso, ele tem nome: SLO (a meta interna, ex.: p95 < 300 ms em 99% dos dias) e SLA (o contrato com quem usa). A turma não precisa de SLA agora, mas precisa do hábito: **meta escrita, medida e com gate** (um bloqueio automático, como o check vermelho da CI que impede o merge).
+**7. Metas explícitas.** Quando o requisito vira compromisso, ele tem nome: SLO (a meta interna, ex.: p95 < 300 ms em 99% dos dias) e SLA (o contrato com quem usa). Você não precisa de SLA agora, mas precisa do hábito: **meta escrita, medida e com gate** (um bloqueio automático, como o check vermelho da CI que impede o merge).
 
 ### Do requisito ao sensor
 
@@ -123,7 +117,7 @@ O sensor também decide como você pede a task ao agente. A pergunta é: existe 
 | Como confirmar | Alguém lê e opina. | `npm test -- vagas.test.js`, com 4 casos fixos. |
 | O que a IA faz | Muda o que quiser e diz que melhorou. | Roda o teste e só para quando passa. |
 
-Duas cartas do baralho servem para transformar task fraca em task forte:
+Duas das 6 perguntas servem para transformar task fraca em task forte:
 
 <div data-cartas="contraprova,par"></div>
 
@@ -131,7 +125,7 @@ Duas cartas do baralho servem para transformar task fraca em task forte:
 
 ## Pratique
 
-### 1. O relógio do Coelho
+### 1. Quanto espera quem cai na cauda?
 
 Projete este laboratório e responda em voz alta:
 
@@ -147,7 +141,7 @@ Projete este laboratório e responda em voz alta:
 
 ### 2. Construtor de requisitos
 
-Em grupo. Cada grupo recebe uma categoria (desempenho, confiabilidade, escalabilidade, manutenibilidade ou privacidade) e escreve **um** requisito para a agenda de mentorias, com número e sensor. Depois cada grupo lê o seu, e a turma aplica a carta ♣ Contraprova: *"que entrada provaria que esse requisito foi quebrado?"*
+Em grupo. Cada grupo recebe uma categoria (desempenho, confiabilidade, escalabilidade, manutenibilidade ou privacidade) e escreve **um** requisito para a agenda de mentorias, com número e sensor. Depois cada grupo lê o seu, e vocês aplicam a carta ♣ Contraprova: *"que entrada provaria que esse requisito foi quebrado?"*
 
 <div data-lab="construtor-nfr"></div>
 
@@ -232,7 +226,7 @@ test('NFR-2: GET /mentores/1/vagas responde com p95 < 50 ms', async () => {
 ```
 
 <details class="toca">
-<summary>Trilha da Toca · para quem terminou antes</summary>
+<summary>Desafio extra · para quem terminou antes</summary>
 
 1. **ADR da leitura vs escrita.** Escreva o ADR-002 da agenda: "vagas livres calculadas na leitura ou mantidas na escrita?". Contexto (carga do pico de segunda), opções, decisão, consequências. Depois peça ao agente para implementar **a partir do ADR** e veja se ele respeita.
 2. **Fitness function.** Transforme o requisito de manutenibilidade em regra do ESLint (`complexity`, `max-lines-per-function`) e faça a CI falhar quando a IA gerar uma função de 60 linhas.
@@ -259,7 +253,7 @@ test('NFR-2: GET /mentores/1/vagas responde com p95 < 50 ms', async () => {
 
 - [Designing Data-Intensive Applications](https://dataintensive.net/), de Martin Kleppmann e Chris Riccomini. Capítulo 2 da 2ª edição: *Defining Nonfunctional Requirements*.
 - [The Tail at Scale](https://research.google/pubs/the-tail-at-scale/), de Jeffrey Dean e Luiz André Barroso (2013). O artigo clássico sobre amplificação da latência de cauda.
-- [EARS: Easy Approach to Requirements Syntax](https://alistairmavin.com/ears/), de Alistair Mavin. Os cinco padrões de frase que a turma usa desde a S6.
+- [EARS: Easy Approach to Requirements Syntax](https://alistairmavin.com/ears/), de Alistair Mavin. Os cinco padrões de frase usados no curso desde a S6.
 - [Service Level Objectives](https://sre.google/sre-book/service-level-objectives/), capítulo do livro de SRE do Google.
 - [Introducing BDD](https://dannorth.net/blog/introducing-bdd/), de Dan North (2006). A origem do formato Dado, Quando, Então.
 - [Gherkin Reference](https://cucumber.io/docs/gherkin/reference/), do Cucumber. A sintaxe dos cenários.

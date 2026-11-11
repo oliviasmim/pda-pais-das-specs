@@ -12,7 +12,7 @@ test('cada cenário pré-pronto tem uma recomendação esperada', () => {
   assert.notEqual(compararTodos(cenario('mesmo-arquivo')).melhor, 'paralelo');
 });
 
-test('agente único entra na dumb zone quando o contexto passa de 40% da janela', () => {
+test('agente único entra na dumb zone quando o contexto passa de 60% da janela', () => {
   const r = simular(cenario('speedrun'), 'unico');
   assert.ok(r.picoContexto > JANELA * ZONA_SMART);
   assert.equal(r.dumb, 'T3');

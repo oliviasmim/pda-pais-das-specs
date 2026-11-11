@@ -101,7 +101,7 @@ export function mount(el, ctx) {
     });
     let status = h('span', { class: 'es-status muted' }, 'na fila');
     if (res && revelar) {
-      if (res.pegoPor) status = h('span', { class: 'es-status es-status--bloq', title: 'Cortem-lhe a cabeça!' }, `✂ barrado: ${sensor(res.pegoPor).nome}`);
+      if (res.pegoPor) status = h('span', { class: 'es-status es-status--bloq', title: 'Gate bloqueou' }, `✂ barrado: ${sensor(res.pegoPor).nome}`);
       else if (res.escapou) status = h('span', { class: 'es-status es-status--escapou' }, 'Chegou na main com defeito');
       else status = h('span', { class: 'es-status es-status--ok' }, 'Merge limpo');
     }
@@ -277,7 +277,7 @@ export function mount(el, ctx) {
       'header',
       { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
-      h('h3', {}, 'A esteira da Rainha'),
+      h('h3', {}, 'A esteira de gates'),
       h('p', {}, 'Dez PRs gerados por agente vão passar pela esteira. Escolha quais sensores rodam e em que ordem, rode a fila e veja o que chega na main.'),
     ),
     h(

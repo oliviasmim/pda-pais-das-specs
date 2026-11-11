@@ -34,7 +34,7 @@ export function mount(el, ctx) {
         ),
         h('div', { class: 'cx-trilho' },
           barraPrincipal,
-          h('span', { class: 'cx-limite', style: { left: `${LIMITE_SMART * 100}%` } }, h('span', {}, '40%')),
+          h('span', { class: 'cx-limite', style: { left: `${LIMITE_SMART * 100}%` } }, h('span', {}, `${Math.round(LIMITE_SMART * 100)}%`)),
         ),
         h('div', { class: 'row cx-legenda' },
           h('span', { class: 'cx-leg cx-leg--base' }, 'sistema + AGENTS.md'),

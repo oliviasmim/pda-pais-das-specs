@@ -250,7 +250,7 @@ export function mount(el, ctx) {
             return h('li', {}, h('strong', { text: `${naipe(a.carta)} ${a.nome} (${a.apelido})` }), ` · visível desde a camada ${c}. ${a.evidencias[c]} ${a.explicacao}`);
           })),
         )
-        : h('p', { class: 'dc-perfeito', text: `Você pegou os ${ALERTAS.length} sinais. Leve o mais grave para a Carta à Rainha, no fim da lição, para o próximo agente não repetir.` }),
+        : h('p', { class: 'dc-perfeito', text: `Você pegou os ${ALERTAS.length} sinais. Leve o mais grave para o laboratório Erro vira regra, no fim da lição, para o próximo agente não repetir.` }),
       h('div', { class: 'dc-licao' },
         h('p', {}, h('strong', { text: 'Perceba: ' }), 'a camada 1 (só a lista de arquivos) já mostra o teste de aceite alterado e a dependência nova. A camada 2 mostra a regra inventada e o 409 que sumiu. Quem começa pelo corpo gasta 20 minutos para achar o que estava na tela no primeiro minuto.'),
       ),

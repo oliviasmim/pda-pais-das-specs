@@ -353,7 +353,7 @@ export const ALERTAS = [
   {
     id: 'rosas',
     nome: 'Teste de aceite alterado para passar',
-    apelido: 'Rosas pintadas',
+    apelido: 'Teste maquiado',
     carta: 'carta-rainha',
     camadas: [1, 3],
     destaque: ['tests/aceite/t1.test.js', 'tests/aceite/CHECKSUMS', 'assert.equal(r.status, 201)'],
@@ -416,7 +416,7 @@ export const ALERTAS = [
       3: 'Nenhum teste do diff espera 409. O único que esperava foi alterado.',
       4: 'Depois de achar a vaga, o código nunca olha vaga.livre. Duas pessoas agendam a mesma vaga.',
     },
-    explicacao: 'É o bug que as rosas pintadas escondiam. E o NFR-1 (duas pessoas pedindo a mesma vaga ao mesmo tempo) nem foi considerado.',
+    explicacao: 'É o bug que o teste maquiado escondia. E o NFR-1 (duas pessoas pedindo a mesma vaga ao mesmo tempo) nem foi considerado.',
   },
   {
     id: 'generico',

@@ -19,7 +19,7 @@
       "opcoes": [
         "Porque worktree ainda é um recurso experimental do git, e a ferramenta evita por precaução as combinações que ela não consegue proteger sozinha contra erro.",
         "Porque branch protegida pelas regras do repositório só pode ser aberta por uma pessoa de cada vez em qualquer pasta do time.",
-        "Porque dois worktrees na mesma branch viram a mesa sem xícaras de novo: duas pastas mexendo na mesma branch, com um commit atropelando o outro.",
+        "Porque dois worktrees na mesma branch voltam ao problema da pasta única: duas pastas mexendo na mesma branch, com um commit atropelando o outro.",
         "É um comportamento defeituoso das versões antigas do git, e a saída aceita pela comunidade é rodar o mesmo comando com --force."
       ],
       "correta": 2,
@@ -32,14 +32,14 @@
         "O worktree clonou só a branch, sem os objetos do repositório inteiro: é preciso rodar git fetch dentro da pasta nova para baixar todo o restante antes de começar.",
         "O agente não tem permissão de escrita em pastas criadas como worktree: um chmod recursivo nas pastas novas resolve.",
         "O .env só pode existir na branch main: crie uma branch separada de configuração com ele versionado para todos os worktrees.",
-        "Nada quebrado: o worktree compartilha o .git, não os arquivos ignorados. Rode npm install em cada xícara e copie o .env (ou liste no .worktreeinclude)."
+        "Nada quebrado: o worktree compartilha o .git, não os arquivos ignorados. Rode npm install em cada worktree e copie o .env (ou liste no .worktreeinclude)."
       ],
       "correta": 3,
-      "explicacao": "Cada xícara se serve sozinha: o que está no .gitignore não viaja. E cuidado com a terceira opção: versionar .env em branch é vazar segredo para o histórico inteiro do repositório."
+      "explicacao": "Cada worktree se prepara sozinho: o que está no .gitignore não viaja. E cuidado com a terceira opção: versionar .env em branch é vazar segredo para o histórico inteiro do repositório."
     },
     {
       "etapa": "check",
-      "pergunta": "No speedrun, o conflito em src/app.js se resolveu mantendo as duas linhas app.use(...). Seu colega generaliza: \"conflito se resolve sempre aceitando os dois lados\". Onde essa regra quebra?",
+      "pergunta": "Na agenda de mentorias, o conflito em src/app.js se resolveu mantendo as duas linhas app.use(...). Seu colega generaliza: \"conflito se resolve sempre aceitando os dois lados\". Onde essa regra quebra?",
       "opcoes": [
         "Só em arquivos de teste, que por convenção de equipe jamais deveriam entrar em conflito, então ali a regra nem chega a valer.",
         "Não quebra: aceitar os dois lados e apagar os marcadores de conflito é a definição mesma de resolução de merge em qualquer fluxo de trabalho moderno com git.",
@@ -47,7 +47,7 @@
         "Quando a branch acumula muitos commits seguidos, porque o diff resultante fica grande demais para qualquer junção automática."
       ],
       "correta": 2,
-      "explicacao": "\"Manter os dois\" funcionou no speedrun porque eram duas rotas independentes registradas no mesmo ponto. Duas implementações diferentes da mesma validação, juntas no mesmo trecho, viram código que faz duas coisas ao mesmo tempo. Aí quem escolhe qual fica é você, com a spec aberta."
+      "explicacao": "\"Manter os dois\" funcionou na agenda porque eram duas rotas independentes registradas no mesmo ponto. Duas implementações diferentes da mesma validação, juntas no mesmo trecho, viram código que faz duas coisas ao mesmo tempo. Aí quem escolhe qual fica é você, com a spec aberta."
     },
     {
       "etapa": "pos",
@@ -55,7 +55,7 @@
       "opcoes": [
         "Mergear sempre em ordem alfabética das branches, porque assim a ordem fica determinística e o histórico da integração fica fácil de reler depois, com calma.",
         "Um merge por vez, com os testes das três tasks verdes na main antes do próximo: o culpado é sempre o último merge, e é um conflito por vez.",
-        "Rodar os testes dentro de cada worktree e partir para o merge: o que está verde dentro da xícara estará verde na mesa.",
+        "Rodar os testes dentro de cada worktree e partir para o merge: o que está verde dentro do worktree estará verde na main.",
         "Resolver todos os conflitos pela interface do GitHub e rodar os testes uma única vez, já no fim de tudo."
       ],
       "correta": 1,

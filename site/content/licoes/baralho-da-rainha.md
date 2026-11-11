@@ -1,12 +1,6 @@
-> Os jogadores jogavam todos ao mesmo tempo, sem esperar a vez, brigando o tempo todo e disputando os ouriços.
->
-> Lewis Carroll, *Alice no País das Maravilhas*, cap. 8 (tradução livre).
-
 ## O problema
 
-Quando a turma descobre subagents (agentes ajudantes que o agente principal chama), vem a tentação: *se um agente resolve, cinco resolvem cinco vezes mais rápido*. Na internet isso ganhou nome: **swarm**, um enxame de agentes.
-
-O croquet da Rainha é um swarm. Todo mundo joga ao mesmo tempo, ninguém espera a vez, os tacos são flamingos que fogem e as bolas são ouriços que vão embora.
+Quando você descobre subagents (agentes ajudantes que o agente principal chama), vem a tentação: *se um agente resolve, cinco resolvem cinco vezes mais rápido*. Na internet isso ganhou nome: **swarm**, um enxame de agentes.
 
 Pensa comigo no que cada agente a mais cobra antes de entregar qualquer coisa:
 
@@ -23,15 +17,15 @@ Se o ganho de rodar junto for menor que essa conta, mais agentes deixam o trabal
 
 Um subagent nada mais é do que um agente com **janela de contexto própria** (o espaço de texto que a IA consegue ler de uma vez). Ele recebe uma tarefa, trabalha e devolve **só um resumo** para quem chamou. Os logs, as tentativas e os arquivos que ele leu ficam com ele.
 
-É isso que resolve o problema da lição *Beba-me*: o agente principal não enche a janela com o trabalho dos outros e continua na smart zone (até uns 40% da janela ocupada, onde ele ainda segue as instruções do começo). Ou seja, o motivo do subagent é **isolar o contexto**. Ganhar tempo é bônus, e só acontece quando as tasks são independentes.
+É isso que resolve o problema da lição *Beba-me*: o agente principal não enche a janela com o trabalho dos outros e continua na smart zone (até uns 60% da janela ocupada, a régua que a gente usa no curso para dizer que ele ainda segue as instruções do começo). Ou seja, o motivo do subagent é **isolar o contexto**. Ganhar tempo é bônus, e só acontece quando as tasks são independentes.
 
 ### Os quatro jeitos de dar as cartas
 
 | Naipe | Padrão | Como funciona | Use quando | Cuidado com |
 |---|---|---|---|---|
-| ♠ | **Agente único** | Uma sessão faz tudo, em ordem. | A task é pequena, está em cadeia, ou precisa enxergar tudo junto. | O contexto acumula e passa dos 40%: dumb zone (o agente começa a esquecer instruções e repetir erros). |
+| ♠ | **Agente único** | Uma sessão faz tudo, em ordem. | A task é pequena, está em cadeia, ou precisa enxergar tudo junto. | O contexto acumula e passa dos 60%: dumb zone (o agente começa a esquecer instruções e repetir erros). |
 | ♣ | **Sequencial** | Um subagent por etapa, um depois do outro. A saída de um é a entrada do próximo. | Etapas com naturezas diferentes. Ex.: RPI com pesquisa, plano e implementação em sessões separadas. | Handoff (o resumo que passa de um para o outro) mal escrito perde informação. Não ganha tempo. |
-| ♦ | **Paralelo** | Vários subagents ao mesmo tempo, cada um no seu worktree (a cópia do repositório do Chá Maluco). Integração no fim. | Tasks independentes, em arquivos diferentes, cada uma com teste de aceite próprio. | Conflitos, tokens multiplicados, integração que come o ganho. |
+| ♦ | **Paralelo** | Vários subagents ao mesmo tempo, cada um no seu worktree (a pasta própria da lição 4). Integração no fim. | Tasks independentes, em arquivos diferentes, cada uma com teste de aceite próprio. | Conflitos, tokens multiplicados, integração que come o ganho. |
 | ♥ | **Supervisor** | Um agente planeja, distribui, revisa cada entrega e consolida. | Muitas partes que precisam de critério comum, ou que disputam os mesmos arquivos. | O supervisor vira gargalo e também gasta contexto. |
 
 <div data-lab="padroes-mapa"></div>
@@ -52,11 +46,11 @@ E a parte que não divide (planejar, integrar, revisar) limita o ganho, não imp
 
 Isso tem nome antigo: **Lei de Brooks**. Fred Brooks escreveu em 1975 que pôr mais gente num projeto atrasado atrasa mais, porque cada pessoa nova precisa aprender o projeto e conversar com as outras. Os pares de conversa crescem com n·(n−1)/2: 3 agentes têm 3 pares, 6 têm 15, 8 têm 28. Na mesma pesquisa, a Anthropic diz que tarefas de código têm menos partes realmente paralelas que pesquisa, e que agentes ainda coordenam mal entre si em tempo real.
 
-No laboratório abaixo, comece com os valores padrão (as três tasks do speedrun). Depois baixe **Partes independentes** para 1 e veja a linha cheia (o tempo real) subir: com uma parte só, cada agente a mais só custa.
+No laboratório abaixo, comece com os valores padrão (as três tasks da agenda: T1, T2 e T3). Depois baixe **Partes independentes** para 1 e veja a linha cheia (o tempo real) subir: com uma parte só, cada agente a mais só custa.
 
 <div data-lab="custo-coordenacao"></div>
 
-### O teste da Rainha: quatro perguntas antes de paralelizar
+### O teste do paralelo: quatro perguntas antes de paralelizar
 
 1. **Independentes?** Nenhuma task precisa do resultado da outra.
 2. **Arquivos diferentes?** Cada uma mexe nos seus arquivos (ou só numa linha de registro).
@@ -83,17 +77,19 @@ Frase pronta para recusar o swarm com argumento:
 
 <div data-lab="motion-subagent" data-montagem="padrao=paralelo,tarefa=grande,dependencia=dependentes"></div>
 
-**Em dupla, cenário por cenário.** Antes de clicar, cada pessoa escolhe um padrão e diz em voz alta o porquê, usando as quatro perguntas do teste da Rainha. Depois rodem. Errou o palpite? Perguntem: "**qual das quatro perguntas eu respondi errado?**"
+**Em dupla, cenário por cenário.** Antes de clicar, cada pessoa escolhe um padrão e diz em voz alta o porquê, usando as quatro perguntas do teste do paralelo. Depois rodem. Errou o palpite? Perguntem: "**qual das quatro perguntas eu respondi errado?**"
 
-Terminem no cenário **Speedrun**: ele é o plano da Aula 2. Depois, em **Monte o seu**, descrevam uma feature do projeto de vocês e vejam qual padrão ganha.
+Terminem no cenário **Agenda: 3 tasks independentes**: são a T1, a T2 e a T3 do projeto da agenda de mentorias, e o único cenário em que o paralelo ganha. Depois, em **Monte o seu**, descrevam uma feature do projeto de vocês e vejam qual padrão ganha.
 
-### Depois do speedrun: do log para o documento
+### Do log para o documento
 
-O entregável da semana é o documento "Quando um agente único teria sido melhor". Ele só vale com os números do seu log, preenchido durante o speedrun. Digite os minutos aqui: o laboratório faz as contas (a), (b) e (c), compara com a sua aposta e gera as seções 2 a 4 em Markdown. As seções 1 e 5 (por que vocês dividiram assim, e a regra que levam para o próximo projeto) ficam para você escrever.
+O simulador dá uma estimativa. O número que vale é o da sua máquina. Rode uma sessão paralela de verdade: as três tasks da agenda (T1, T2 e T3), cada uma no seu worktree, ou duas tasks independentes do seu projeto. Antes de começar, anote quanto tempo você aposta que vai levar. Durante a sessão, anote no log os minutos de cada task e da integração, até o `npm test` ficar verde.
+
+Com o log na mão, você escreve o documento "Quando um agente único teria sido melhor". Digite os minutos aqui: o laboratório faz as contas (a), (b) e (c), compara com a sua aposta e gera as seções 2 a 4 em Markdown. As seções 1 e 5 (por que você dividiu assim, e a regra que leva para o próximo projeto) ficam para você escrever.
 
 <div data-lab="log-paralelo"></div>
 
-Ganho (c) pequeno ou negativo não invalida o documento: esse número é justamente o dado que a semana pediu. Escreva qual parte do log explica o resultado (conflito, diffs para revisar, contexto lido de novo por cada agente).
+Ganho (c) pequeno ou negativo não invalida o documento: esse número é justamente o dado que o documento pede. Escreva qual parte do log explica o resultado (conflito, diffs para revisar, contexto lido de novo por cada agente).
 
 ## Leve com você
 
@@ -117,17 +113,17 @@ Registro de decisão para colar no PR:
 ```markdown
 ## Orquestração
 - Padrão escolhido: (único | sequencial | paralelo | supervisor)
-- Teste da Rainha: independentes? __ · arquivos diferentes? __ · pronto próprio? __ · integração curta? __
+- Teste do paralelo: independentes? __ · arquivos diferentes? __ · pronto próprio? __ · integração curta? __
 - Por que não um agente único: ___
 - Tempo previsto: __ min · tempo real: __ min
 - O que custou mais do que eu esperava: ___
 ```
 
 <details class="toca">
-<summary>Trilha da Toca · para quem terminou antes</summary>
+<summary>Desafio extra · para quem terminou antes</summary>
 
-1. **Meça o seu speedrun.** Antes da Aula 2, preveja no laboratório o tempo do seu time. Depois do speedrun, compare com o tempo real. Onde o modelo do laboratório errou: coordenação, integração ou a própria task?
-2. **Profundidade.** Subagents podem chamar subagents (até três níveis por padrão no Claude Code). Desenhe um caso em que isso ajuda e um em que vira o croquet da Rainha.
+1. **Meça a sua sessão paralela.** Antes de rodar as tasks da agenda (ou do seu projeto) em paralelo, preveja o tempo no laboratório de custo de coordenação. Depois, compare com o tempo do seu log. Onde o modelo do laboratório errou: coordenação, integração ou a própria task?
+2. **Profundidade.** Subagents podem chamar subagents (até três níveis por padrão no Claude Code). Desenhe um caso em que isso ajuda e um em que vira bagunça: todo mundo mexendo ao mesmo tempo, ninguém esperando a vez.
 3. **Votação.** Uma variação do paralelo é rodar a **mesma** task em vários agentes e comparar as saídas. Quando isso vale o custo? (Dica: revisão de segurança, não implementação.)
 4. **Revisão em paralelo.** No cenário "Revisar um PR grande", troque supervisor por paralelo e explique o que se perde quando ninguém consolida os quatro relatórios.
 

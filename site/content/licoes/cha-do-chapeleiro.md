@@ -1,10 +1,6 @@
-> "Quero uma xícara limpa", interrompeu o Chapeleiro. "Vamos todos mudar um lugar."
->
-> Lewis Carroll, *Alice no País das Maravilhas*, cap. 7 (tradução livre).
-
 ## O problema
 
-No speedrun vocês vão rodar três agentes ao mesmo tempo, um para cada tarefa (task): agendar (T1), cancelar (T2) e listar vagas (T3). O jeito mais rápido de começar é abrir três terminais na mesma pasta e mandar ver.
+O projeto da agenda de mentorias tem três tarefas (tasks) para implementar: agendar (T1), cancelar (T2) e listar vagas (T3). Uma não depende da outra, então dá vontade de pôr três agentes trabalhando ao mesmo tempo, um por task. O jeito mais óbvio é abrir três terminais na mesma pasta e mandar cada agente pegar a sua.
 
 Parece funcionar: nenhum comando falha. Agora perceba o que acontece por baixo:
 
@@ -13,7 +9,7 @@ Parece funcionar: nenhum comando falha. Agora perceba o que acontece por baixo:
 - um `git add .` de um agente leva junto o trabalho pela metade de outro;
 - alguém faz `git checkout` para olhar outra branch (outra linha de trabalho do projeto) e puxa o chão de quem estava trabalhando.
 
-Nenhum desses problemas aparece como erro na tela. Você só descobre quando o teste de T1 quebra na `main` e a rota dele não está mais em `src/app.js`. É o Chá Maluco: cadeira para todo mundo, uma xícara só, e cada um bebe o resto do outro.
+Nenhum desses problemas aparece como erro na tela. Você só descobre quando o teste de T1 quebra na `main` e a rota dele não está mais em `src/app.js`.
 
 ## O conceito
 
@@ -30,10 +26,10 @@ Nenhum desses problemas aparece como erro na tela. Você só descobre quando o t
 
 ### As regras do chá
 
-1. **Uma branch, uma xícara.** O git não deixa a mesma branch aberta em dois worktrees. Ele recusa com `fatal: 'main' is already used by worktree at ...`. Isso é a proteção funcionando, não um bug. Agentes do mesmo modelo tendem a escolher os mesmos nomes: num experimento da Anthropic com 30 agentes subindo ao mesmo tempo, 18 criaram uma branch com o mesmo nome. Então escreva o nome da branch no pedido (`-b t1-agendar`) em vez de deixar o agente escolher.
-2. **A cabeceira é da integração.** A pasta principal fica na `main`. Agentes trabalham nas xícaras. Merge acontece na cabeceira.
-3. **Cada xícara se serve sozinha.** O worktree só traz o que está versionado. `node_modules` e arquivos do `.gitignore` (como `.env`) ficam para trás. Rode `npm install` em cada worktree. No Claude Code, o arquivo `.worktreeinclude` lista arquivos ignorados que devem ser copiados para worktrees novos.
-4. **Lave a xícara no fim.** `git worktree remove <pasta>` apaga a pasta. A branch e os commits continuam.
+1. **Uma branch, um worktree.** O git não deixa a mesma branch aberta em dois worktrees. Ele recusa com `fatal: 'main' is already used by worktree at ...`. Isso é a proteção funcionando, não um bug. Agentes do mesmo modelo tendem a escolher os mesmos nomes: num experimento da Anthropic com 30 agentes subindo ao mesmo tempo, 18 criaram uma branch com o mesmo nome. Então escreva o nome da branch no pedido (`-b t1-agendar`) em vez de deixar o agente escolher.
+2. **A pasta principal é da integração.** Ela fica na `main`. Agentes trabalham nos worktrees. Merge acontece na pasta principal.
+3. **Cada worktree se prepara sozinho.** O worktree só traz o que está versionado. `node_modules` e arquivos do `.gitignore` (como `.env`) ficam para trás. Rode `npm install` em cada worktree. No Claude Code, o arquivo `.worktreeinclude` lista arquivos ignorados que devem ser copiados para worktrees novos.
+4. **Remova o worktree no fim.** `git worktree remove <pasta>` apaga a pasta. A branch e os commits continuam.
 
 ### Com git
 
@@ -54,7 +50,7 @@ claude -w agendar
 
 Isso cria `.claude/worktrees/agendar/` numa branch nova `worktree-agendar` e já abre a sessão lá dentro. Adicione `.claude/worktrees/` ao `.gitignore`. Ao sair de uma sessão sem mudanças, o worktree é removido; com mudanças, o Claude Code pergunta se mantém.
 
-Subagent nada mais é do que o Claude chamando outro Claude com um prompt próprio, numa conversa separada que devolve só um resumo. O subagent também pode ganhar xícara própria: com `isolation: worktree` no cabeçalho do arquivo dele, cada execução roda num worktree temporário.
+Subagent nada mais é do que o Claude chamando outro Claude com um prompt próprio, numa conversa separada que devolve só um resumo. O subagent também pode ganhar worktree próprio: com `isolation: worktree` no cabeçalho do arquivo dele, cada execução roda num worktree temporário.
 
 ```markdown
 ---
@@ -71,7 +67,7 @@ da lista da task. No fim, devolva: arquivos alterados, testes rodados, o que fic
 
 ### Worktree e subagent não são a mesma coisa
 
-Os dois aparecem juntos nas aulas e na documentação, então parecem sinônimos. Cada um separa uma coisa:
+Os dois aparecem juntos no curso e na documentação, então parecem sinônimos. Cada um separa uma coisa:
 
 | | Worktree | Subagent |
 |---|---|---|
@@ -124,7 +120,7 @@ Pronto quando `git worktree list` mostrar só a pasta principal de novo.
 
 ## Leve com você
 
-Cola de comandos para o speedrun:
+Cola de comandos desta lição, com as três tasks da agenda (T1, T2, T3) em paralelo:
 
 ```bash
 # na pasta principal, na main
@@ -164,11 +160,11 @@ Regra para o `AGENTS.md`:
 ```
 
 <details class="toca">
-<summary>Trilha da Toca · para quem terminou antes</summary>
+<summary>Desafio extra · para quem terminou antes</summary>
 
 1. **Script de mesa posta.** Escreva `scripts/xicaras.sh` que recebe três nomes, cria os três worktrees com `-b`, roda `npm install` em cada um e imprime `git worktree list`. Peça à IA, mas aplique a carta ♠ Rastro em cada linha do script.
 2. **`.worktreeinclude`.** Descubra quais arquivos ignorados o projeto precisa para rodar (ex.: `.env`) e crie o `.worktreeinclude` para o Claude Code copiá-los.
-3. **Subagent com xícara própria.** Crie o subagent `implementador` acima, peça para ele implementar uma task e descubra onde o worktree temporário foi criado e o que acontece com ele no fim.
+3. **Subagent com worktree próprio.** Crie o subagent `implementador` acima, peça para ele implementar uma task e descubra onde o worktree temporário foi criado e o que acontece com ele no fim.
 4. **Quando não usar.** Monte no laboratório da lição 5 o cenário em que as tasks mexem de verdade no mesmo arquivo. Worktree isola a escrita, mas o conflito continua lá: só aparece mais tarde, no merge.
 5. **Conflito de verdade, em 30 segundos.** Duas tasks mexem em funções diferentes do mesmo arquivo e, mesmo assim, o git para. Rode e leia o que ele imprime:
 

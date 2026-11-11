@@ -11,7 +11,7 @@ Alguém do time pede para a IA:
 
 Em dez segundos chegam 50 linhas. O código roda, a rota responde, o status é 200. Tem cara de pronto.
 
-Agora vem a revisão: **está certo?** Na turma, a resposta costuma ser uma destas:
+Agora vem a revisão: **está certo?** Três respostas possíveis:
 
 - "Testaria."
 - "Pediria para outra IA revisar."
@@ -128,7 +128,7 @@ O erro nasce numa etapa e aparece em outra. O e-mail que ninguém queria só apa
 
 O tamanho do processo depende do tamanho do problema. Corrigir um erro de digitação não pede três sessões. A T1 inteira, com as duas requisições ao mesmo tempo do NFR-1 (requisito não funcional número 1, a regra de concorrência), pede.
 
-### O Baralho do Gato
+### As 6 perguntas
 
 Seis perguntas para trocar o "testaria" por uma revisão que dá para conferir. Cada carta mostra uma resposta ruim e uma boa. A boa sempre cita **uma linha, uma entrada, um status ou uma mensagem exata**.
 
@@ -214,7 +214,7 @@ Não sugira melhorias de estilo. Não altere arquivos.
 ```
 
 <details class="toca">
-<summary>Trilha da Toca · para quem terminou antes</summary>
+<summary>Desafio extra · para quem terminou antes</summary>
 
 1. **Zero assumidos.** Reescreva o pedido de 9 palavras até que nenhum trecho do diff precise ser classificado como "assumido". Quantas linhas ficou o pedido? Compare com a spec de T1: ela é mais curta ou mais longa que o seu pedido?
 2. **Assumido vira ADR.** Escolha duas suposições do diff (fonte de dados, status de sucesso) e escreva cada uma como um ADR de cinco linhas: contexto, decisão, alternativa descartada, consequência.

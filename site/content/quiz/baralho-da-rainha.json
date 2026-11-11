@@ -15,7 +15,7 @@
     },
     {
       "etapa": "pre",
-      "pergunta": "Três tasks passam no teste da Rainha nas três primeiras perguntas: são independentes, mexem em arquivos diferentes e têm teste de aceite. Mas a integração prevista são dois dias de costura. Veredito?",
+      "pergunta": "Três tasks passam no teste do paralelo nas três primeiras perguntas: são independentes, mexem em arquivos diferentes e têm teste de aceite. Mas a integração prevista são dois dias de costura. Veredito?",
       "opcoes": [
         "Paralelo, com ressalva: passou em três das quatro perguntas, e a maioria decide.",
         "Supervisor: um agente dedicado só à integração cuida da quarta pergunta sem atrasar as tasks.",
@@ -54,7 +54,7 @@
       "pergunta": "Um vídeo mostra um \"swarm de 8 agentes\" revisando um PR: quatro leem partes do diff em paralelo e um \"agente líder\" junta os relatórios num veredito. O que há por baixo do nome?",
       "opcoes": [
         "Um padrão de orquestração novo, que só os modelos da última geração conseguem rodar.",
-        "Paralelo com supervisor, só que com mais cartas. As quatro perguntas da Rainha continuam decidindo se vale.",
+        "Paralelo com supervisor, só que com mais agentes. As quatro perguntas do teste do paralelo continuam decidindo se vale.",
         "Oito MCPs de revisão chamando ferramentas de análise estática ao mesmo tempo no mesmo PR.",
         "Um único modelo grande em que oito personas de revisor discutem entre si até chegar a um consenso."
       ],
@@ -63,7 +63,7 @@
     },
     {
       "etapa": "pos",
-      "pergunta": "O time paralelizou 4 tasks do speedrun e entregou 30% mais devagar que o colega com um agente só. O líder pergunta se a tentativa valeu ao menos como aprendizado. Qual comparação fecha a conta?",
+      "pergunta": "Um time paralelizou 4 tasks da agenda de mentorias e entregou 30% mais devagar do que a mesma entrega feita com um agente só. O líder pergunta se a tentativa valeu ao menos como aprendizado. Qual comparação fecha a conta?",
       "opcoes": [
         "Tempo de relógio e custo para entregar as mesmas 4 tasks com os mesmos testes verdes. Se um agente entrega igual, o resto era bloat.",
         "Tokens gastos pelo paralelo comparados aos tokens que o agente único teria gasto.",

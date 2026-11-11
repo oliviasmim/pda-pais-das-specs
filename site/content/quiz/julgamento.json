@@ -3,7 +3,7 @@
   "perguntas": [
     {
       "etapa": "pre",
-      "pergunta": "O agente abriu um PR de 278 linhas. Qual destas atitudes é \"sentença primeiro, veredito depois\", a ordem da Rainha?",
+      "pergunta": "O agente abriu um PR de 278 linhas. Qual destas atitudes é \"sentença primeiro, veredito depois\", a ordem invertida?",
       "opcoes": [
         "Escrever o teste de aceite primeiro, ver ele falhar no vermelho pelo motivo certo e só então implementar o código que o faz passar.",
         "Rodar a CI completa, com lint e testes, antes que qualquer pessoa do time comece a ler o pull request.",
@@ -11,7 +11,7 @@
         "Aprovar porque o agente disse \"pronto, testes passando\" e a CI está verde, ou ler tudo na ordem e aprovar por cansaço."
       ],
       "correta": 3,
-      "explicacao": "A primeira opção é TDD, e TDD é a ordem certa: o veredito (o teste falhando) vem antes do código. A ordem da Rainha é decidir sem olhar a evidência. Tanto faz se foi por confiar no \"pronto\" de quem escreveu ou por chegar cansada na linha 200: nos dois casos, ninguém conferiu qual teste prova o quê."
+      "explicacao": "A primeira opção é TDD, e TDD é a ordem certa: o veredito (o teste falhando) vem antes do código. A ordem invertida é decidir sem olhar a evidência. Tanto faz se foi por confiar no \"pronto\" de quem escreveu ou por chegar cansada na linha 200: nos dois casos, ninguém conferiu qual teste prova o quê."
     },
     {
       "etapa": "pre",

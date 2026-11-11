@@ -44,7 +44,7 @@ export function mount(el, ctx) {
   }
 
   const resultado = h('div', { class: 'cd-resultado', 'aria-live': 'polite' });
-  const selo = h('div', { class: 'cd-selo', 'aria-hidden': 'true' }, h('span', {}, 'Aprovada'), h('small', {}, 'pelo Gato'));
+  const selo = h('div', { class: 'cd-selo', 'aria-hidden': 'true' }, h('span', {}, 'Aprovada'), h('small', {}, 'vira teste'));
 
   const papel = h('div', { class: 'cd-papel' },
     selo,
@@ -85,12 +85,12 @@ export function mount(el, ctx) {
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
       h('h3', {}, 'Carta de Destino'),
-      h('p', {}, 'Escreva o destino da sua próxima feature. O Gato só aprova o que dá para virar teste.'),
+      h('p', {}, 'Escreva o destino da sua próxima feature. Só passa o que dá para virar teste.'),
     ),
     h('div', { class: 'lab__body' },
       papel,
       h('div', { class: 'row cd-acoes' },
-        h('button', { type: 'button', class: 'btn btn--primary', onclick: () => { tentou = true; salvar(); render(true); } }, 'Aplicar o Teste do Gato'),
+        h('button', { type: 'button', class: 'btn btn--primary', onclick: () => { tentou = true; salvar(); render(true); } }, 'Conferir a carta'),
         h('button', { type: 'button', class: 'btn btn--sm btn--ghost', onclick: carregarExemplo }, 'Carregar um exemplo'),
         h('button', { type: 'button', class: 'btn btn--sm btn--ghost', onclick: limpar }, 'Limpar'),
       ),

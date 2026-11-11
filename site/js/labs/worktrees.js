@@ -192,7 +192,7 @@ export function mount(el, ctx) {
     h(
       'p',
       { class: 'wt-intro' },
-      'Três agentes recebem T1, T2 e T3 do speedrun. Todos rodam na mesma pasta, na mesma branch. Cada task só precisa registrar uma linha em ',
+      'Três agentes recebem T1, T2 e T3 da agenda de mentorias. Todos rodam na mesma pasta, na mesma branch. Cada task só precisa registrar uma linha em ',
       h('code', {}, 'src/app.js'),
       '. Antes de rodar, aposte: qual rota chega viva no fim?',
     ),
@@ -274,7 +274,7 @@ export function mount(el, ctx) {
           ? h('span', { class: 'wt-lugar__estado' }, `cabeceira · ${estado.branches.main.ancoras.usos.length}/3 rotas integradas`)
           : agente
             ? h('span', { class: 'wt-lugar__estado' }, `Agente ${agente.id} · ${task.id} ${task.titulo}`, h('span', { class: 'mono' }, ` ${agente.sha}`))
-            : h('span', { class: 'wt-lugar__estado muted' }, 'xícara pronta, ainda sem agente'),
+            : h('span', { class: 'wt-lugar__estado muted' }, 'worktree pronto, ainda sem agente'),
         br && br.mesclada && !w.principal ? h('span', { class: 'chip chip--ok' }, 'mesclada') : null,
         aqui ? h('span', { class: 'wt-lugar__aqui' }, 'você está aqui') : null,
       );
@@ -283,7 +283,7 @@ export function mount(el, ctx) {
       .filter(([nome]) => nome !== 'main' && !estado.worktrees.some((w) => w.branch === nome))
       .map(([nome, br]) => h('span', { class: `chip ${br.mesclada ? 'chip--ok' : ''}` }, nome));
     mesa.replaceChildren(h('div', { class: 'wt-mesa__toalha' }, h('ul', { class: 'wt-lugares' }, lugares)));
-    if (soltas.length) mesa.append(h('p', { class: 'wt-mesa__soltas' }, h('span', { class: 'muted' }, 'Branches sem xícara: '), soltas));
+    if (soltas.length) mesa.append(h('p', { class: 'wt-mesa__soltas' }, h('span', { class: 'muted' }, 'Branches sem worktree: '), soltas));
   }
 
   function desenharMissao() {
@@ -307,7 +307,7 @@ export function mount(el, ctx) {
           'div',
           { class: 'callout wt-callout-folha' },
           h('strong', {}, 'As três rotas estão na main e nenhum worktree sobrou.'),
-          h('p', {}, 'No speedrun o fluxo é este, com agentes de verdade. O conflito em src/app.js vai aparecer lá também, e a saída é a mesma: manter as duas linhas e rodar npm test na main.'),
+          h('p', {}, 'No projeto da agenda o fluxo é este, com agentes de verdade. O conflito em src/app.js vai aparecer lá também, e a saída é a mesma: manter as duas linhas e rodar npm test na main.'),
         ),
       );
     } else fim.replaceChildren();
@@ -442,7 +442,7 @@ export function mount(el, ctx) {
     h(
       'p',
       { class: 'wt-intro' },
-      'Agora cada agente ganha uma xícara: um worktree, com pasta e branch próprias e o mesmo histórico. A pasta principal (a cabeceira da mesa) fica na main e serve só para integrar.',
+      'Agora cada agente ganha um worktree, com pasta e branch próprias e o mesmo histórico. A pasta principal fica na main e serve só para integrar.',
     ),
     h(
       'div',

@@ -28,9 +28,9 @@ test('só o essencial é bom', () => {
   assert.equal(avaliar(essenciais).veredito, 'bom');
 });
 
-test('tudo dentro passa dos 40% e vira poluído', () => {
+test('tudo dentro passa dos 60% e vira poluído', () => {
   const r = avaliar(todas);
-  assert.ok(r.fracao > 0.4);
+  assert.ok(r.fracao > 0.6);
   assert.equal(r.veredito, 'poluido');
   assert.equal(r.ruido.length, 5);
 });
@@ -39,9 +39,9 @@ test('ruído sem o essencial é parcial', () => {
   assert.equal(avaliar(['lock', 'docs-express', 'log-bruto']).veredito, 'parcial');
 });
 
-test('zona respeita o limite de 40% e o de janela cheia', () => {
-  assert.equal(zona(0.4), 'smart');
-  assert.equal(zona(0.41), 'dumb');
+test('zona respeita o limite de 60% e o de janela cheia', () => {
+  assert.equal(zona(0.6), 'smart');
+  assert.equal(zona(0.61), 'dumb');
   assert.equal(zona(0.95), 'cheia');
   assert.ok(JANELA > 0);
   assert.equal(formatarTokens(1500), '1.5k');

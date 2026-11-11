@@ -255,7 +255,7 @@ export function mount(el, ctx) {
         ? h('div', { class: 'ig-padrao' },
           h('span', { class: 'ig-rotulo', text: 'O padrão de erro da IA' }),
           h('p', { text: PADRAO }),
-          h('p', { class: 'muted', text: 'Para a dupla: que linha no AGENTS.md teria impedido os 6 inventados de nascer? Anotem. Ela vai para a Carta à Rainha.' }),
+          h('p', { class: 'muted', text: 'Para a dupla: que linha no AGENTS.md teria impedido os 6 inventados de nascer? Anotem. Ela vai para o laboratório Erro vira regra, na lição 7.' }),
         )
         : null,
       h('div', { class: 'row' },

@@ -1,31 +1,26 @@
-> "Não, não!", disse a Rainha. "Sentença primeiro, veredito depois."
-> "Que bobagem!", disse Alice em voz alta. "Onde já se viu dar a sentença primeiro!"
->
-> Lewis Carroll, *Alice no País das Maravilhas*, cap. 12 (tradução livre).
-
 ## O problema
 
-O agente termina o speedrun e abre um PR: **278 linhas, 11 arquivos, CI verde** (a checagem automática passou), e uma mensagem animada: "Pronto! Todos os testes passando ✅".
+O agente termina T1 e T3 da agenda de mentorias e abre um PR: **278 linhas, 11 arquivos, CI verde** (a checagem automática passou), e uma mensagem animada: "Pronto! Todos os testes passando ✅".
 
 A gente costuma reagir de um destes dois jeitos, e os dois dão ruim:
 
 1. **"LGTM" em 40 segundos** (*looks good to me*, o "pra mim tá ok" do review). A CI está verde, o agente disse que terminou, você aprova.
 2. **Duas horas linha a linha**, a partir do primeiro arquivo, até perder a visão do todo e aprovar por cansaço.
 
-E tem coisa pior: **CI verde pode mentir.** Uma pergunta voltou várias vezes nas aulas: *"Como evitar que o agente altere o teste para fazer o código passar?"*. Se o agente mexe no teste, o sensor continua verde. Só que agora ele mede outra coisa.
+E tem coisa pior: **CI verde pode mentir.** Uma pergunta aparece cedo ou tarde: *"Como evitar que o agente altere o teste para fazer o código passar?"*. Se o agente mexe no teste, o sensor continua verde. Só que agora ele mede outra coisa.
 
-No fim desta lição, você vai conseguir: ler um diff de 278 linhas em camadas e achar os problemas graves nos primeiros minutos, pegar o agente pintando as rosas, montar dois revisores em `.claude/agents/` e transformar o erro de hoje em uma regra e uma checagem para amanhã.
+No fim desta lição, você vai conseguir: ler um diff de 278 linhas em camadas e achar os problemas graves nos primeiros minutos, pegar o agente maquiando um teste, montar dois revisores em `.claude/agents/` e transformar o erro de hoje em uma regra e uma checagem para amanhã.
 
 ## O conceito
 
 ### Sentença primeiro, veredito depois
 
-No julgamento do Valete de Copas, a Rainha quer dar a sentença antes de ouvir a evidência. Alice acha um absurdo. Só que, na revisão de código com IA, a gente faz exatamente isso:
+Dar a sentença antes de ouvir a evidência parece absurdo. Só que, na revisão de código com IA, a gente faz exatamente isso:
 
 - **Sentença:** "Pronto, todos os testes passando ✅" (dita pelo agente, que é parte interessada).
 - **Veredito:** qual teste? Ele falharia sem esse código? Alguém mexeu nele?
 
-TDD nada mais é do que escrever o teste antes do código. Ele segue a ordem certa: **o veredito vem antes**. Você escreve o teste, vê ele falhar (vermelho), e só aceita o código que o faz passar. Aceitar o "pronto" do agente sem abrir a evidência é a ordem da Rainha.
+TDD nada mais é do que escrever o teste antes do código. Ele segue a ordem certa: **o veredito vem antes**. Você escreve o teste, vê ele falhar (vermelho), e só aceita o código que o faz passar. Aceitar o "pronto" do agente sem abrir a evidência é a ordem invertida.
 
 ### Leitura em camadas
 
@@ -67,26 +62,24 @@ Perceba que a camada 2 é a que mais gente pula, e é ela que pega **ausências*
 
 ### Sinais de alerta
 
-| Sinal | Onde aparece primeiro | Pergunta do baralho |
+| Sinal | Onde aparece primeiro | Pergunta que ajuda |
 |---|---|---|
-| 🌹 Teste de aceite alterado (rosas pintadas) | Camada 1 | ♥ Par: qual caso deveria falhar e agora passa? |
-| 📦 Dependência nova sem motivo | Camada 1 | 🎩 Navalha: a biblioteca padrão resolve? |
-| 🏛 Abstração sem necessidade | Camada 1 | 🎩 Navalha: qual teste quebra sem essa camada? |
-| ♠ Regra de negócio não pedida | Camada 2 | ♠ Rastro: onde está na spec? |
-| ♦ Erro genérico (`catch` → 500) | Camada 2 | ♦ Contrato: qual erro, qual status, qual mensagem? |
-| ∅ Caso de falha que sumiu | Camada 2 | ♥ Par: cadê o teste que deveria falhar? |
-| 🐢 Teste que só testa o mock (Falsa Tartaruga) | Camada 3 | ♣ Contraprova: que bug este teste pegaria? |
-| 🧳 Mudança fora do escopo: arquivo sem relação com o título | Camada 1 (`git diff --stat`) | ♠ Rastro: onde o pedido mandou mexer aqui? |
-| 🧹 Refactor não pedido: muitas linhas mudadas, nenhum teste novo | Camada 1 | 🎩 Navalha: o que quebra se este arquivo voltar ao que era? |
-| 💬 Comentário que explica o óbvio ou justifica uma escolha estranha | Camada 4 | ♣ Contraprova: se eu apagar o comentário, perco alguma informação? |
+| Teste de aceite alterado (teste maquiado) | Camada 1 | Par: qual caso deveria falhar e agora passa? |
+| Dependência nova sem motivo | Camada 1 | Navalha: a biblioteca padrão resolve? |
+| Abstração sem necessidade | Camada 1 | Navalha: qual teste quebra sem essa camada? |
+| Regra de negócio não pedida | Camada 2 | Rastro: onde está na spec? |
+| Erro genérico (`catch` → 500) | Camada 2 | Contrato: qual erro, qual status, qual mensagem? |
+| Caso de falha que sumiu | Camada 2 | Par: cadê o teste que deveria falhar? |
+| Teste que só testa o mock | Camada 3 | Contraprova: que bug este teste pegaria? |
+| Mudança fora do escopo: arquivo sem relação com o título | Camada 1 (`git diff --stat`) | Rastro: onde o pedido mandou mexer aqui? |
+| Refactor não pedido: muitas linhas mudadas, nenhum teste novo | Camada 1 | Navalha: o que quebra se este arquivo voltar ao que era? |
+| Comentário que explica o óbvio ou justifica uma escolha estranha | Camada 4 | Contraprova: se eu apagar o comentário, perco alguma informação? |
 
 Para o agente, mexer em mais um arquivo custa quase nada. Por isso o PR dele costuma trazer mudança que parece fazer sentido, mas está fora do pedido. A AWS chama o controle disso de *scope-creep detection* (detectar o escopo crescendo sem ninguém pedir). E um estudo com 33.707 PRs de agentes mostrou que sinais que dá para ver sem rodar nada (tipo de arquivo, tamanho do patch) já indicam quais PRs vão dar mais trabalho de revisão. A tabela acima serve para isso: ela muda **onde você olha primeiro**. Quem decide o que bloqueia continua sendo você.
 
-### As rosas pintadas
+### O teste maquiado
 
-No jardim da Rainha, três jardineiros estão pintando rosas brancas de vermelho. Plantaram a roseira errada e, se a Rainha descobrir, perdem a cabeça. Então pintam.
-
-O agente faz igual. Ele não consegue fazer o teste `vaga ocupada responde 409` passar e troca a asserção para `201`. A CI fica verde. O bug continua lá, agora escondido. Você pediu "faça os testes passarem", e mudar o teste também faz os testes passarem.
+Quando o código não passa, o caminho mais curto é mudar o teste. O agente não consegue fazer o teste `vaga ocupada responde 409` passar e troca a asserção para `201`. A CI fica verde. O bug continua lá, agora escondido. Você pediu "faça os testes passarem", e mudar o teste também faz os testes passarem.
 
 A defesa tem três peças, e você precisa das três:
 
@@ -96,7 +89,7 @@ A defesa tem três peças, e você precisa das três:
 | Hook `PreToolUse` | Sensor, na hora | Bloqueia a edição no momento em que o agente tenta e devolve a mensagem para ele. |
 | Guarda na CI | Sensor, no merge | Compara os testes de aceite com os checksums originais. Pega o que escapou do hook. |
 
-O hook `PreToolUse` nada mais é do que um comando que o Claude Code roda antes de usar uma ferramenta. Ele recebe no stdin um JSON dizendo qual ferramenta o agente quer usar. O caminho do arquivo vem em `tool_input.file_path`. Se o script sair com código **2**, a ação é bloqueada, e o que você escreveu no stderr volta para o agente como explicação. O projeto do speedrun já vem com ele:
+O hook `PreToolUse` nada mais é do que um comando que o Claude Code roda antes de usar uma ferramenta. Ele recebe no stdin um JSON dizendo qual ferramenta o agente quer usar. O caminho do arquivo vem em `tool_input.file_path`. Se o script sair com código **2**, a ação é bloqueada, e o que você escreveu no stderr volta para o agente como explicação. O projeto da agenda de mentorias já vem com ele (no repositório, em `speedrun/agenda-mentorias/.claude/`):
 
 ```json
 {
@@ -196,7 +189,7 @@ Red team é revisar procurando falha de propósito, como quem está do outro lad
 
 <div data-quiz="check"></div>
 
-**2. Fábrica de revisores (8 min).** Monte dois revisores para o seu projeto do speedrun: um `rastreador-de-spec` e um `cetico-de-testes`. Salve os dois em `.claude/agents/` e reinicie a sessão do Claude Code. Você deve ver os dois nomes quando digitar `/agents`.
+**2. Fábrica de revisores (8 min).** Monte dois revisores para o projeto da agenda de mentorias: um `rastreador-de-spec` e um `cetico-de-testes`. No formato da resposta, escolha um que traga a linha `VEREDITO` (Tabela de achados ou Veredito primeiro). Salve os dois em `.claude/agents/`. Para testar, abra o Claude Code numa branch com mudanças e peça pelo nome: *"Use o cetico-de-testes para revisar o diff desta branch contra a main."* Pronto quando a resposta trouxer `VEREDITO: APROVAR` ou `VEREDITO: BLOQUEAR`, no lugar que o formato escolhido manda. Se vier um review genérico, sem essa linha, o seu arquivo não foi usado: confira o `name:` no cabeçalho e a pasta.
 
 <div data-lab="fabrica-revisores"></div>
 
@@ -207,7 +200,7 @@ Red team é revisar procurando falha de propósito, como quem está do outro lad
 **4. Red team em duplas (20 min).**
 
 1. Troque de PR com outra dupla.
-2. **10 minutos à mão.** Leitura em camadas e baralho. Anote cada achado com arquivo:linha e a carta usada.
+2. **10 minutos à mão.** Leitura em camadas e as 6 perguntas. Anote cada achado com arquivo:linha e a carta usada.
 3. Rode os dois subagents de review no PR.
 4. Preencham juntos a tabela abaixo e tragam para a turma a linha que mais surpreendeu vocês.
 
@@ -215,7 +208,7 @@ Red team é revisar procurando falha de propósito, como quem está do outro lad
 |---|---|---|---|---|
 | | | | | |
 
-**5. Carta à Rainha (fechamento da semana).** Que erro a IA repetiu hoje, no seu speedrun ou no PR que vocês revisaram? Transforme em uma regra que o agente lê antes (vai para o AGENTS.md) e em uma checagem que pega depois (hook, CI, teste ou revisor). A carta está pronta quando o laboratório não mostra mais nenhum aviso.
+**5. Erro vira regra (fechamento da lição).** Que erro a IA repetiu hoje, numa task da agenda ou no PR que vocês revisaram? Transforme em uma regra que o agente lê antes (vai para o AGENTS.md) e em uma checagem que pega depois (hook, CI, teste ou revisor). A carta está pronta quando o laboratório não mostra mais nenhum aviso.
 
 <div data-lab="carta-rainha"></div>
 
@@ -234,14 +227,14 @@ Red team é revisar procurando falha de propósito, como quem está do outro lad
 
 **Os dois revisores prontos** estão no repositório em `speedrun/agentes-review/`: `rastreador-de-spec.md` e `cetico-de-testes.md`. Copie para `.claude/agents/` do seu projeto.
 
-**Regra contra rosas pintadas** para o AGENTS.md:
+**Regra contra teste maquiado** para o AGENTS.md:
 
 ```markdown
 - Nunca edite arquivos em tests/aceite/. Se um teste de aceite parecer errado, pare e explique por quê. Corrija o código em src/, não o teste.
 ```
 
 <details class="toca">
-<summary>Trilha da Toca · para quem terminou antes</summary>
+<summary>Desafio extra · para quem terminou antes</summary>
 
 1. **Revisor na CI.** Use a action oficial `anthropics/claude-code-action@v1` para rodar um revisor em todo PR. Esboço (confira os campos atuais na documentação da action antes de usar):
 
@@ -279,7 +272,7 @@ Red team é revisar procurando falha de propósito, como quem está do outro lad
 | Termo | O que dizem | O que realmente significa |
 |---|---|---|
 | Leitura em camadas | "Revisar com calma." | Ler um diff de fora para dentro: arquivos, contratos, testes, corpo. Cada camada mais barata pega problemas antes da seguinte. |
-| Rosas pintadas | "Ajustei o teste." | Alterar um teste para ele passar, em vez de corrigir o código. Esconde o bug e deixa a CI verde mentindo. |
+| Teste maquiado | "Ajustei o teste." | Alterar um teste para ele passar, em vez de corrigir o código. Esconde o bug e deixa a CI verde mentindo. |
 | Falsa Tartaruga | "Teste unitário." | Teste que só confere o que o mock devolveu. Sobe a cobertura e não pega bug. |
 | Hook `PreToolUse` | "Configuração." | Comando que o Claude Code roda antes de uma ferramenta. Sair com código 2 bloqueia a ação. |
 | Sensor inferencial | "A IA revisa." | Sensor que usa um modelo para julgar. Complementa lint e testes; não substitui. |

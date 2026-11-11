@@ -9,7 +9,7 @@ const RESULTADO = {
 };
 const JUST = {
   curta: 'Sua justificativa está curta demais. Diga o critério: custo de coordenação, isolamento, dependência entre tarefas...',
-  'sem-criterio': 'Sua justificativa não cita um critério. "Porque é melhor" não convence a Rainha: diga o que muda em tokens, janela ou dependência entre tarefas.',
+  'sem-criterio': 'Sua justificativa não cita um critério. "Porque é melhor" não convence ninguém: diga o que muda em tokens, janela ou dependência entre tarefas.',
 };
 
 export function mount(el, ctx) {

@@ -326,7 +326,7 @@ export function placar(respostas) {
 export function relatorio(respostas) {
   const p = placar(respostas);
   const linhas = [
-    '# Interrogatório do Gato · relatório da dupla',
+    '# Interrogatório do diff · relatório da dupla',
     '',
     `Pedido: "${PEDIDO}"`,
     `Placar: ${p.pontos}/${p.total} (${p.respondidas} trechos analisados)`,

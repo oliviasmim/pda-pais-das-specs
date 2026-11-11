@@ -27,10 +27,10 @@ export function mount(el, ctx) {
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
       h('h3', {}, 'Quanto custa mais um agente?'),
-      h('p', {}, 'Arraste os controles e veja quando a linha do tempo real se afasta da ideal. Os valores iniciais são as três tasks do speedrun.'),
+      h('p', {}, 'Arraste os controles e veja quando a linha do tempo real se afasta da ideal. Os valores iniciais são as três tasks da agenda (T1, T2, T3).'),
     ),
     h('div', { class: 'lab__body' }, campos, grafico, leitor, tabela,
-      h('p', { class: 'muted cc-aviso' }, 'Isto é um modelo para treinar a intuição, não uma medição. Tempo = parte serial + parte dividida entre os agentes que têm o que fazer + subida de cada agente + atrito por par de agentes (n·(n−1)/2). Depois do speedrun, confie no seu log.'),
+      h('p', { class: 'muted cc-aviso' }, 'Isto é um modelo para treinar a intuição, não uma medição. Tempo = parte serial + parte dividida entre os agentes que têm o que fazer + subida de cada agente + atrito por par de agentes (n·(n−1)/2). Quando você rodar uma sessão paralela de verdade, confie no seu log.'),
     ),
   );
 

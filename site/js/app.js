@@ -1,7 +1,9 @@
 import { h, toast, copy, download, slug } from './ui.js';
 import { estadoDoLab, licaoFeita, marcarLicao, preferencia, definirPreferencia } from './store.js';
 import { renderQuiz } from './quiz.js';
-import { semanas, aulas, licoes, cartas, licaoPorId, vizinhas, aulaDaLicao } from '../content/curriculo.js';
+import { icone, pecas, iconeDaLicao } from './iso.js';
+import { placaHarness } from './views/placa.js';
+import { aulas, licoes, cartas, licaoPorId, vizinhas, aulaDaLicao } from '../content/curriculo.js';
 import { maquinas, maquinaPorId } from '../content/maquinas.js';
 
 const MARKED_URL = 'https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js';
@@ -103,24 +105,11 @@ function cartasInline(ids) {
         h(
           'a',
           { class: 'carta-mini', href: `#/baralho?carta=${c.id}`, 'data-naipe': c.naipe },
-          h('span', { class: 'carta__canto', style: { color: c.naipe === '♠' || c.naipe === '♣' ? 'var(--ink)' : '' } }, c.naipe),
+          h('span', { class: 'carta__canto' }, c.naipe),
           h('span', {}, h('strong', {}, c.nome), h('span', {}, c.pergunta)),
         ),
       ),
   );
-}
-
-function sorrisoSvg() {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 140 46');
-  svg.setAttribute('class', 'sorriso');
-  svg.setAttribute('aria-hidden', 'true');
-  svg.innerHTML =
-    '<path d="M6 10 Q70 58 134 10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>' +
-    '<path d="M14 14 Q70 46 126 14" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>' +
-    [26, 38, 50, 62, 74, 86, 98, 110].map((x) => `<line x1="${x}" y1="${16 + Math.sin(((x - 6) / 128) * Math.PI) * 14}" x2="${x}" y2="${22 + Math.sin(((x - 6) / 128) * Math.PI) * 18}" stroke="currentColor" stroke-width="1"/>`).join('') +
-    '<circle cx="4" cy="8" r="2" fill="currentColor"/><circle cx="136" cy="8" r="2" fill="currentColor"/>';
-  return svg;
 }
 
 /* ---------------- views ---------------- */
@@ -129,53 +118,111 @@ function viewInicio() {
   definirTitulo('');
   const totalFeitas = licoes.filter((l) => licaoFeita(l.id)).length;
 
+  const progresso = Math.round((totalFeitas / licoes.length) * 100);
   const heroi = h(
     'section',
-    { class: 'heroi' },
+    { class: 'palco' },
     h(
       'div',
-      {},
-      h('div', { class: 'sobretitulo' }, 'Semana 10 · Revisão'),
-      h('h1', { html: 'Para onde você quer <em>ir</em>?' }),
+      { class: 'palco__principal' },
       h(
-        'p',
-        { class: 'heroi__lead' },
-        'Subagent, worktree, CI e review deixam a IA mais rápida. Para onde ela vai, quem escreve é você, na spec. Esta semana a gente treina três respostas antes de abrir o editor: o que o sistema faz, quão bem precisa fazer (com número) e qual teste mostra que fez.',
+        'div',
+        { class: 'palco__cab' },
+        h('div', { class: 'sobretitulo' }, 'Especialização em IA · PdA'),
+        h('h1', { html: 'Para onde você quer <em>ir</em>?' }),
+      ),
+      placaHarness(licoes),
+    ),
+    h(
+      'aside',
+      { class: 'palco__lado' },
+      h(
+        'div',
+        { class: 'painel painel--progresso' },
+        h('span', { class: 'painel__icone', html: icone(pecas.livro()) }),
+        h(
+          'div',
+          { class: 'painel__progresso' },
+          h('span', { class: 'painel__rotulo' }, 'Lições feitas'),
+          h('span', { class: 'barra-prog', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': licoes.length, 'aria-valuenow': totalFeitas, 'aria-label': 'Lições feitas' }, h('i', { style: { width: `${progresso}%` } })),
+        ),
+        h('span', { class: 'painel__conta mono' }, `${totalFeitas}/${licoes.length}`),
       ),
       h(
         'div',
-        { class: 'row', style: { marginTop: '1.5rem' } },
-        h('a', { class: 'btn btn--primary', href: `#/licao/${licoes[0].id}` }, totalFeitas ? 'Voltar para a lição 1' : 'Começar pela lição 1', ' →'),
-        h('a', { class: 'btn', href: '#/baralho' }, '♠ Baralho do Gato'),
-        totalFeitas ? h('span', { class: 'chip chip--ok' }, `${totalFeitas} de ${licoes.length} lições feitas`) : null,
+        { class: 'painel' },
+        h('div', { class: 'painel__abas', role: 'presentation' }, h('span', { class: 'ativa' }, 'Ponto de partida')),
+        h(
+          'figure',
+          { class: 'dialogo' },
+          h('span', { class: 'quem' }, 'Alice'),
+          h('p', {}, '“Você poderia me dizer, por favor, que caminho devo tomar para sair daqui?”'),
+          h('span', { class: 'quem gato' }, 'O Gato'),
+          h('p', {}, '“Isso depende bastante de para onde você quer ir.”'),
+          h('span', { class: 'quem' }, 'Alice'),
+          h('p', {}, '“Não me importa muito para onde…”'),
+          h('span', { class: 'quem gato' }, 'O Gato'),
+          h('p', {}, '“Então não importa que caminho você tome.”'),
+          h('cite', {}, 'Lewis Carroll, Alice no País das Maravilhas (1865), cap. 6. Tradução livre.'),
+        ),
+        h(
+          'p',
+          { class: 'painel__lead' },
+          'Subagent, worktree, CI e review deixam a IA mais rápida. Para onde ela vai, quem escreve é você, na spec: o que o sistema faz, quão bem precisa fazer (com número) e qual teste mostra que fez.',
+        ),
+      ),
+      h(
+        'div',
+        { class: 'painel painel--codigo' },
+        h('div', { class: 'painel__abas' }, h('span', { class: 'ativa' }, 'Leve com você'), h('span', { class: 'mono faint' }, 'AGENTS.md')),
+        h(
+          'ol',
+          { class: 'codigo-linhas mono' },
+          ['## Regras', '1. Não crie regra que não', '   esteja em docs/spec.md.', '2. Status e mensagem de erro', '   exatamente como na spec.', '3. Pronto é quando o gate passa.'].map((t) => h('li', {}, t)),
+        ),
+      ),
+      h(
+        'div',
+        { class: 'row' },
+        h('a', { class: 'btn btn--primary', href: `#/licao/${licoes[0].id}` }, totalFeitas ? 'Continuar' : 'Começar pela lição 1', ' →'),
+        h('a', { class: 'btn', href: '#/baralho' }, 'As 6 perguntas'),
       ),
     ),
+  );
+
+  const faixa = h(
+    'section',
+    { class: 'faixa', 'aria-label': 'Lições' },
+    h('h2', { class: 'faixa__titulo' }, 'Lições'),
     h(
-      'figure',
-      { class: 'dialogo', style: { margin: 0 } },
-      sorrisoSvg(),
-      h('span', { class: 'quem' }, 'Alice'),
-      h('p', {}, '“Você poderia me dizer, por favor, que caminho devo tomar para sair daqui?”'),
-      h('span', { class: 'quem gato' }, 'O Gato'),
-      h('p', {}, '“Isso depende bastante de para onde você quer ir.”'),
-      h('span', { class: 'quem' }, 'Alice'),
-      h('p', {}, '“Não me importa muito para onde…”'),
-      h('span', { class: 'quem gato' }, 'O Gato'),
-      h('p', {}, '“Então não importa que caminho você tome.”'),
-      h('cite', {}, 'Lewis Carroll, Alice no País das Maravilhas (1865), cap. 6. Tradução livre.'),
+      'ol',
+      { class: 'faixa__lista' },
+      licoes.map((l) =>
+        h(
+          'li',
+          {},
+          h(
+            'a',
+            { class: `faixa__item${licaoFeita(l.id) ? ' feita' : ''}`, href: `#/licao/${l.id}` },
+            h('span', { class: 'faixa__arte', html: icone(iconeDaLicao[l.id]?.() || pecas.chip()) }),
+            h('span', { class: 'faixa__nome' }, `${l.numero}. ${l.titulo}`),
+            h('span', { class: 'faixa__seta', 'aria-hidden': 'true' }, licaoFeita(l.id) ? '✓' : '›'),
+          ),
+        ),
+      ),
     ),
   );
 
   const frase = h(
     'section',
-    { class: 'frase-semana', 'aria-label': 'Frase da semana' },
+    { class: 'frase-semana', 'aria-label': 'Frase para levar' },
     h('p', { html: 'Requisito sem número é <em>desejo</em>.<br>Requisito sem sensor é <em>promessa</em>.' }),
   );
 
   const blocoAulas = h(
     'section',
     { class: 'secao' },
-    h('div', { class: 'secao__cab' }, h('h2', {}, 'As duas aulas da semana'), h('span', { class: 'muted' }, 'Quem digita é você. A facilitadora circula e faz as perguntas do baralho.')),
+    h('div', { class: 'secao__cab' }, h('h2', {}, 'Em que ordem fazer'), h('span', { class: 'muted' }, 'Quem digita é você. As 6 perguntas mostram se você sabe o que quer da IA.')),
     h(
       'div',
       { class: 'aulas' },
@@ -202,19 +249,6 @@ function viewInicio() {
                 ),
               );
             }),
-            a.id === 'aula-2'
-              ? h(
-                  'li',
-                  {},
-                  h(
-                    'a',
-                    { href: '#/speedrun' },
-                    h('span', { class: 'num' }, '⏱'),
-                    h('span', {}, h('span', { class: 'titulo-licao' }, 'Speedrun cronometrado'), h('span', { class: 'sub-licao' }, '3 tasks em paralelo, uma worktree para cada, 40 minutos no relógio')),
-                    h('span', { class: 'faint', style: { fontSize: '0.8rem' } }, '40 min'),
-                  ),
-                )
-              : null,
           ),
           h('p', { class: 'muted', style: { margin: '1rem 0 0', fontSize: '0.9rem' } }, h('strong', {}, 'Entregável: '), a.entregavel),
         ),
@@ -222,49 +256,26 @@ function viewInicio() {
     ),
   );
 
-  const mapa = h(
-    'section',
-    { class: 'secao' },
-    h('div', { class: 'secao__cab' }, h('h2', {}, 'As 14 semanas e o que a turma pediu para rever'), h('a', { href: '#/trilha' }, 'Abrir a trilha →')),
-    h(
-      'div',
-      { class: 'mapa-mini', role: 'list' },
-      semanas.map((s) =>
-        h('a', { href: `#/trilha?semana=${s.n}`, 'data-revisao': s.revisao, role: 'listitem', title: `S${s.n} · ${s.titulo}` }, h('span', { class: 'barra' }), `S${s.n}`),
-      ),
-    ),
-    h(
-      'div',
-      { class: 'legenda' },
-      h('span', {}, h('i', { style: { background: 'color-mix(in srgb, var(--copas) 55%, var(--line))' } }), 'mais pedida para revisão'),
-      h('span', {}, h('i', { style: { background: 'color-mix(in srgb, var(--ouro) 50%, var(--line))' } }), 'revisão média'),
-      h('span', {}, h('i', { style: { background: 'var(--ink)' } }), 'você está aqui'),
-      h('span', {}, h('i', { style: { background: 'var(--line)' } }), 'ainda vem'),
-    ),
-  );
-
   const atalhos = h(
     'section',
     { class: 'secao' },
-    h('div', { class: 'secao__cab' }, h('h2', {}, 'Ferramentas da semana')),
+    h('div', { class: 'secao__cab' }, h('h2', {}, 'Ferramentas')),
     h(
       'div',
       { class: 'atalhos' },
       [
-        { href: '#/maquinas', naipe: '⚙', t: 'Máquinas', d: 'Seis simulações para rodar, quebrar e abrir: agente, requisito, subagent, worktrees, esteira e review.' },
-        { href: '#/baralho', naipe: '♠', t: 'Baralho do Gato', d: 'As seis perguntas da facilitadora, com a resposta que trava e a que avança. Dá para imprimir.' },
-        { href: '#/speedrun', naipe: '⏱', t: 'Speedrun', d: 'Cronômetro de 40 minutos, placar dos times e os comandos prontos para copiar.' },
-        { href: '#/trilha', naipe: '🗺', t: 'Trilha', d: 'Em que semana cada conceito apareceu e qual lição desta semana revisa ele.' },
-        { href: '#/glossario', naipe: '📖', t: 'Glossário', d: 'Cada termo com o que se ouve por aí e o que ele é na prática.' },
-      ].map((a) => h('a', { class: 'card atalho', href: a.href }, h('span', { class: 'naipe', 'aria-hidden': 'true' }, a.naipe), h('h3', {}, a.t), h('p', {}, a.d))),
+        { href: '#/maquinas', arte: pecas.chip(), t: 'Máquinas', d: 'Seis simulações para rodar, quebrar e abrir: agente, requisito, subagent, worktrees, esteira e review.' },
+        { href: '#/baralho', arte: pecas.cartas(), t: 'As 6 perguntas', d: 'As perguntas da facilitadora, com a resposta que trava e a que avança. Dá para imprimir.' },
+        { href: '#/glossario', arte: pecas.livro(), t: 'Glossário', d: 'Cada termo com o que se ouve por aí e o que ele é na prática.' },
+      ].map((a) => h('a', { class: 'card atalho', href: a.href }, h('span', { class: 'atalho__arte', html: icone(a.arte) }), h('h3', {}, a.t), h('p', {}, a.d))),
     ),
   );
 
-  main.replaceChildren(heroi, frase, blocoAulas, mapa, atalhos);
+  main.replaceChildren(heroi, faixa, frase, blocoAulas, atalhos);
 }
 
 function viewBaralho(params) {
-  definirTitulo('Baralho do Gato');
+  definirTitulo('As 6 perguntas');
   const foco = params.get('carta');
   const grade = h(
     'div',
@@ -310,19 +321,19 @@ function viewBaralho(params) {
     h(
       'section',
       { class: 'secao', style: { marginTop: '0.5rem' } },
-      h('div', { class: 'sobretitulo' }, 'Ferramenta da semana'),
-      h('h1', {}, 'O Baralho do Gato'),
+      h('div', { class: 'sobretitulo' }, 'Para usar na prática'),
+      h('h1', {}, 'As 6 perguntas'),
       h(
         'p',
         { class: 'heroi__lead' },
-        'Seis perguntas que a facilitadora faz durante a prática. Se você responde cada uma com uma linha do diff, um número ou o status e a mensagem exatos, você sabe o que quer da IA. Se a resposta tem "testaria", "trataria" ou "acho que", ainda está caindo na toca.',
+        'Seis perguntas que a facilitadora faz durante a prática. Se você responde cada uma com uma linha do diff, um número ou o status e a mensagem exatos, você sabe o que quer da IA. Se a resposta tem "testaria", "trataria" ou "acho que", ainda não sabe para onde quer ir.',
       ),
       h(
         'div',
         { class: 'row nao-imprimir', style: { margin: '1.2rem 0 2rem' } },
         h('button', { class: 'btn', type: 'button', onclick: () => document.querySelectorAll('.carta').forEach((c) => (c.dataset.virada = '0')) }, 'Desvirar todas'),
         h('button', { class: 'btn', type: 'button', onclick: () => document.querySelectorAll('.carta').forEach((c) => (c.dataset.virada = '1')) }, 'Virar todas'),
-        h('button', { class: 'btn', type: 'button', onclick: () => sortearCarta() }, '🎲 Sortear uma carta'),
+        h('button', { class: 'btn', type: 'button', onclick: () => sortearCarta() }, 'Sortear uma carta'),
         h('button', { class: 'btn btn--ghost', type: 'button', onclick: () => window.print() }, 'Imprimir'),
       ),
       grade,
@@ -343,60 +354,6 @@ function viewBaralho(params) {
     const alvo = document.getElementById(`carta-${foco}`);
     if (alvo) setTimeout(() => alvo.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
   }
-}
-
-function viewTrilha(params) {
-  definirTitulo('Trilha');
-  const foco = Number(params.get('semana'));
-  const rotulo = { alta: 'revisão prioritária', media: 'revisão média', agora: 'você está aqui', futura: 'ainda vem' };
-  main.replaceChildren(
-    h(
-      'section',
-      { class: 'secao', style: { marginTop: '0.5rem', maxWidth: '820px' } },
-      h('div', { class: 'sobretitulo' }, 'Mapa do País'),
-      h('h1', {}, 'A trilha das 14 semanas'),
-      h(
-        'p',
-        { class: 'heroi__lead' },
-        'Cada semana ganhou um lugar do livro. A cor do marcador mostra o que a turma mais pediu para rever: juntamos as dúvidas do chat e as feitas em voz na aula, e cruzamos com a matriz de prioridade de revisão.',
-      ),
-      h(
-        'ol',
-        { class: 'trilha' },
-        semanas.map((s) =>
-          h(
-            'li',
-            { 'data-revisao': s.revisao, id: `semana-${s.n}` },
-            h('span', { class: 'trilha__no', 'aria-hidden': 'true' }, s.n),
-            h(
-              'div',
-              { class: 'card trilha__card', style: s.n === foco ? { borderColor: 'var(--ink)' } : {} },
-              h('div', { class: 'row', style: { justifyContent: 'space-between' } }, h('span', { class: 'trilha__lugar' }, s.lugar), h('span', { class: 'chip' }, `${s.modulo} · ${rotulo[s.revisao]}`)),
-              h('h3', {}, `S${s.n} · ${s.titulo}`),
-              h('p', {}, s.ideia),
-              s.n === 10 ? h('p', { style: { marginTop: '0.6rem' } }, h('a', { href: '#/' }, 'Abrir a semana de revisão →')) : null,
-              licoesQueRevisam(s.n),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-  if (foco) {
-    const alvo = document.getElementById(`semana-${foco}`);
-    if (alvo) setTimeout(() => alvo.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
-  }
-}
-
-function licoesQueRevisam(n) {
-  const ls = licoes.filter((l) => l.semanas.includes(n));
-  if (!ls.length || n === 10) return null;
-  return h(
-    'p',
-    { class: 'faint', style: { marginTop: '0.6rem', fontSize: '0.85rem' } },
-    'Revisto em: ',
-    ls.map((l, i) => [i ? ', ' : '', h('a', { href: `#/licao/${l.id}` }, l.titulo)]),
-  );
 }
 
 async function viewGlossario() {
@@ -439,7 +396,7 @@ async function viewGlossario() {
     h(
       'section',
       { class: 'secao', style: { marginTop: '0.5rem' } },
-      h('div', { class: 'sobretitulo' }, 'Linguagem ubíqua: o vocabulário que a turma combinou'),
+      h('div', { class: 'sobretitulo' }, 'Linguagem ubíqua: o mesmo nome para a mesma coisa'),
       h('h1', {}, 'Glossário'),
       h('p', { class: 'heroi__lead' }, 'Teste rápido: explique o termo sem usar a própria palavra. Se travar, leia a terceira coluna e abra a lição da quarta.'),
       h('div', { style: { margin: '1.5rem 0' } }, campo),
@@ -512,21 +469,6 @@ async function viewMaquina(id, params) {
   }
 }
 
-async function viewSpeedrun() {
-  definirTitulo('Speedrun');
-  carregarCss('css/speedrun.css');
-  try {
-    const mod = await import('./views/speedrun.js');
-    const el = h('div', { class: 'speedrun' });
-    main.replaceChildren(el);
-    const fim = mod.render(el, ctxDe('speedrun', 'placar'));
-    if (typeof fim === 'function') limpezas.push(fim);
-  } catch (erro) {
-    console.error(erro);
-    main.replaceChildren(h('p', { class: 'carregando' }, 'O speedrun não carregou. Recarregue a página. Se continuar, avise a facilitadora.'));
-  }
-}
-
 async function viewLicao(id) {
   const licao = licaoPorId(id);
   if (!licao) return viewNaoAchei();
@@ -548,7 +490,8 @@ async function viewLicao(id) {
   const cab = h(
     'header',
     { class: 'licao__cab' },
-    h('div', { class: 'sobretitulo' }, `${aula ? aula.titulo : 'Semana 10'} · Lição ${licao.numero}`),
+    iconeDaLicao[id] ? h('div', { class: 'licao__arte', html: icone(iconeDaLicao[id](), { pad: 4 }) }) : null,
+    h('div', { class: 'sobretitulo' }, aula ? `${aula.titulo} · Lição ${licao.numero}` : `Lição ${licao.numero}`),
     h('h1', {}, licao.titulo),
     h('p', { class: 'lema' }, licao.lema),
     h(
@@ -616,7 +559,7 @@ async function viewLicao(id) {
     { class: 'licao__lado', 'aria-label': 'Nesta lição' },
     h('h4', {}, 'Nesta lição'),
     indice,
-    h('h4', {}, aula ? aula.titulo : 'Semana 10'),
+    h('h4', {}, aula ? aula.titulo : 'Lições'),
     h(
       'ol',
       {},
@@ -648,7 +591,7 @@ async function viewLicao(id) {
       anterior ? h('a', { href: `#/licao/${anterior.id}` }, h('small', {}, '← Anterior'), anterior.titulo) : h('span'),
       proxima
         ? h('a', { class: 'prox', href: `#/licao/${proxima.id}` }, h('small', {}, 'Próxima →'), proxima.titulo)
-        : h('a', { class: 'prox', href: '#/speedrun' }, h('small', {}, 'Fim da semana →'), 'Speedrun e placar'),
+        : h('a', { class: 'prox', href: '#/maquinas' }, h('small', {}, 'Fim das lições →'), 'Abrir as máquinas'),
     ),
   );
 
@@ -697,9 +640,7 @@ async function rotear() {
     if (partes.length === 0) viewInicio();
     else if (partes[0] === 'licao' && partes[1]) await viewLicao(partes[1]);
     else if (partes[0] === 'baralho') viewBaralho(params);
-    else if (partes[0] === 'trilha') viewTrilha(params);
     else if (partes[0] === 'glossario') await viewGlossario();
-    else if (partes[0] === 'speedrun') await viewSpeedrun();
     else if (partes[0] === 'maquinas') viewMaquinas();
     else if (partes[0] === 'maquina' && partes[1]) await viewMaquina(partes[1], params);
     else viewNaoAchei();
@@ -707,7 +648,7 @@ async function rotear() {
     console.error(erro);
     main.replaceChildren(h('p', { class: 'carregando' }, 'Esta página deu erro ao abrir. Recarregue. Se continuar, avise a facilitadora.'));
   }
-  if (!params.get('carta') && !params.get('semana') && partes[0] !== 'licao') window.scrollTo(0, 0);
+  if (!params.get('carta') && partes[0] !== 'licao') window.scrollTo(0, 0);
 }
 
 /* ---------------- preferências ---------------- */

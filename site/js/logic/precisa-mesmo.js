@@ -40,7 +40,7 @@ export const CENARIOS = [
   },
   {
     id: 'speedrun',
-    titulo: 'Três tasks independentes com prazo de 40 minutos',
+    titulo: 'As três tasks da agenda (T1, T2, T3)',
     contexto: 'T1 (agendar), T2 (cancelar) e T3 (listar vagas) mexem em arquivos diferentes e têm testes próprios.',
     recomendada: 'paralelo',
     aceitaveis: ['supervisor'],

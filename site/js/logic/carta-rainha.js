@@ -159,7 +159,7 @@ export function montarCarta({ erroId, evidencia = '', regra = '', sensor = '', t
   const t = TIPOS_SENSOR[tipo] ? tipo : e ? e.sensor.tipo : 'review';
   const local = onde || (e ? e.sensor.onde : '');
   return [
-    '## 🫖 Carta à Rainha',
+    '## Erro vira regra',
     '',
     `**Erro que a IA repetiu:** ${e ? e.nome : '(escolha um erro)'}`,
     `**Evidência de hoje:** ${evidencia.trim() || '(faltando)'}`,

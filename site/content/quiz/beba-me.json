@@ -35,7 +35,7 @@
         "Abrir uma sessão nova levando só a spec e a task: o problema é a janela lotada (a dumb zone), e mais texto por cima agrava a causa."
       ],
       "correta": 3,
-      "explicacao": "Passou dos ~40% da janela, o agente esquece o que leu no começo (a spec) e repete erro. Colar a correção de novo só põe mais texto na mesma janela lotada. Sessão nova com a spec e a task volta para a smart zone. E apagar o log do disco não muda nada: o que já foi lido está na janela, não no disco."
+      "explicacao": "Passou dos ~60% da janela, o agente esquece o que leu no começo (a spec) e repete erro. Colar a correção de novo só põe mais texto na mesma janela lotada. Sessão nova com a spec e a task volta para a smart zone. E apagar o log do disco não muda nada: o que já foi lido está na janela, não no disco."
     },
     {
       "etapa": "check",

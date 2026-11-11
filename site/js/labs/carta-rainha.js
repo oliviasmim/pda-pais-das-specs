@@ -43,7 +43,7 @@ export function mount(el, ctx) {
   el.append(
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag', text: 'Laboratório' }),
-      h('h3', { text: 'Carta à Rainha' }),
+      h('h3', { text: 'Erro vira regra' }),
       h('p', { class: 'muted', text: 'Escolha o erro que a IA repetiu hoje, cole onde ele apareceu e escreva duas coisas: a regra que o agente lê antes (guia) e a checagem que pega o erro depois (sensor).' }),
     ),
     h('div', { class: 'lab__body' },

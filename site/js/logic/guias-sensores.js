@@ -92,7 +92,7 @@ export const ITENS = [
   },
   {
     id: 'pr-humano',
-    nome: 'Revisão humana com o Baralho do Gato',
+    nome: 'Revisão humana com as 6 perguntas',
     desc: 'Você lendo o diff e perguntando "onde está escrito isso?".',
     resposta: 'sensor',
     explicacao: 'Sensor humano: o mais caro e o único que entende intenção. Use onde os outros sensores não alcançam.',

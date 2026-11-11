@@ -1,14 +1,10 @@
-> A Rainha só tinha um jeito de resolver todas as dificuldades, grandes ou pequenas. "Cortem-lhe a cabeça!", dizia, sem nem olhar em volta.
->
-> Lewis Carroll, *Alice no País das Maravilhas*, cap. 8 (tradução livre).
-
 ## O problema
 
 O agente termina e escreve: *"Pronto! Implementei a feature e todos os testes estão passando ✅"*.
 
-Perceba quem está dando a notícia: quem escreveu o código está dizendo que o código está certo. É a Rainha no julgamento do Valete, **sentença primeiro, veredito depois**. A IA é treinada para terminar a tarefa, e "os testes passam" é o jeito mais curto de dizer que terminou. Ninguém rodou nada na sua frente.
+Perceba quem está dando a notícia: quem escreveu o código está dizendo que o código está certo. É **sentença primeiro, veredito depois**. A IA é treinada para terminar a tarefa, e "os testes passam" é o jeito mais curto de dizer que terminou. Ninguém rodou nada na sua frente.
 
-Um **gate** (portão) nada mais é do que uma checagem que roda sozinha e responde sim ou não. Ele mora na CI (integração contínua, a esteira que roda a cada push e a cada PR) e não negocia: se falhar, o botão de merge fica travado. Na análise de dúvidas da turma, quality gates e CI ficaram em primeiro lugar no índice de necessidade de revisão. Vocês montaram a CI na S8. A pergunta agora é outra: **ela bloqueia mesmo? E bloqueia o quê?**
+Um **gate** (portão) nada mais é do que uma checagem que roda sozinha e responde sim ou não. Ele mora na CI (integração contínua, a esteira que roda a cada push e a cada PR) e não negocia: se falhar, o botão de merge fica travado. Vocês montaram a CI na S8. A pergunta agora é outra: **ela bloqueia mesmo? E bloqueia o quê?**
 
 ## O conceito
 
@@ -37,14 +33,14 @@ Sensores também se dividem em dois tipos. Os **computacionais** são comandos c
 | **Testes + cobertura** | O comportamento é o que a spec pede? | Status e mensagem errados, regra trocada | O que não está em nenhum teste. E teste alterado para passar. |
 | **Dependências** | Alguma biblioteca tem vulnerabilidade conhecida? | Versão com falha de segurança já catalogada (uma CVE) de severidade alta | Dependência desnecessária. Pacote que o modelo inventou. |
 
-Esta semana a gente soma dois extras:
+Nesta lição a gente soma dois extras:
 
 - **Sensor de NFR.** NFR é requisito não funcional: não diz o que o sistema faz, diz como (rápido, seguro, aguentando carga). Requisito sem sensor é promessa (lição 2). O NFR-2 da agenda pede "p95 abaixo de 50 ms com 1.000 vagas", ou seja, 95 de cada 100 respostas chegam em menos de 50 ms. Ele vira um teste que mede e falha.
 - **Guarda dos testes de aceite.** Um checksum (a impressão digital de um arquivo: mudou uma vírgula, muda o checksum) dos arquivos de `tests/aceite/`. Se o agente trocar o `409` esperado por `201` para a CI ficar verde (as **rosas pintadas** da lição 7), a guarda corta a cabeça.
 
 ### Fail fast: o barato primeiro
 
-Fail fast quer dizer falhar cedo. Os passos de um job rodam em ordem e o job para no primeiro que falha. Se o lint leva 20 segundos e os testes levam um minuto, um erro de sintaxe pego no lint te devolve a resposta um minuto antes. Num dia de speedrun, com dezenas de pushes, é a diferença entre esperar segundos e esperar minutos a cada push.
+Fail fast quer dizer falhar cedo. Os passos de um job rodam em ordem e o job para no primeiro que falha. Se o lint leva 20 segundos e os testes levam um minuto, um erro de sintaxe pego no lint te devolve a resposta um minuto antes. Num dia com dezenas de pushes, é a diferença entre esperar segundos e esperar minutos a cada push.
 
 ### O pacote que a IA inventou
 
@@ -154,7 +150,7 @@ O terceiro engana mais, porque o YAML (o formato desse arquivo) está perfeito e
 
 ### Configurar CI com a IA, sem aceitar YAML às cegas
 
-Pode pedir o workflow para a IA, vai sem medo. O que não dá é aceitar sem ler: aí é o Valete escrevendo a própria sentença. Este YAML foi gerado por um agente para a agenda de mentorias. Ele tem **cinco problemas**. Encontre os cinco antes de abrir o gabarito.
+Pode pedir o workflow para a IA, vai sem medo. O que não dá é aceitar sem ler: aí é o réu escrevendo a própria sentença. Este YAML foi gerado por um agente para a agenda de mentorias. Ele tem **cinco problemas**. Encontre os cinco antes de abrir o gabarito.
 
 ```yaml
 name: CI
@@ -282,7 +278,7 @@ test('NFR-2: p95 de GET /mentores/:id/vagas < 50 ms com 1.000 vagas', async () =
 ```
 
 <details class="toca">
-<summary>Trilha da Toca · para quem terminou antes</summary>
+<summary>Desafio extra · para quem terminou antes</summary>
 
 1. **Sensor inferencial na CI.** Adicione `anthropics/claude-code-action@v1` ao workflow para revisar cada PR com um subagent de review. Onde ele entra na ordem: antes ou depois dos sensores computacionais? Por quê?
 2. **Quem testa os testes?** No laboratório você quebrou o código à mão. Rode uma ferramenta de *mutation testing* (Stryker para JavaScript) no seu projeto: quantas mutações sobrevivem? Qual teste sobreviveu mais?

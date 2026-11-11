@@ -90,7 +90,7 @@ export function mount(el, ctx) {
           ),
         ),
         h('fieldset', {}, h('legend', { text: '4 · Modelo' }), h('label', { for: `${uid}-modelo`, class: 'sr-only', text: 'Modelo' }), modelo),
-        h('fieldset', {}, h('legend', { text: '5 · Rubrica (cartas do baralho e sinais de alerta)' }), rubrica),
+        h('fieldset', {}, h('legend', { text: '5 · Rubrica (as 6 perguntas e sinais de alerta)' }), rubrica),
         h('fieldset', {}, h('legend', { text: '6 · Formato da resposta' }), formatos),
       ),
       h('div', { class: 'fr-saida' },

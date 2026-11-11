@@ -1,5 +1,5 @@
 export const JANELA = 200;
-export const ZONA_SMART = 0.4;
+export const ZONA_SMART = 0.6; // régua do curso, não limite publicado
 
 export const CUSTOS = {
   contextoBase: 10,
@@ -31,14 +31,14 @@ export const PADROES = [
 export const CENARIOS = [
   {
     id: 'speedrun',
-    nome: 'Speedrun: 3 tasks independentes',
+    nome: 'Agenda: 3 tasks independentes',
     descricao: 'As tasks T1, T2 e T3 da agenda de mentorias. Cada uma tem seu arquivo de rota; todas registram uma linha em src/app.js.',
     maxAgentes: 3,
     custoConflito: { 'src/app.js': 2 },
     tasks: [
-      { id: 'T1', nome: 'Agendar', dur: 14, tokens: 35, deps: [], arquivos: ['src/routes/agendamentos.js', 'src/app.js'] },
-      { id: 'T2', nome: 'Cancelar', dur: 10, tokens: 25, deps: [], arquivos: ['src/routes/cancelamento.js', 'src/app.js'] },
-      { id: 'T3', nome: 'Vagas', dur: 12, tokens: 30, deps: [], arquivos: ['src/routes/vagas.js', 'src/app.js'] },
+      { id: 'T1', nome: 'Agendar', dur: 14, tokens: 50, deps: [], arquivos: ['src/routes/agendamentos.js', 'src/app.js'] },
+      { id: 'T2', nome: 'Cancelar', dur: 10, tokens: 35, deps: [], arquivos: ['src/routes/cancelamento.js', 'src/app.js'] },
+      { id: 'T3', nome: 'Vagas', dur: 12, tokens: 45, deps: [], arquivos: ['src/routes/vagas.js', 'src/app.js'] },
     ],
   },
   {
@@ -69,10 +69,10 @@ export const CENARIOS = [
     custoConflito: {},
     consolidar: true,
     tasks: [
-      { id: 'V1', nome: 'Segurança', dur: 6, tokens: 30, deps: [], arquivos: [] },
-      { id: 'V2', nome: 'Testes', dur: 6, tokens: 30, deps: [], arquivos: [] },
-      { id: 'V3', nome: 'Rastro da spec', dur: 5, tokens: 25, deps: [], arquivos: [] },
-      { id: 'V4', nome: 'Simplicidade', dur: 5, tokens: 25, deps: [], arquivos: [] },
+      { id: 'V1', nome: 'Segurança', dur: 6, tokens: 40, deps: [], arquivos: [] },
+      { id: 'V2', nome: 'Testes', dur: 6, tokens: 40, deps: [], arquivos: [] },
+      { id: 'V3', nome: 'Rastro da spec', dur: 5, tokens: 35, deps: [], arquivos: [] },
+      { id: 'V4', nome: 'Simplicidade', dur: 5, tokens: 35, deps: [], arquivos: [] },
     ],
   },
   {

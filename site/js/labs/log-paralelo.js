@@ -11,8 +11,8 @@ export function mount(el, ctx) {
   el.append(
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
-      h('h3', {}, 'Seu log vira o documento da semana'),
-      h('p', {}, 'Depois do speedrun, copie os minutos do seu log. O laboratório calcula (a), (b) e (c) do documento "Quando um agente único teria sido melhor" e mostra se a aposta de vocês bateu.'),
+      h('h3', {}, 'Do seu log para o documento'),
+      h('p', {}, 'Rodou uma sessão paralela no projeto da agenda ou no seu? Copie os minutos do log. O laboratório calcula (a), (b) e (c) do documento "Quando um agente único teria sido melhor" e mostra se a sua aposta bateu.'),
     ),
     h('div', { class: 'lab__body' }, montarForm(), resultado, acoes),
   );

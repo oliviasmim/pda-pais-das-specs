@@ -3,7 +3,7 @@ export const BASE_PRINCIPAL = 18000;
 export const BASE_SUBAGENT = 12000;
 export const CUSTO_PEDIDO = 1500;
 export const CUSTO_RESUMO = 2000;
-export const LIMITE_SMART = 0.4;
+export const LIMITE_SMART = 0.6; // régua do curso, não limite publicado
 
 export const ACOES = [
   { id: 'spec', nome: 'Ler a spec e a task T1', tokens: 6000, tipo: 'implementar' },

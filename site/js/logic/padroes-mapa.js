@@ -20,7 +20,7 @@ export const MAPA = [
     passos: [
       { ativos: ['t1'], texto: 'Uma sessão lê a spec e faz T1. O contexto começa limpo.' },
       { ativos: ['t2'], texto: 'T2 roda na mesma sessão. O que T1 deixou na janela continua lá, útil ou não.' },
-      { ativos: ['t3'], texto: 'Em T3 a janela já carrega T1 e T2. Passou de 40%? Entrou na dumb zone: o agente começa a esquecer as instruções do começo.' },
+      { ativos: ['t3'], texto: 'Em T3 a janela já carrega T1 e T2. Passou de 60%? Entrou na dumb zone: o agente começa a esquecer as instruções do começo.' },
     ],
     custo: 'Sem coordenação e sem conflito. O preço é o contexto que acumula, task após task.',
     usar: 'Task pequena, em cadeia, ou que precisa enxergar tudo junto.',

@@ -1,4 +1,4 @@
-// Calculadora do log do speedrun: transforma os números do LOG-SESSAO-PARALELA no
+// Calculadora do log de uma sessão paralela: transforma os números do LOG-SESSAO-PARALELA no
 // cálculo de custo de coordenação do documento "Quando um agente único teria sido melhor".
 // Sem DOM. Não guarda nome de aluno, só minutos.
 
@@ -60,7 +60,7 @@ export function calcular(dados) {
   else veredito = 'empatou';
 
   const avisos = [];
-  if (dados.verde === false) avisos.push('Os testes não fecharam 100% verdes. Pela regra da semana, o relógio não parou: este tempo ainda não vale como resultado.');
+  if (dados.verde === false) avisos.push('Os testes não fecharam 100% verdes, então o relógio não parou. Este tempo ainda não vale como resultado.');
   if (preenchidas.length < tasks.length) avisos.push('Há tasks sem minutos. A soma usa só as preenchidas.');
   if (real < maisLonga) avisos.push('O tempo real é menor que a task mais longa sozinha. Confira os números do log.');
   if (dados.conflito === 'sim' && integracao === null) avisos.push('Houve conflito, mas falta o tempo de integração. Esse é o número que mais explica o resultado.');

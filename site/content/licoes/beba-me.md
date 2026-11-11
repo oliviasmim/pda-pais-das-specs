@@ -1,7 +1,3 @@
-> Havia um frasco com um rótulo de papel: "BEBA-ME". Mas Alice era sensata e não ia fazer aquilo com pressa: "Não, primeiro vou olhar se está escrito *veneno* ou não."
->
-> Lewis Carroll, *Alice no País das Maravilhas*, cap. 1 (tradução livre).
-
 ## O problema
 
 Três cenas da mesma semana:
@@ -33,7 +29,6 @@ Todo componente do harness faz uma de duas coisas:
 | Quando age | **Antes** de o agente gerar | **Depois** que o agente gerou |
 | O que faz | Aumenta a chance de acertar de primeira | Detecta o erro e devolve um sinal |
 | Exemplos | AGENTS.md, skill, spec com EARS, ADR (registro de uma decisão de arquitetura), exemplo de código | Lint, type check, build, testes, `npm audit`, CI, agente de review, hook que bloqueia |
-| Na história | Alice lê o rótulo do frasco | A Rainha grita "Cortem-lhe a cabeça!" |
 | Sozinho vira | Esperança: ninguém confere se foi seguido | Retrabalho: o agente erra e o sensor reprova, sem fim |
 
 Sensores ainda se dividem em dois tipos. **Computacionais** são determinísticos e baratos: lint, tipos, testes. Rodam sempre e dão sempre a mesma resposta. **Inferenciais** usam um modelo para julgar: agente de review, LLM como juiz (um modelo dando nota para a saída de outro). Pegam o que o lint não vê, mas podem errar e custam tokens. Use os computacionais em tudo e os inferenciais onde eles não alcançam.
@@ -73,7 +68,7 @@ Por isso a `description` decide tudo. Vaga, a skill nunca dispara. Larga demais,
 
 ### Grande demais para a porta: contexto
 
-Alice bebe e encolhe, come e cresce, e nunca está do tamanho certo para a porta. A janela de contexto (o que o agente consegue ter à vista de uma vez) é assim. Tudo o que o agente lê, roda e responde fica lá dentro. Até uns 40% da janela, o agente está na **smart zone**. (Esse 40% é uma observação prática da turma, não um limite publicado: a degradação é gradual e varia com o modelo.) Depois disso, entra na **dumb zone**: esquece instruções do começo, repete erros, mistura tarefas. É o *context rot* que você viu na S2: a janela cheia de histórico que não serve mais, puxando a qualidade para baixo.
+A janela de contexto (o que o agente consegue ter à vista de uma vez) é assim. Tudo o que o agente lê, roda e responde fica lá dentro. Até uns 60% da janela, o agente está na **smart zone**. (Esse 60% é a régua que a gente usa no curso, não um limite publicado: a qualidade cai aos poucos, e o ponto muda de modelo para modelo.) Depois disso, entra na **dumb zone**: esquece instruções do começo, repete erros, mistura tarefas. É o *context rot* que você viu na S2: a janela cheia de histórico que não serve mais, puxando a qualidade para baixo.
 
 Subagents (agentes auxiliares que trabalham à parte) resolvem um problema específico: **isolamento de contexto**.
 
@@ -123,13 +118,13 @@ Classifique as 14 peças. Para cada uma, pergunte: ela age antes de o agente ger
 
 ### 4. Faxina de contexto
 
-A janela começa com tudo dentro, em 63%. Tire o que não serve à T1 até ficar abaixo de 40%. Se tirar demais, o agente inventa o que faltou.
+A janela começa com tudo dentro, em 78%. Tire o que não serve à T1 até ficar abaixo de 60%. Se tirar demais, o agente inventa o que faltou.
 
 <div data-lab="faxina-contexto"></div>
 
 ### 5. A porta e a chave
 
-O agente vai implementar a T1 do speedrun (`POST /agendamentos`). Primeiro, rode tudo no principal. Depois, recomece e delegue as investigações pesadas. Compare onde cada versão termina.
+O agente vai implementar a T1 da agenda (`POST /agendamentos`). Primeiro, rode tudo no principal. Depois, recomece e delegue as investigações pesadas. Compare onde cada versão termina.
 
 <div data-lab="contexto"></div>
 
@@ -151,7 +146,7 @@ Em dupla. Para cada cenário, escolham o arranjo **antes** de revelar e escrevam
 
 ### 8. Carta de Destino
 
-Fechamento da Aula 1. Escreva o destino da feature que você vai usar no speedrun (ou da próxima feature do seu projeto). O Gato só aprova o que dá para virar teste.
+Escreva o destino da próxima feature do seu projeto. Só vale o que dá para virar teste.
 
 <div data-lab="carta-destino"></div>
 
@@ -214,9 +209,9 @@ Adicione uma regra aqui (guia) E um teste ou checagem de review (sensor).
 ```
 
 <details class="toca">
-<summary>Trilha da Toca · para quem terminou antes</summary>
+<summary>Desafio extra · para quem terminou antes</summary>
 
-1. **Meça a sua janela.** Numa sessão real do seu projeto, use `/context` no Claude Code a cada 15 minutos. Em que momento você passa de 40%? O que encheu a janela?
+1. **Meça a sua janela.** Numa sessão real do seu projeto, use `/context` no Claude Code a cada 15 minutos. Em que momento você passa de 60%? O que encheu a janela?
 2. **Mesma review, dois contextos.** Peça uma revisão do mesmo diff duas vezes: uma na sessão principal (que escreveu o código) e outra num subagent de review com contexto limpo. Compare os achados. Qual foi mais crítico? Por quê?
 3. **Guia sem sensor.** Liste todas as regras do seu AGENTS.md. Para cada uma, qual sensor confere se ela foi seguida? As que não têm sensor são esperança. Escolha uma e crie o sensor.
 4. **Regra ou ruído.** Escolha um erro real do seu projeto e escreva uma regra de uma frase. Rode a mesma tarefa duas vezes, sem a regra e com ela. Se o resultado não mudou, apague a regra.

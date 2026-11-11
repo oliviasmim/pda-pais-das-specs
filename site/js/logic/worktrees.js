@@ -497,7 +497,7 @@ export function executar(estadoAtual, linha) {
     const nome = resto.filter((a) => !a.startsWith('-')).pop();
     const ocupado = estado.worktrees.find((w) => w.branch === nome && w.dir !== estado.cwd);
     if (ocupado) return erro(estado, `fatal: '${nome}' is already used by worktree at '${ocupado.dir}'`);
-    return erro(estado, 'dica: neste simulador, troque de xícara com cd em vez de trocar de branch.');
+    return erro(estado, 'dica: neste simulador, troque de worktree com cd em vez de trocar de branch.');
   }
   return erro(estado, `git: '${sub || ''}' não é suportado neste simulador (digite help).`);
 }

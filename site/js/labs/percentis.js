@@ -78,7 +78,7 @@ export function mount(el, ctx) {
   el.append(
     h('header', { class: 'lab__head' },
       h('span', { class: 'lab__tag' }, 'Laboratório'),
-      h('h3', {}, 'O relógio do Coelho: quanto espera quem cai na cauda?'),
+      h('h3', {}, 'Quanto espera quem cai na cauda?'),
       h('p', {}, 'Mexa na cauda e no fan-out. Perceba que a média quase não sai do lugar enquanto o p99 dispara.'),
     ),
     h('div', { class: 'lab__body' },

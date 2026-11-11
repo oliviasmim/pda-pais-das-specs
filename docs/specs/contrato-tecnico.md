@@ -24,7 +24,8 @@ site/
   js/quiz.js                 componente de quiz
   js/labs/<labId>.js         interface de cada laboratório
   js/logic/<labId>.js        lógica pura de cada laboratório
-  content/curriculo.js       semanas do curso, lições da semana 10, cartas do baralho
+  content/curriculo.js       semanas do curso (usadas no chip "Revisa Sx" da lição), aulas, lições, cartas do baralho
+  content/maquinas.js        lista das máquinas (motions)
   content/glossario.js       termos
   content/licoes/<id>.md     texto de cada lição
   content/quiz/<id>.json     quiz de cada lição
@@ -34,11 +35,9 @@ site/
 
 | Rota | View |
 |---|---|
-| `#/` | Início: citação, mapa da jornada, lições da semana 10 |
+| `#/` | Início: citação, placa do harness, lições e ferramentas |
 | `#/licao/<id>` | Lição |
 | `#/baralho` | Baralho do Gato (6 cartas) |
-| `#/trilha` | Mapa das 14 semanas |
-| `#/speedrun` | Cronômetro e placar do speedrun |
 | `#/glossario` | Glossário |
 | `#/maquinas` | Galeria das máquinas (motions) |
 | `#/maquina/<id>?m=<montagem>` | Uma máquina em tela cheia, já montada (link copiável de dentro da máquina) |

@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>País das Specs</title>
-    <meta name="description" content="Semana 10 da Especialização em IA da Programadores do Amanhã. Requisito com número, agentes em paralelo com worktrees, gates na CI e revisão do diff que a IA gerou, com laboratórios para mexer no navegador." />
-    <meta name="theme-color" content="#f4f0e6" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='2' width='22' height='28' rx='4' fill='%23fbf9f3' stroke='%231c1a15' stroke-width='1.5'/%3E%3Ctext x='16' y='22' font-size='14' text-anchor='middle' fill='%23b4232c'%3E%E2%99%A5%3C/text%3E%3C/svg%3E" />
+    <meta name="description" content="Lições e laboratórios da Especialização em IA da Programadores do Amanhã: requisito com número, agentes em paralelo com worktrees, gates na CI e revisão do diff que a IA gerou. Tudo roda no navegador." />
+    <meta name="theme-color" content="#f2eee5" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 28 10v13l-12 7-12-7V10z' fill='%232f3f9e' stroke='%231d2230' stroke-width='1.4' stroke-linejoin='round'/%3E%3Cpath d='M4 10l12 7 12-7M16 17v13' fill='none' stroke='%231d2230' stroke-width='1.4'/%3E%3Cpath d='M4 10 16 3l12 7-12 7z' fill='%23129d97' stroke='%231d2230' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
     />
     <link rel="stylesheet" href="css/style.css" />
     <script>
@@ -30,16 +30,14 @@
     <header class="topo">
       <div class="topo__in">
         <a class="marca" href="#/" aria-label="País das Specs, início">
-          <span class="marca__selo" aria-hidden="true">♥</span>
-          <span>País das Specs<small>PdA · Especialização em IA · Semana 10</small></span>
+          <svg class="marca__selo" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z" fill="var(--placa)" stroke="var(--iso-linha)" stroke-width="1.6" stroke-linejoin="round"/><path d="M5 11.5 20 20l15-8.5M20 20v17" fill="none" stroke="var(--iso-linha)" stroke-width="1.6"/><path d="M20 20 35 11.5v17L20 37z" fill="rgba(0,0,0,.25)"/><path d="M5 11.5 20 3l15 8.5L20 20z" fill="var(--acento)" stroke="var(--iso-linha)" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <span>País das Specs<small>Especifique · Delegue · Confira</small></span>
         </a>
         <button class="icone-btn menu-btn" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav" id="menu-btn">☰</button>
         <nav class="nav" id="nav" aria-label="Principal">
           <a href="#/">Início</a>
-          <a href="#/baralho">Baralho</a>
-          <a href="#/trilha">Trilha</a>
+          <a href="#/baralho">Perguntas</a>
           <a href="#/maquinas">Máquinas</a>
-          <a href="#/speedrun">Speedrun</a>
           <a href="#/glossario">Glossário</a>
           <button class="icone-btn" type="button" id="btn-projetor" aria-pressed="false" title="Modo projetor (P)" aria-label="Modo projetor">⛶</button>
           <button class="icone-btn" type="button" id="btn-tema" title="Trocar tema" aria-label="Trocar tema claro ou escuro">◐</button>
@@ -47,12 +45,12 @@
       </div>
     </header>
     <main id="conteudo" tabindex="-1">
-      <p class="carregando">Caindo na toca do coelho…</p>
+      <p class="carregando">Carregando…</p>
     </main>
     <footer class="rodape">
       <div class="rodape__in">
-        <span>Programadores do Amanhã · Especialização em IA · Semana 10 (revisão)</span>
-        <span>Citações de Lewis Carroll (1865) em tradução livre, domínio público. Inspirado em <a href="https://github.com/rohitg00/ai-engineering-from-scratch">AI Engineering from Scratch</a>.</span>
+        <span>Programadores do Amanhã · Especialização em IA</span>
+        <span>Citação de Lewis Carroll (1865) em tradução livre, domínio público. Inspirado em <a href="https://github.com/rohitg00/ai-engineering-from-scratch">AI Engineering from Scratch</a>.</span>
       </div>
     </footer>
     <noscript><p style="padding: 1rem">As lições e os laboratórios rodam em JavaScript. Ative o JavaScript no navegador para abrir o site.</p></noscript>
